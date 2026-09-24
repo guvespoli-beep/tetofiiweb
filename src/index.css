@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@keyframes tickerMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.ticker-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: tickerMarquee 90s linear infinite;
+  will-change: transform;
+}
+
+.ticker-marquee-track:hover {
+  animation-play-state: paused;
+}

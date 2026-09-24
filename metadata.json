@@ -1,0 +1,6 @@
+{
+  "name": "TETOFII - Calculadora de Preço Teto para FIIs de Tijolo",
+  "description": "TETOFII: Calculadora de Preço Teto, P/VP e Margem de Segurança para Fundos Imobiliários de Tijolo com base na taxa de referência NTN-B e informes CVM.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
