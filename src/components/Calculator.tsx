@@ -241,8 +241,8 @@ export const Calculator: React.FC<CalculatorProps> = ({
       }
     }
 
-    // Preço Atual / Preço Teto
-    const priceToCeilingRatio = ceilingPrice > 0 && currentPrice > 0 ? (currentPrice / ceilingPrice) * 100 : 0;
+    // Preço Atual / Preço Teto (múltiplo decimal como P/VP, ex: 0,85)
+    const priceToCeilingRatio = ceilingPrice > 0 && currentPrice > 0 ? (currentPrice / ceilingPrice) : 0;
     let ceilingAnalysis: CalculationResult['ceilingAnalysis'] = 'NO_PRECO_TETO';
     let safetyMarginPercentage = 0;
 
@@ -281,7 +281,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
     const summaryText = `📊 Análise de Preço Teto • FII ${activeFii?.ticker || tickerQuery || 'FII'} (${activeFii?.name || 'FII de Tijolo'})
 Preço Atual (B3): ${formatCurrency(currentPrice)} (atualizado a cada 5 min)
 Preço Teto Calculado: ${result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'Aguardando parâmetros'}
-Relação Preço/Teto: ${result.ceilingPrice > 0 ? formatPercent(result.priceToCeilingRatio) : '-'}
+Preço Atual / Teto: ${result.ceilingPrice > 0 ? formatDecimal(result.priceToCeilingRatio, 2) : '-'}
 Status do Teto: ${result.ceilingPrice > 0 ? (result.ceilingAnalysis === 'ABAIXO_DO_PRECO_TETO' ? `Abaixo do Teto (Margem de Segurança de ${formatPercent(result.safetyMarginPercentage)})` : `Acima do Teto (Sobrepreço de ${formatPercent(result.safetyMarginPercentage)})`) : 'Parâmetros incompletos'}
 P/VP: ${result.pvp > 0 ? formatDecimal(result.pvp, 2) : '-'} (${result.pvpAnalysis === 'SEM_DADOS' ? '-' : result.pvpAnalysis === 'ABAIXO_DO_VP' ? `Desconto de ${formatPercent(result.pvpDiscountOrPremiumPercent)}` : result.pvpAnalysis === 'ACIMA_DO_VP' ? `Ágio de ${formatPercent(result.pvpDiscountOrPremiumPercent)}` : 'Paridade'})
 Premissas: Taxa de Referência ${referenceRate ? formatPercent(Number(referenceRate)) : 'não informada'} + Prêmio ${riskPremium ? formatPercent(Number(riskPremium)) : 'não informado'}
@@ -723,7 +723,7 @@ Calculado no TETOFII`;
             </div>
           </div>
 
-          {/* Card 2: Relação Preço Atual / Preço Teto */}
+          {/* Card 2: Relação Preço Atual / Preço Teto (Múltiplo Decimal similar a P/VP) */}
           <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
@@ -731,10 +731,10 @@ Calculado no TETOFII`;
                   Preço Atual / Teto
                   <QuestionButton topicId="relacao-preco-teto" onClick={onOpenExplanation} className="bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white" />
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">Relação %</span>
+                <span className="text-[10px] font-mono text-slate-400">Múltiplo</span>
               </div>
               <div className="text-2xl sm:text-3xl font-black font-mono text-white">
-                {result.ceilingPrice > 0 ? formatPercent(result.priceToCeilingRatio, 1) : '-'}
+                {result.ceilingPrice > 0 ? formatDecimal(result.priceToCeilingRatio, 2) : '-'}
               </div>
             </div>
 
@@ -744,16 +744,16 @@ Calculado no TETOFII`;
                 result.ceilingAnalysis === 'ABAIXO_DO_PRECO_TETO' ? (
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
                     <TrendingDown className="w-3.5 h-3.5" />
-                    <span>Abaixo do Preço Teto ({formatPercent(result.safetyMarginPercentage)} margem)</span>
+                    <span>Abaixo do Teto ({formatPercent(result.safetyMarginPercentage)} margem)</span>
                   </div>
                 ) : result.ceilingAnalysis === 'ACIMA_DO_PRECO_TETO' ? (
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30">
                     <TrendingUp className="w-3.5 h-3.5" />
-                    <span>Acima do Preço Teto (+{formatPercent(result.safetyMarginPercentage)})</span>
+                    <span>Acima do Teto (+{formatPercent(result.safetyMarginPercentage)})</span>
                   </div>
                 ) : (
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
-                    <span>No Preço Teto (Paridade)</span>
+                    <span>No Preço Teto (1,00)</span>
                   </div>
                 )
               ) : (

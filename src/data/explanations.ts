@@ -130,21 +130,21 @@ export const EXPLANATION_TOPICS: Record<string, ExplanationTopic> = {
 
   'relacao-preco-teto': {
     id: 'relacao-preco-teto',
-    title: 'Relação Preço Atual / Preço Teto e Margem de Segurança',
-    badge: 'Termômetro de Decisão',
-    summary: 'Métrica que compara onde o preço de mercado se encontra em relação ao teto e mensura a proteção contra oscilações de mercado.',
+    title: 'Preço Atual / Preço Teto e Margem de Segurança',
+    badge: 'Múltiplo de Decisão',
+    summary: 'Métrica exibida em formato decimal (como o P/VP) que compara a cotação de mercado ao Preço Teto calculado.',
     detailedContent: [
-      'A relação entre o Preço Atual e o Preço Teto expressa numericamente a distância para o seu limite de compra:',
-      '• Relação menor que 100%: A cota está abaixo do teto. A diferença (100% - Relação) é a sua MARGEM DE SEGURANÇA. Quanto maior a margem de segurança, maior a sua proteção contra imprevistos (vacâncias temporárias, inadimplência de inquilino ou quedas de mercado).',
-      '• Relação igual a 100%: O preço atual é exatamente igual ao teto. Você obterá exatamente o retorno exigido, sem margem extra.',
-      '• Relação maior que 100%: A cota está acima do teto. Significa que, no preço atual, o dividendo projetado não remunera adequadamente o risco frente ao Tesouro IPCA+.'
+      'Assim como o indicador P/VP compara o preço de mercado ao valor contábil (VP), o múltiplo Preço Atual / Preço Teto compara a cotação diretamente com o limite máximo de compra estipulado pelo investidor:',
+      '• Múltiplo menor que 1,00 (ex: 0,85): A cotação está ABAIXO do Preço Teto. A diferença para 1,00 é a sua MARGEM DE SEGURANÇA (neste exemplo, 15% de margem de proteção). Quanto menor que 1,00, maior a sua proteção contra imprevistos como vacâncias ou despesas.',
+      '• Múltiplo igual a 1,00: O preço de mercado está exatamente na paridade com o teto. O ativo entregará exatamente o retorno exigido (yield requerido).',
+      '• Múltiplo maior que 1,00 (ex: 1,12): A cotação está ACIMA do Preço Teto (neste exemplo, 12% acima). O investidor estaria pagando mais do que o limite aceitável para o retorno exigido frente ao Tesouro IPCA+.'
     ],
-    formula: 'Relação = (Preço Atual ÷ Preço Teto) × 100% | Margem de Segurança = ((Preço Teto - Preço Atual) ÷ Preço Teto) × 100%',
-    formulaDescription: 'Valores positivos de Margem de Segurança indicam folga favorável ao investidor.',
+    formula: 'Preço Atual / Teto = Preço Atual da Cota ÷ Preço Teto | Margem de Segurança = ((Preço Teto - Preço Atual) ÷ Preço Teto) × 100%',
+    formulaDescription: 'Múltiplo abaixo de 1,00 indica oportunidade com margem de segurança favorável ao cotista.',
     example: {
-      title: 'Cálculo de Margem',
-      scenario: 'Preço Teto calculado = R$ 120,00. Cota negociada no mercado = R$ 96,00.',
-      result: 'Relação = 80%. Margem de Segurança = ((120 - 96) / 120) * 100 = 20% de margem de proteção.'
+      title: 'Exemplo prático similar ao P/VP',
+      scenario: 'Preço Teto calculado = R$ 120,00. Cotação de mercado na B3 = R$ 96,00.',
+      result: 'Preço Atual / Teto = 0,80 (equivalente a 80% do teto, conferindo 20% de margem de segurança).'
     }
   }
 };
