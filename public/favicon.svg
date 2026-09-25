@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="tetofii-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+    <linearGradient id="line-glow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#a7f3d0" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Fundo Circular Moderno com gradiente esmeralda -->
+  <rect width="64" height="64" rx="16" fill="url(#tetofii-bg)" />
+
+  <!-- Prédio estilizado de fundo (torre menor) -->
+  <path d="M14 26 H26 V52 H14 Z" fill="#065f46" opacity="0.9" />
+  <!-- Janelas da torre menor -->
+  <rect x="17" y="30" width="3" height="3" rx="0.5" fill="#a7f3d0" opacity="0.6" />
+  <rect x="22" y="30" width="3" height="3" rx="0.5" fill="#a7f3d0" opacity="0.6" />
+  <rect x="17" y="36" width="3" height="3" rx="0.5" fill="#a7f3d0" opacity="0.6" />
+  <rect x="22" y="36" width="3" height="3" rx="0.5" fill="#a7f3d0" opacity="0.6" />
+  <rect x="17" y="42" width="3" height="3" rx="0.5" fill="#a7f3d0" opacity="0.6" />
+  <rect x="22" y="42" width="3" height="3" rx="0.5" fill="#a7f3d0" opacity="0.6" />
+
+  <!-- Prédio estilizado principal (torre corporativa mais alta) -->
+  <path d="M28 14 H44 V52 H28 Z" fill="#0f766e" />
+  <!-- Janelas da torre principal -->
+  <rect x="31" y="18" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="38" y="18" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="31" y="25" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="38" y="25" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="31" y="32" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="38" y="32" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="31" y="39" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+  <rect x="38" y="39" width="4" height="4" rx="0.8" fill="#ecfdf5" opacity="0.9" />
+
+  <!-- Linha de cotação e valorização subindo com sombra -->
+  <path d="M12 46 L24 38 L36 41 L52 18" fill="none" stroke="url(#line-glow)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#shadow)" />
+  
+  <!-- Ponta da seta de alta -->
+  <path d="M44 18 H52 V26" fill="none" stroke="#a7f3d0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Ponto luminoso final -->
+  <circle cx="52" cy="18" r="2.5" fill="#ffffff" />
+</svg>

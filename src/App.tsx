@@ -103,8 +103,8 @@ export default function App() {
             onClick={() => setActiveTab('calculator')}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-800 to-teal-600 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-              <Building2 className="w-5 h-5" />
+            <div className="w-11 h-11 rounded-xl overflow-hidden shadow-xs group-hover:scale-105 transition-transform flex items-center justify-center bg-emerald-800">
+              <img src="/favicon.svg" alt="TETOFII Ícone" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="flex items-center gap-2">
