@@ -108,33 +108,39 @@ export async function fetchLiveQuote(rawTicker: string): Promise<LiveQuoteResult
     // continua
   }
 
-  // 3. Fallback: tentar buscar diretamente caso o navegador permita
-  try {
-    const directUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${cleanTicker}.SA?interval=1d&range=1d`;
-    const directRes = await fetch(directUrl);
-    if (directRes.ok) {
-      const json = await directRes.json();
-      const meta = json?.chart?.result?.[0]?.meta;
-      const price = meta?.regularMarketPrice ?? meta?.chartPreviousClose;
-      if (typeof price === 'number' && price > 0) {
-        return {
-          ticker: cleanTicker,
-          price: Number(price.toFixed(2)),
-          change: meta?.regularMarketChange,
-          changePercent: meta?.regularMarketChangePercent,
-          previousClose: meta?.chartPreviousClose,
-          source: 'B3 em Tempo Real',
-          timestamp: Date.now(),
-          timeString: new Date().toLocaleTimeString('pt-BR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-          }),
-        };
+  // 3. Fallback: tentar buscar via proxies públicos sem CORS para qualquer FII da B3 não catalogado
+  const corsProxies = [
+    `https://corsproxy.io/?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${cleanTicker}.SA?interval=1d&range=1d`)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${cleanTicker}.SA?interval=1d&range=1d`)}`
+  ];
+
+  for (const proxyUrl of corsProxies) {
+    try {
+      const directRes = await fetch(proxyUrl, { signal: AbortSignal.timeout(3500) });
+      if (directRes.ok) {
+        const json = await directRes.json();
+        const meta = json?.chart?.result?.[0]?.meta;
+        const price = meta?.regularMarketPrice ?? meta?.chartPreviousClose;
+        if (typeof price === 'number' && price > 0) {
+          return {
+            ticker: cleanTicker,
+            price: Number(price.toFixed(2)),
+            change: meta?.regularMarketChange,
+            changePercent: meta?.regularMarketChangePercent,
+            previousClose: meta?.chartPreviousClose,
+            source: 'B3 em Tempo Real',
+            timestamp: Date.now(),
+            timeString: new Date().toLocaleTimeString('pt-BR', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            }),
+          };
+        }
       }
+    } catch {
+      // Tenta o próximo proxy
     }
-  } catch {
-    // Fallback silencioso
   }
 
   return null;

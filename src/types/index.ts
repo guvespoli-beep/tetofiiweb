@@ -6,7 +6,11 @@ export type FiiSegment =
   | 'Híbrido'
   | 'Hospitalar'
   | 'Educacional'
-  | 'Hotéis';
+  | 'Hotéis'
+  | 'Terras Agrícolas'
+  | 'Cemitérios'
+  | 'Residencial'
+  | 'Agências Bancárias';
 
 export interface FiiData {
   ticker: string;
@@ -27,6 +31,7 @@ export interface FiiData {
   searchPopularityScore: number; // Índice de pesquisas e volume de interesse dos investidores (0 a 100)
   relevanceScore: number; // Score composto de relevância de mercado (0 a 100)
   relevanceRank: number; // Posição ordinal no ranking de relevância
+  inRadar?: boolean; // Define se aparece na tabela do Radar de Tijolo
   notes?: string;
   tickerChangeReason?: string;
   numberOfProperties?: number;

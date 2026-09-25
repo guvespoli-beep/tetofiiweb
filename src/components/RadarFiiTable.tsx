@@ -38,6 +38,7 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
     'Lajes Corporativas',
     'Renda Urbana',
     'Híbrido',
+    'Terras Agrícolas',
     'Hospitalar',
     'Educacional',
     'Hotéis'
@@ -85,6 +86,9 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
 
   const filteredFiiList = useMemo(() => {
     return FII_DATABASE.filter((fii) => {
+      // No Radar de FIIs de Tijolo, exibe apenas os mais relevantes (inRadar !== false)
+      if (fii.inRadar === false) return false;
+
       const matchesSearch =
         fii.ticker.toLowerCase().includes(searchTerm.toLowerCase()) ||
         fii.previousTickers.some(p => p.toLowerCase().includes(searchTerm.toLowerCase())) ||
