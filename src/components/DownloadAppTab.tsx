@@ -209,14 +209,22 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
                 href={groupUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-sm rounded-xl shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer group"
+                className="w-full py-3.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer group"
               >
                 <span>Acessar o Google Groups</span>
                 <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </a>
-              <span className="text-[11px] text-slate-400 text-center block mt-2">
-                Basta clicar em <strong>"Participar do grupo"</strong> na tela do Google.
-              </span>
+
+              {/* Guia visual ilustrado do botão do Google */}
+              <div className="mt-3 p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1.5 text-center">
+                <span className="text-[11px] text-slate-500 block leading-tight">
+                  Ao abrir a página do Google, basta clicar no botão azul no topo:
+                </span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1a73e8] text-white rounded-md text-xs font-semibold shadow-2xs">
+                  <Users className="w-3.5 h-3.5" />
+                  <span>Participar do grupo</span>
+                </div>
+              </div>
             </div>
           </div>
 
