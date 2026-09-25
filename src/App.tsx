@@ -7,10 +7,12 @@ import {
   Menu,
   X,
   Building2,
-  Mail
+  Mail,
+  Smartphone
 } from 'lucide-react';
 import { Calculator } from './components/Calculator';
 import { RadarFiiTable } from './components/RadarFiiTable';
+import { DownloadAppTab } from './components/DownloadAppTab';
 import { ExplanationModal } from './components/ExplanationModal';
 import { DisclaimerModal } from './components/DisclaimerModal';
 import { AdsenseGuideModal } from './components/AdsenseGuideModal';
@@ -20,7 +22,7 @@ import { MarketTickerTape } from './components/MarketTickerTape';
 
 export default function App() {
   // Navigation tabs
-  const [activeTab, setActiveTab] = useState<'calculator' | 'radar'>('calculator');
+  const [activeTab, setActiveTab] = useState<'calculator' | 'radar' | 'download'>('calculator');
   const [selectedFiiForCalc, setSelectedFiiForCalc] = useState<string>('');
 
   // Modals state
@@ -146,6 +148,24 @@ export default function App() {
               <TableIcon className="w-4 h-4" />
               <span>Radar de FIIs de Tijolo</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('download')}
+              className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'download'
+                  ? 'bg-emerald-700 text-white shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Smartphone className="w-4 h-4" />
+              <span>Baixe o Aplicativo</span>
+              <span className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded ${
+                activeTab === 'download' ? 'bg-emerald-800 text-white' : 'bg-emerald-100 text-emerald-800'
+              }`}>
+                Beta
+              </span>
+            </button>
           </nav>
 
           {/* Mobile menu toggle */}
@@ -192,6 +212,25 @@ export default function App() {
               <span>Radar de FIIs de Tijolo</span>
             </button>
 
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('download');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between ${
+                activeTab === 'download' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Smartphone className="w-4 h-4" />
+                <span>Baixe o Aplicativo</span>
+              </div>
+              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                Beta
+              </span>
+            </button>
+
             <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
               <button
                 type="button"
@@ -234,6 +273,10 @@ export default function App() {
           />
         )}
 
+        {activeTab === 'download' && (
+          <DownloadAppTab onOpenDisclaimer={() => setIsDisclaimerOpen(true)} />
+        )}
+
         {/* AdSense Slot #4: Bottom Footer / In-Article Banner (Strategic Position 4) */}
         <AdBanner position="bottom_footer" onOpenAdGuide={() => setIsAdGuideOpen(true)} />
       </main>
@@ -272,6 +315,17 @@ export default function App() {
                 <Mail className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Contato: suporte@gvlab.com.br</span>
               </a>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('download');
+                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                }}
+                className="text-emerald-700 hover:text-emerald-800 font-bold transition-colors cursor-pointer flex items-center gap-1"
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                <span>Baixe o Aplicativo (Beta)</span>
+              </button>
               <button
                 type="button"
                 onClick={() => setIsPrivacyOpen(true)}

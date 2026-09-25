@@ -28,7 +28,7 @@ export const EducationalGuide: React.FC<EducationalGuideProps> = ({ onOpenTopic 
           <span className="text-xs text-slate-400">Leitura recomendada • 8 minutos</span>
         </div>
         <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
-          Como Calcular o Preço Teto de FIIs de Tijolo: Método Bazin Adaptado e Custo de Oportunidade
+          Como Calcular o Preço Teto de FIIs de Tijolo: Metodologia e Custo de Oportunidade
         </h2>
         <p className="text-slate-500 text-sm mt-1">
           Aprenda a calibrar a taxa de desconto livre de risco (NTN-B), mensurar o prêmio de risco adequado para galpões, shoppings e lajes corporativas, e evitar as armadilhas do P/VP contábil.
@@ -39,13 +39,13 @@ export const EducationalGuide: React.FC<EducationalGuideProps> = ({ onOpenTopic 
       <section className="space-y-3">
         <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
           <Award className="w-5 h-5 text-emerald-700" />
-          1. O que é o Preço Teto e por que Décio Bazin é adaptado aos FIIs?
+          1. O que é o Preço Teto e como ele se aplica aos FIIs de Tijolo?
         </h3>
         <p>
-          O conceito de <strong>Preço Teto</strong> foi consagrado pelo jornalista financeiro Décio Bazin em sua célebre obra <em>Faça Fortuna com Ações</em>. A tese central de Bazin era inequívoca: um investidor que busca renda passiva recorrente não deve pagar por um ativo um valor superior àquele que garanta uma rentabilidade mínima pré-fixada através de dividendos.
+          O conceito de <strong>Preço Teto</strong> estabelece o valor máximo a pagar por uma cota para garantir que o investidor obtenha uma rentabilidade mínima pré-fixada em dividendos e rendimentos recorrentes. A premissa central é direta: quem busca renda passiva não deve pagar por um fundo imobiliário um valor que reduza seu retorno percentual abaixo do seu custo de oportunidade.
         </p>
         <p>
-          Originalmente desenvolvido para o mercado de ações com um Yield fixo de 6% ao ano, o método precisou ser <strong>adaptado para a realidade do mercado imobiliário brasileiro e dos Fundos Imobiliários (FIIs)</strong> por uma razão fundamental: a presença de títulos públicos soberanos com remuneração real extremamente atraente, os títulos do <strong>Tesouro IPCA+ (NTN-B)</strong>.
+          No mercado imobiliário brasileiro e dos Fundos Imobiliários (FIIs), a metodologia leva em conta a presença de títulos públicos soberanos com remuneração real extremamente atraente, os títulos do <strong>Tesouro IPCA+ (NTN-B)</strong>, somados ao prêmio de risco pelos imóveis físicos.
         </p>
         <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-950 font-medium text-xs sm:text-sm">
           Fórmula Matemática Central:

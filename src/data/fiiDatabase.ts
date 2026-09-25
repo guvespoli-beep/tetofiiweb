@@ -1,4 +1,4 @@
-import { FiiData } from '../types';
+import { FiiData } from '../types/index.ts';
 
 /**
  * Base de dados oficial de Fundos Imobiliários de Tijolo componentes do IFIX (B3)

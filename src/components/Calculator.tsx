@@ -79,11 +79,17 @@ export const Calculator: React.FC<CalculatorProps> = ({
         setAliasNotification(null);
       }
 
-      // Busca a cotação real atualizada na B3 via Yahoo Finance / Google Finance
+      // Busca a cotação real atualizada na B3 e o VP oficial CVM mais recente
       try {
         const live = await fetchLiveQuote(fund.ticker);
         if (live && live.price > 0) {
           setCurrentPrice(live.price);
+          if (live.vpPerShare && live.vpPerShare > 0) {
+            setVpPerShare(live.vpPerShare);
+            if (live.cvmReportDate) {
+              setActiveFii(prev => prev ? { ...prev, vpPerShare: live.vpPerShare!, cvmReportDate: live.cvmReportDate! } : null);
+            }
+          }
           setLastQuoteTime(live.timeString);
           if (live.source) setQuoteSource(live.source);
         }
@@ -128,7 +134,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
       } catch {
         // ignore
       }
-      setSearchError(`Fundo "${clean}" não encontrado na base. Digite o ticker do FII que quer consultar (ex: TRXF11, HGLG11, PMLL11).`);
+      setSearchError(`Fundo "${clean}" não encontrado na base. Digite o ticker do FII de Tijolo que quer consultar (ex: TRXF11, HGLG11, PMLL11).`);
     }
   }, []);
 
@@ -167,6 +173,12 @@ export const Calculator: React.FC<CalculatorProps> = ({
       const live = await fetchLiveQuote(target);
       if (live && live.price > 0) {
         setCurrentPrice(live.price);
+        if (live.vpPerShare && live.vpPerShare > 0 && !isVpManuallyEdited) {
+          setVpPerShare(live.vpPerShare);
+          if (live.cvmReportDate) {
+            setActiveFii(prev => prev ? { ...prev, vpPerShare: live.vpPerShare!, cvmReportDate: live.cvmReportDate! } : null);
+          }
+        }
         setLastQuoteTime(live.timeString);
         if (live.source) setQuoteSource(live.source);
       } else {
@@ -207,7 +219,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
     const discountRate = numRefRate + numRiskPrem; // in %
     const annualDividend = numMonthlyDiv * 12;
 
-    // Preço Teto Bazin: ((Provento Mensal x 12)/(Taxa de Referência + Prêmio de Risco)) * 100
+    // Preço Teto: ((Provento Mensal x 12)/(Taxa de Referência + Prêmio de Risco)) * 100
     const ceilingPrice = discountRate > 0 && annualDividend > 0 ? (annualDividend / discountRate) * 100 : 0;
 
     // P/VP
@@ -313,7 +325,7 @@ Calculado no TETOFII`;
                 type="text"
                 value={tickerQuery}
                 onChange={(e) => setTickerQuery(e.target.value.toUpperCase())}
-                placeholder="(digite o ticker do FII que quer consultar)"
+                placeholder="(digite o ticker do FII de Tijolo que quer consultar)"
                 className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-500/20 text-slate-900 font-mono font-semibold placeholder:font-sans placeholder:text-slate-400 text-sm transition-all"
               />
             </div>
@@ -650,7 +662,7 @@ Calculado no TETOFII`;
               onClick={() => onOpenExplanation('preco-teto')}
               className="w-full py-2 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
-              <span>Entenda o Método de Bazin</span>
+              <span>Entenda o Cálculo de Preço Teto</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -658,7 +670,7 @@ Calculado no TETOFII`;
       </div>
 
       {/* Primary Results Section: 4 High-Impact KPI Cards */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-855 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
           <div>
             <div className="flex items-center gap-2">
@@ -688,7 +700,7 @@ Calculado no TETOFII`;
 
         {/* 4 Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          {/* Card 1: Preço Teto Bazin */}
+          {/* Card 1: Preço Teto */}
           <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
@@ -696,7 +708,7 @@ Calculado no TETOFII`;
                   Preço Teto Máximo
                   <QuestionButton topicId="preco-teto" onClick={onOpenExplanation} className="bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white" />
                 </span>
-                <span className="text-[10px] font-mono text-emerald-400">Método Bazin</span>
+                <span className="text-[10px] font-mono text-emerald-400">Preço Teto</span>
               </div>
               <div className="text-2xl sm:text-3xl font-black font-mono text-emerald-400">
                 {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'R$ 0,00'}
@@ -835,7 +847,7 @@ Calculado no TETOFII`;
               </p>
             ) : (
               <p className="text-slate-300">
-                Preencha a <strong>Taxa de Referência</strong>, o <strong>Prêmio de Risco</strong> e o <strong>Provento Mensal</strong> para visualizar o cálculo do Preço Teto Bazin e a margem de segurança {activeFii?.ticker || tickerQuery ? `para o fundo ${activeFii?.ticker || tickerQuery}` : 'para o ativo desejado'}.
+                Preencha a <strong>Taxa de Referência</strong>, o <strong>Prêmio de Risco</strong> e o <strong>Provento Mensal</strong> para visualizar o cálculo do Preço Teto e a margem de segurança {activeFii?.ticker || tickerQuery ? `para o fundo ${activeFii?.ticker || tickerQuery}` : 'para o ativo desejado'}.
               </p>
             )}
           </div>

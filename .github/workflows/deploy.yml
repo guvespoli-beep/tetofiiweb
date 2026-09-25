@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main", "master"]
+  schedule:
+    # Atualiza automaticamente de segunda a sexta, de hora em hora das 10h às 19h (Horário de Brasília / UTC 13h às 22h)
+    - cron: '0 13-22 * * 1-5'
   workflow_dispatch:
 
 permissions:
@@ -25,10 +28,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: ''
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+
+      - name: Sync latest B3 live quotes & CVM official VP
+        run: npx tsx scripts/update-quotes.mjs
 
       - name: Build app
         run: npm run build

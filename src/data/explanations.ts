@@ -110,11 +110,11 @@ export const EXPLANATION_TOPICS: Record<string, ExplanationTopic> = {
 
   'preco-teto': {
     id: 'preco-teto',
-    title: 'Preço Teto (Método de Décio Bazin Adaptado a FIIs)',
+    title: 'Preço Teto para Fundos Imobiliários',
     badge: 'Preço Máximo de Compra',
     summary: 'O preço limite que você pode pagar pela cota para atingir exatamente a rentabilidade mínima desejada (Yield Requerido).',
     detailedContent: [
-      'A metodologia do Preço Teto foi popularizada no Brasil pelo jornalista e investidor Décio Bazin em seu livro "Faça Fortuna com Ações", adaptada para a classe de Fundos Imobiliários.',
+      'A metodologia do Preço Teto define o valor máximo que um investidor deve pagar por uma cota para garantir a rentabilidade desejada através do fluxo de proventos.',
       'O princípio é simples e poderoso: você nunca deve pagar por um ativo um valor que reduza seu fluxo de proventos abaixo da taxa mínima de retorno que você estabeleceu.',
       'Como funciona a fórmula: O Provento Anual projetado é dividido pela taxa de retorno exigida (Taxa de Referência NTN-B + Prêmio de Risco).',
       'Se o Preço Atual estiver ABAIXO do Preço Teto, você está comprando com Margem de Segurança. Se estiver ACIMA, o ativo está caro perante suas exigências de retorno.'

@@ -103,7 +103,7 @@ export const AdsenseGuideModal: React.FC<AdsenseGuideModalProps> = ({
                 <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
                   <strong className="block text-slate-800">Conteúdo Rico e Educativo</strong>
-                  <span>Calculadoras de página única vazias são negadas por "Valuable Inventory". Incluímos o Radar de FIIs, Guia de Bazin e Histórico de Tickers para resolver isso.</span>
+                  <span>Calculadoras de página única vazias são negadas por "Valuable Inventory". Incluímos o Radar de FIIs, Guia de Preço Teto e Histórico de Tickers para resolver isso.</span>
                 </div>
               </div>
 

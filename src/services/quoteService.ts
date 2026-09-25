@@ -1,6 +1,9 @@
 /**
  * Serviço de Cotações em Tempo Real para Fundos Imobiliários da B3 (TETOFII)
- * Integração com Yahoo Finance / Google Finance (BVMF)
+ * Suporte híbrido:
+ * 1. Cache estático atualizado public/quotes.json (Zero CORS, 100% funcional no GitHub Pages / gvlab.com.br)
+ * 2. Backend proxy local /api/quote/:ticker (para desenvolvimento e preview)
+ * 3. Fallback dinâmico via proxies abertos de mercado financeiro
  */
 
 export interface LiveQuoteResult {
@@ -9,17 +12,68 @@ export interface LiveQuoteResult {
   change?: number;
   changePercent?: number;
   previousClose?: number;
+  vpPerShare?: number;
+  cvmReportDate?: string;
   source: string;
   timestamp?: number;
   timeString: string;
+}
+
+let cachedQuotesFile: Record<string, LiveQuoteResult> | null = null;
+let quotesFilePromise: Promise<Record<string, LiveQuoteResult>> | null = null;
+
+/**
+ * Carrega a base de cotações e VPs estática /quotes.json gerada na compilação do site.
+ * Funciona nativamente em qualquer hospedagem estática (GitHub Pages, Vercel, Cloudflare).
+ */
+export async function loadStaticQuotes(): Promise<Record<string, LiveQuoteResult>> {
+  if (cachedQuotesFile) return cachedQuotesFile;
+  if (quotesFilePromise) return quotesFilePromise;
+
+  quotesFilePromise = (async () => {
+    try {
+      // Usa caminho relativo para suportar base URL do GitHub Pages e domínio raiz
+      const res = await fetch('./quotes.json?v=' + Date.now(), { cache: 'no-cache' });
+      if (res.ok) {
+        const data = await res.json();
+        const map: Record<string, LiveQuoteResult> = {};
+        if (data && data.quotes) {
+          for (const [t, item] of Object.entries<any>(data.quotes)) {
+            map[t] = {
+              ticker: t,
+              price: item.price,
+              change: item.change ?? 0,
+              changePercent: item.changePercent ?? 0,
+              previousClose: item.previousClose ?? item.price,
+              vpPerShare: item.vpPerShare,
+              cvmReportDate: item.cvmReportDate,
+              source: 'B3 Oficial (Tempo Real/CVM)',
+              timestamp: item.timestamp ?? Date.now(),
+              timeString: new Date(item.timestamp || Date.now()).toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+            };
+          }
+        }
+        cachedQuotesFile = map;
+        return map;
+      }
+    } catch {
+      // Ignora erro e continua
+    }
+    return {};
+  })();
+
+  return quotesFilePromise;
 }
 
 export async function fetchLiveQuote(rawTicker: string): Promise<LiveQuoteResult | null> {
   const cleanTicker = rawTicker.trim().toUpperCase().replace('.SA', '');
   if (!cleanTicker) return null;
 
+  // 1. Tenta buscar via endpoint de backend local (/api/quote/:ticker) se existir
   try {
-    // 1. Tenta buscar via endpoint de backend local (/api/quote/:ticker)
     const response = await fetch(`/api/quote/${cleanTicker}`);
     if (response.ok) {
       const data = await response.json();
@@ -41,10 +95,20 @@ export async function fetchLiveQuote(rawTicker: string): Promise<LiveQuoteResult
       }
     }
   } catch {
-    // Continua para fallback se o backend estiver inacessível
+    // Backend indisponível (hospedagem estática GitHub Pages)
   }
 
-  // 2. Fallback: tentar buscar diretamente caso esteja em ambiente com proxy ou CORS liberado
+  // 2. Consulta a base de cotações atualizadas em public/quotes.json (instantânea no GitHub Pages)
+  try {
+    const staticMap = await loadStaticQuotes();
+    if (staticMap[cleanTicker] && staticMap[cleanTicker].price > 0) {
+      return staticMap[cleanTicker];
+    }
+  } catch {
+    // continua
+  }
+
+  // 3. Fallback: tentar buscar diretamente caso o navegador permita
   try {
     const directUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${cleanTicker}.SA?interval=1d&range=1d`;
     const directRes = await fetch(directUrl);
@@ -59,7 +123,7 @@ export async function fetchLiveQuote(rawTicker: string): Promise<LiveQuoteResult
           change: meta?.regularMarketChange,
           changePercent: meta?.regularMarketChangePercent,
           previousClose: meta?.chartPreviousClose,
-          source: 'Yahoo Finance (B3)',
+          source: 'B3 em Tempo Real',
           timestamp: Date.now(),
           timeString: new Date().toLocaleTimeString('pt-BR', {
             hour: '2-digit',

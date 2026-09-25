@@ -29,6 +29,7 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
   const [sortBy, setSortBy] = useState<SortField>('default');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [livePrices, setLivePrices] = useState<Record<string, number>>({});
+  const [liveVps, setLiveVps] = useState<Record<string, { vp: number; date?: string }>>({});
 
   const segments: string[] = [
     'TODOS',
@@ -42,10 +43,31 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
     'Hotéis'
   ];
 
-  // Atualização em background das cotações em tempo real para os fundos
+  // Atualização das cotações em tempo real para todos os fundos
   useEffect(() => {
     let isMounted = true;
     const updateQuotes = async () => {
+      try {
+        const { loadStaticQuotes } = await import('../services/quoteService');
+        const staticQuotes = await loadStaticQuotes();
+        if (isMounted && staticQuotes && Object.keys(staticQuotes).length > 0) {
+          const map: Record<string, number> = {};
+          const vps: Record<string, { vp: number; date?: string }> = {};
+          for (const [t, item] of Object.entries(staticQuotes)) {
+            if (item.price > 0) {
+              map[t] = item.price;
+            }
+            if (item.vpPerShare && item.vpPerShare > 0) {
+              vps[t] = { vp: item.vpPerShare, date: item.cvmReportDate };
+            }
+          }
+          setLivePrices(prev => ({ ...prev, ...map }));
+          setLiveVps(prev => ({ ...prev, ...vps }));
+        }
+      } catch {
+        // ignore
+      }
+
       for (const fii of FII_DATABASE.slice(0, 15)) {
         try {
           const live = await fetchLiveQuote(fii.ticker);
@@ -76,8 +98,10 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
     }).sort((a, b) => {
       const priceA = livePrices[a.ticker] ?? a.currentMarketPrice;
       const priceB = livePrices[b.ticker] ?? b.currentMarketPrice;
-      const pvpA = a.vpPerShare > 0 ? priceA / a.vpPerShare : 0;
-      const pvpB = b.vpPerShare > 0 ? priceB / b.vpPerShare : 0;
+      const vpA = liveVps[a.ticker]?.vp ?? a.vpPerShare;
+      const vpB = liveVps[b.ticker]?.vp ?? b.vpPerShare;
+      const pvpA = vpA > 0 ? priceA / vpA : 0;
+      const pvpB = vpB > 0 ? priceB / vpB : 0;
 
       let comparison = 0;
       if (sortBy === 'default') {
@@ -88,14 +112,14 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
       } else if (sortBy === 'price') {
         comparison = priceA - priceB;
       } else if (sortBy === 'vp') {
-        comparison = a.vpPerShare - b.vpPerShare;
+        comparison = vpA - vpB;
       } else if (sortBy === 'pvp') {
         comparison = pvpA - pvpB;
       }
 
       return sortOrder === 'desc' ? -comparison : comparison;
     });
-  }, [searchTerm, selectedSegment, sortBy, sortOrder, livePrices]);
+  }, [searchTerm, selectedSegment, sortBy, sortOrder, livePrices, liveVps]);
 
   const handleSort = (field: SortField) => {
     if (sortBy === field) {
@@ -220,7 +244,9 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
           <tbody className="divide-y divide-slate-100 font-sans">
             {filteredFiiList.map((fii) => {
               const currentPrice = livePrices[fii.ticker] ?? fii.currentMarketPrice;
-              const pvp = fii.vpPerShare > 0 ? currentPrice / fii.vpPerShare : 0;
+              const currentVp = liveVps[fii.ticker]?.vp ?? fii.vpPerShare;
+              const currentVpDate = liveVps[fii.ticker]?.date || fii.cvmReportDate;
+              const pvp = currentVp > 0 ? currentPrice / currentVp : 0;
               const hasOldTickers = fii.previousTickers.length > 0;
 
               return (
@@ -269,9 +295,9 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
 
                   {/* VP por Cota */}
                   <td className="p-3.5 text-right font-mono text-slate-700 text-xs">
-                    <div className="font-semibold">{formatCurrency(fii.vpPerShare)}</div>
+                    <div className="font-semibold">{formatCurrency(currentVp)}</div>
                     <span className="text-[10px] text-slate-400 block font-sans">
-                      Informe de {fii.cvmReportDate}
+                      Informe de {currentVpDate}
                     </span>
                   </td>
 

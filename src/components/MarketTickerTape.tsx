@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { FII_DATABASE } from '../data/fiiDatabase';
+import { loadStaticQuotes } from '../services/quoteService';
 
 export interface TickerTapeItem {
   ticker: string;
@@ -73,7 +74,31 @@ export const MarketTickerTape: React.FC<MarketTickerTapeProps> = ({ onSelectFii 
           const data = await response.json();
           if (isMounted && data.items && Array.isArray(data.items) && data.items.length > 0) {
             setItems(data.items);
+            return;
           }
+        }
+      } catch {
+        // backend ausente (GitHub Pages)
+      }
+
+      // Fallback para GitHub Pages e domínio gvlab.com.br
+      try {
+        const staticQuotes = await loadStaticQuotes();
+        if (isMounted && staticQuotes && Object.keys(staticQuotes).length > 0) {
+          setItems((prevItems) =>
+            prevItems.map((item) => {
+              const live = staticQuotes[item.ticker];
+              if (live && live.price > 0) {
+                return {
+                  ...item,
+                  price: live.price,
+                  change: live.change ?? 0,
+                  changePercent: live.changePercent ?? 0,
+                };
+              }
+              return item;
+            })
+          );
         }
       } catch (err) {
         console.warn('Usando dados de reserva para letreiro de mercado:', err);
