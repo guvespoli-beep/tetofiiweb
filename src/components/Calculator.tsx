@@ -971,152 +971,151 @@ export const Calculator: React.FC<CalculatorProps> = ({
       </div>
 
       {/* =======================================================================
-          TEMPLATE EXCLUSIVO DE COMPARTILHAMENTO (OFFSCREEN / FIXED DIMENSIONS)
-          Renderizado fora da tela com dimensões fixas perfeitas (1000px).
-          Não tem botões, não sofre com telas pequenas de celular e gera uma imagem
-          impecável e profissional para WhatsApp, Instagram e Redes Sociais.
+          TEMPLATE EXCLUSIVO DE COMPARTILHAMENTO (MOBILE-FIRST / WHATSAPP / TELEGRAM)
+          Proporção compacta (560px de largura), tipografia generosa e legível no celular,
+          cards organizados em grade 2x2 que preenchem perfeitamente a tela vertical.
          ======================================================================= */}
       <div className="fixed -left-[9999px] top-0 pointer-events-none select-none z-[-100]">
         <div
           ref={shareCardTemplateRef}
-          style={{ width: '1000px' }}
-          className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-10 text-white rounded-3xl border-2 border-slate-800 shadow-2xl space-y-6 font-sans"
+          style={{ width: '580px' }}
+          className="bg-slate-950 p-6 text-white rounded-3xl border-2 border-slate-800 shadow-2xl space-y-4 font-sans"
         >
-          {/* Cabeçalho do Card de Compartilhamento */}
-          <div className="flex items-center justify-between pb-6 border-b border-slate-800">
+          {/* Cabeçalho */}
+          <div className="flex items-center justify-between pb-4 border-b border-slate-800/90">
             <div>
-              <div className="flex items-center gap-3">
-                <span className="px-3 py-1 rounded-full text-xs font-black tracking-wide uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  Simulação de Preço Teto
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  Preço Teto
                 </span>
                 <span className="text-sm font-bold text-slate-300">
-                  Fundo: <strong className="text-emerald-400 font-mono text-base">{activeFii?.ticker || tickerQuery || 'FII'}</strong>
+                  <strong className="text-emerald-400 font-mono text-lg">{activeFii?.ticker || tickerQuery || 'FII'}</strong>
                   {activeFii?.name ? ` • ${activeFii.name}` : ''}
                 </span>
               </div>
-              <h2 className="text-2xl font-black tracking-tight text-white mt-2">
-                Análise de Precificação e Margem de Segurança
+              <h2 className="text-lg font-black tracking-tight text-white mt-1">
+                Análise de Precificação e Margem
               </h2>
             </div>
 
             {/* Logo da Marca */}
-            <div className="flex items-center gap-2.5 bg-slate-900/90 px-4 py-2.5 rounded-2xl border border-slate-800">
-              <div className="w-8 h-8 rounded-xl bg-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-md">
+            <div className="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800 shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-emerald-700 text-white flex items-center justify-center font-black text-xs">
                 T
               </div>
-              <div className="text-left">
-                <span className="text-base font-black tracking-tight text-white">
+              <div className="text-left leading-tight">
+                <span className="text-sm font-black tracking-tight text-white">
                   TETO<span className="text-emerald-400">FII</span>
                 </span>
-                <span className="block text-[10px] text-slate-400 -mt-1 font-mono">gvlab.com.br</span>
+                <span className="block text-[9px] text-slate-400 font-mono">gvlab.com.br</span>
               </div>
             </div>
           </div>
 
-          {/* Faixa destacada: Taxa de Desconto Total (Yield Requerido) */}
-          <div className="px-5 py-3.5 rounded-2xl bg-slate-900/80 border border-slate-800/90 flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2.5 text-slate-200 font-semibold">
+          {/* Faixa destacada: Taxa de Desconto Total */}
+          <div className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 text-slate-200 font-medium">
               <Percent className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
-                Taxa de Desconto Total (Yield Requerido):{' '}
-                <strong className="text-emerald-400 font-bold text-base font-mono">
+                Taxa Desconto Total (Yield Requerido):{' '}
+                <strong className="text-emerald-400 font-bold text-sm font-mono">
                   {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : '0,00% a.a.'}
                 </strong>
               </span>
             </div>
-            <div className="text-slate-400 text-xs font-semibold">
-              ({referenceRate ? formatPercent(Number(referenceRate)) : '0,00%'} Taxa Ref. + {riskPremium ? formatPercent(Number(riskPremium)) : '0,00%'} Prêmio)
+            <div className="text-slate-400 text-[11px]">
+              ({referenceRate ? formatPercent(Number(referenceRate)) : '0%'} + {riskPremium ? formatPercent(Number(riskPremium)) : '0%'})
             </div>
           </div>
 
-          {/* 4 Cards Grid - Fixos em 4 Colunas Perfeitas */}
-          <div className="grid grid-cols-4 gap-4">
+          {/* 4 Cards Grid - Grade 2x2 para máxima legibilidade no celular */}
+          <div className="grid grid-cols-2 gap-3">
             {/* Card 1: Preço Atual */}
-            <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
               <div>
                 <span className="text-slate-400 text-xs font-semibold block mb-1">Preço Atual</span>
                 <div className="text-2xl font-black font-mono text-white">
                   {currentPrice > 0 ? formatCurrency(currentPrice) : 'R$ 0,00'}
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400">
-                <span>Cotação de mercado em tempo real</span>
+              <div className="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+                <span>Cotação de mercado</span>
               </div>
             </div>
 
             {/* Card 2: Preço Teto */}
-            <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
               <div>
                 <span className="text-slate-400 text-xs font-semibold block mb-1">Preço Teto</span>
                 <div className="text-2xl font-black font-mono text-emerald-400">
                   {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'R$ 0,00'}
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400 truncate">
+              <div className="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400 truncate">
                 <span>
                   {result.discountRate > 0 && typeof monthlyDividend === 'number'
                     ? `Provento de ${formatCurrency(monthlyDividend)} e yield de ${formatPercent(result.discountRate)} a.a.`
                     : result.discountRate > 0
-                    ? `Para yield de ${formatPercent(result.discountRate)} a.a.`
-                    : 'Preencha taxa e provento'}
+                    ? `Yield de ${formatPercent(result.discountRate)} a.a.`
+                    : 'Aguardando parâmetros'}
                 </span>
               </div>
             </div>
 
             {/* Card 3: Preço Atual / Preço Teto */}
-            <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
               <div>
                 <span className="text-slate-400 text-xs font-semibold block mb-1">Preço Atual / Preço Teto</span>
                 <div className="text-2xl font-black font-mono text-white">
                   {result.ceilingPrice > 0 ? formatDecimal(result.priceToCeilingRatio, 2) : '-'}
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800">
+              <div className="mt-3 pt-2 border-t border-slate-800">
                 {result.ceilingPrice > 0 ? (
                   result.ceilingAnalysis === 'ABAIXO_DO_PRECO_TETO' ? (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
-                      <TrendingDown className="w-3.5 h-3.5" />
-                      <span>Abaixo do Teto ({formatPercent(result.safetyMarginPercentage)} margem)</span>
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30">
+                      <TrendingDown className="w-3 h-3" />
+                      <span>Abaixo ({formatPercent(result.safetyMarginPercentage)} margem)</span>
                     </div>
                   ) : result.ceilingAnalysis === 'ACIMA_DO_PRECO_TETO' ? (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 text-xs font-bold border border-rose-500/30">
-                      <TrendingUp className="w-3.5 h-3.5" />
-                      <span>Acima do Teto (+{formatPercent(result.safetyMarginPercentage)})</span>
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-300 text-[11px] font-bold border border-rose-500/30">
+                      <TrendingUp className="w-3 h-3" />
+                      <span>Acima (+{formatPercent(result.safetyMarginPercentage)})</span>
                     </div>
                   ) : (
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
-                      <span>No Preço Teto (1,00)</span>
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/30">
+                      <span>No Teto (1,00)</span>
                     </div>
                   )
                 ) : (
-                  <span className="text-xs text-slate-400">Aguardando parâmetros</span>
+                  <span className="text-[11px] text-slate-400">-</span>
                 )}
               </div>
             </div>
 
             {/* Card 4: Indicador P/VP */}
-            <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between">
+            <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between">
               <div>
                 <span className="text-slate-400 text-xs font-semibold block mb-1">Indicador P/VP</span>
                 <div className="text-2xl font-black font-mono text-white">
                   {result.pvp > 0 ? formatDecimal(result.pvp, 2) : '-'}
                 </div>
               </div>
-              <div className="mt-4 pt-3 border-t border-slate-800">
+              <div className="mt-3 pt-2 border-t border-slate-800">
                 {result.pvpAnalysis === 'SEM_DADOS' ? (
-                  <span className="text-xs text-slate-400">Aguardando dados</span>
+                  <span className="text-[11px] text-slate-400">-</span>
                 ) : result.pvpAnalysis === 'ABAIXO_DO_VP' ? (
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
-                    <TrendingDown className="w-3.5 h-3.5" />
-                    <span>Abaixo do VP (-{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30">
+                    <TrendingDown className="w-3 h-3" />
+                    <span>Abaixo VP (-{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
                   </div>
                 ) : result.pvpAnalysis === 'ACIMA_DO_VP' ? (
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
-                    <TrendingUp className="w-3.5 h-3.5" />
-                    <span>Acima do VP (+{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[11px] font-bold border border-amber-500/30">
+                    <TrendingUp className="w-3 h-3" />
+                    <span>Acima VP (+{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
                   </div>
                 ) : (
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-500/30">
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-500/20 text-blue-300 text-[11px] font-bold border border-blue-500/30">
                     <span>No VP (1,00)</span>
                   </div>
                 )}
@@ -1125,26 +1124,26 @@ export const Calculator: React.FC<CalculatorProps> = ({
           </div>
 
           {/* Diagnóstico Consolidado */}
-          <div className="p-4 rounded-2xl bg-slate-900/70 border border-slate-800 text-xs">
-            <span className="text-slate-400 font-bold uppercase tracking-wider text-[11px] block mb-1">
-              Diagnóstico Consolidado da Simulação:
+          <div className="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs leading-relaxed">
+            <span className="text-slate-400 font-bold uppercase tracking-wider text-[10px] block mb-1">
+              Diagnóstico Consolidado:
             </span>
             {hasCompleteInputs ? (
-              <p className="text-slate-200 text-xs leading-relaxed">
-                No preço atual de <strong className="text-white">{formatCurrency(currentPrice)}</strong>, o fundo entrega um Dividend Yield projetado de{' '}
-                <strong className="text-white">{formatPercent(result.currentYield)} ao ano</strong> contra um retorno mínimo requerido de{' '}
-                <strong className="text-white">{formatPercent(result.discountRate)} ao ano</strong>.
+              <p className="text-slate-200 text-xs leading-normal">
+                No preço atual de <strong className="text-white">{formatCurrency(currentPrice)}</strong>, o fundo entrega Dividend Yield de{' '}
+                <strong className="text-white">{formatPercent(result.currentYield)} a.a.</strong> contra yield requerido de{' '}
+                <strong className="text-white">{formatPercent(result.discountRate)} a.a.</strong>
                 {result.ceilingAnalysis === 'ABAIXO_DO_PRECO_TETO' ? (
                   <span className="text-emerald-300 font-semibold ml-1">
-                    O ativo encontra-se na zona de oportunidade matemática com {formatPercent(result.safetyMarginPercentage)} de margem de proteção.
+                    O ativo está na zona de oportunidade com {formatPercent(result.safetyMarginPercentage)} de margem.
                   </span>
                 ) : result.ceilingAnalysis === 'ACIMA_DO_PRECO_TETO' ? (
                   <span className="text-rose-300 font-semibold ml-1">
-                    O ativo está negociando acima do limite estabelecido para a sua rentabilidade exigida.
+                    O ativo está negociando acima do teto estabelecido.
                   </span>
                 ) : (
                   <span className="text-amber-300 font-semibold ml-1">
-                    O ativo está negociando no limite estabelecido para a sua rentabilidade exigida.
+                    O ativo está negociando no limite estabelecido.
                   </span>
                 )}
               </p>
@@ -1156,18 +1155,18 @@ export const Calculator: React.FC<CalculatorProps> = ({
           </div>
 
           {/* Rodapé e Chamada para Ação Orgânica */}
-          <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-300">
-                Faça sua própria simulação grátis em:{' '}
+          <div className="pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1.5">
+              <span className="font-bold text-slate-300 text-xs">
+                Faça sua simulação:{' '}
                 <strong className="text-emerald-400 font-mono text-sm underline decoration-emerald-500/50">
                   gvlab.com.br
                 </strong>
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-slate-400 text-xs">
-              <Calendar className="w-3.5 h-3.5 text-slate-500" />
-              <span>Simulação realizada em {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+            <div className="flex items-center gap-1 text-slate-400 text-[11px]">
+              <Calendar className="w-3 h-3 text-slate-500" />
+              <span>{new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
             </div>
           </div>
         </div>
