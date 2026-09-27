@@ -75,6 +75,11 @@ export default function App() {
     }
   }, []);
 
+  // Rola suavemente para o topo sempre que o usuário trocar de aba/seção
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeTab]);
+
   const handleAcceptDisclaimer = (dontShowAgain: boolean) => {
     if (dontShowAgain) {
       localStorage.setItem('tetofii_disclaimer_accepted', 'true');
@@ -214,7 +219,7 @@ export default function App() {
               <span className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded ${
                 activeTab === 'download' ? 'bg-emerald-800 text-white' : 'bg-emerald-100 text-emerald-800'
               }`}>
-                Beta
+                Android
               </span>
             </button>
           </nav>
@@ -306,7 +311,7 @@ export default function App() {
                 <span>Baixe o Aplicativo</span>
               </div>
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                Beta
+                Android
               </span>
             </button>
 

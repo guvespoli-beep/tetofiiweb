@@ -110,7 +110,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
     if (!activeReport) return;
     const shareUrl = `${window.location.origin}${window.location.pathname}?materia=${activeReport.id}`;
     const shareTitle = `${activeReport.title} | TETOFII`;
-    const shareText = `Confira os principais destaques do relatório gerencial de ${activeReport.ticker} (${activeReport.fundName}) no TETOFII:`;
+    const shareText = activeReport.title;
 
     if (navigator.share) {
       try {
@@ -149,16 +149,16 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
             type="button"
             onClick={() => {
               handleOpenReport(null);
-              window.scrollTo({ top: 100, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 font-bold text-sm shadow-2xs hover:bg-slate-50 transition-all cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Voltar para Lista de Relatórios</span>
+            <span>Voltar</span>
           </button>
 
           <div className="flex items-center gap-2">
-            {/* Botão de Compartilhar Matéria */}
+            {/* Botão de Compartilhar */}
             <button
               type="button"
               onClick={handleShareReport}
@@ -167,7 +167,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
                   ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                   : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 hover:text-emerald-700 hover:border-emerald-300'
               }`}
-              title="Compartilhar matéria"
+              title="Compartilhar"
             >
               {copiedLink ? (
                 <>
@@ -177,7 +177,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
               ) : (
                 <>
                   <Share2 className="w-4 h-4 text-emerald-600" />
-                  <span>Compartilhar Matéria</span>
+                  <span>Compartilhar</span>
                 </>
               )}
             </button>
@@ -228,23 +228,12 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
               Fundo: <strong className="text-slate-800">{activeReport.fundName}</strong> • Gestão: <strong className="text-slate-800">{activeReport.gestor}</strong>
             </p>
 
-            {/* Ações: Ler relatório completo e Compartilhar */}
+            {/* Ações: Compartilhar no cabeçalho */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
-              <a
-                href={activeReport.pdfUrl || 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1327262&cvm=true'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-slate-900 hover:bg-emerald-800 text-white font-bold text-sm shadow-xs transition-all hover:scale-[1.01] cursor-pointer"
-              >
-                <FileText className="w-4 h-4 text-emerald-400" />
-                <span>Clique Aqui para ler o relatório completo</span>
-                <ExternalLink className="w-4 h-4 text-slate-400" />
-              </a>
-
               <button
                 type="button"
                 onClick={handleShareReport}
-                className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 font-bold text-sm transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 font-bold text-sm transition-colors cursor-pointer"
               >
                 <Share2 className="w-4 h-4 text-emerald-700" />
                 <span>{copiedLink ? 'Link Copiado!' : 'Compartilhar'}</span>
@@ -380,38 +369,34 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
           </div>
         </section>
 
-        {/* Bloco 4: Conexão com o Preço Teto TETOFII */}
-        {activeReport.observacaoTetoFii && (
-          <section className="bg-emerald-900 text-white rounded-3xl p-6 sm:p-8 shadow-md space-y-3">
-            <div className="flex items-center gap-2 text-emerald-300 font-bold text-xs uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-emerald-300" />
-              <span>Visão Editorial TETOFII para a Precificação</span>
-            </div>
-            <h3 className="text-lg sm:text-xl font-black text-white">
-              Como esse relatório impacta a Projeção de Preço Teto de {activeReport.ticker}?
-            </h3>
-            <p className="text-sm text-emerald-100 leading-relaxed font-normal">
-              {activeReport.observacaoTetoFii}
-            </p>
-          </section>
-        )}
-
-        {/* Rodapé da Página do Artigo com CTA para o Relatório Completo e Compartilhamento */}
-        <div className="p-6 rounded-3xl bg-slate-100 border border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="space-y-1 text-center sm:text-left">
+        {/* Rodapé da Página do Artigo com CTA em Destaque para o Relatório Completo */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-slate-100 border border-slate-200/80 flex flex-col items-center justify-center text-center gap-5">
+          <div className="space-y-1 max-w-xl">
             <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-              Fonte Oficial do Documento
+              Documento Oficial na Íntegra
             </p>
-            <p className="text-sm text-slate-800 font-semibold">
-              Relatório publicado pela Gestora ({activeReport.gestor}) e registrado na CVM.
+            <p className="text-sm text-slate-700 font-medium">
+              Relatório publicado pela Gestora ({activeReport.gestor}) e registrado oficialmente na CVM / B3.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
+            {/* Botão com o layout e destaque exato da imagem */}
+            <a
+              href={activeReport.pdfUrl || 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1327262&cvm=true'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full bg-[#03442c] hover:bg-[#023321] text-white font-bold text-sm sm:text-base shadow-md hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <FileText className="w-5 h-5 text-emerald-400" />
+              <span>Clique Aqui para ler o relatório completo</span>
+              <ExternalLink className="w-4 h-4 text-emerald-300/80 ml-0.5" />
+            </a>
+
             <button
               type="button"
               onClick={handleShareReport}
-              className={`inline-flex items-center gap-2 px-5 py-3 rounded-2xl border font-bold text-sm shadow-xs transition-colors cursor-pointer ${
+              className={`inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border font-bold text-sm shadow-xs transition-all cursor-pointer ${
                 copiedLink
                   ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
                   : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 hover:text-emerald-700'
@@ -425,20 +410,10 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
               ) : (
                 <>
                   <Share2 className="w-4 h-4 text-emerald-600" />
-                  <span>Compartilhar Matéria</span>
+                  <span>Compartilhar</span>
                 </>
               )}
             </button>
-
-            <a
-              href={activeReport.pdfUrl || 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1327262&cvm=true'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm shadow-xs transition-colors shrink-0 cursor-pointer"
-            >
-              <span>Clique Aqui para ler o relatório completo</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
           </div>
         </div>
       </article>
@@ -533,7 +508,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
               key={report.id}
               onClick={() => {
                 handleOpenReport(report.id);
-                window.scrollTo({ top: 120, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-slate-200/90 hover:border-emerald-500/80 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-4"
             >

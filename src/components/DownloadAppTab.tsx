@@ -61,7 +61,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               <div>
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] font-semibold">
                   <Sparkles className="w-3 h-3 text-emerald-300" />
-                  <span>Acesso Antecipado • Versão de Testes Beta</span>
+                  <span>Aplicativo Oficial • Google Play Store</span>
                 </div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white mt-1">
                   Aplicativo <span className="text-emerald-400">TETO FII</span>
@@ -70,7 +70,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
             </div>
 
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              O aplicativo <strong>TETO FII</strong> está em fase de testes e você pode acessá-lo <strong>antecipadamente</strong>. Baixe agora para salvar sua própria carteira de ativos e monitorar Preço Teto, valor patrimonial e cotações da B3 com praticidade na palma da mão!
+              O aplicativo oficial <strong>TETO FII</strong> está disponível para smartphones Android. Instale agora para salvar sua própria carteira personalizada de ativos e monitorar Preço Teto, valor patrimonial e cotações da B3 com praticidade na palma da mão!
             </p>
 
             <div className="pt-1 flex flex-wrap items-center gap-4 text-xs text-slate-300">
@@ -84,7 +84,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               </div>
               <div className="flex items-center gap-1.5">
                 <HeartHandshake className="w-4 h-4 text-teal-300" />
-                <span>Comunidade de Testadores</span>
+                <span>Comunidade Oficial de Usuários</span>
               </div>
             </div>
           </div>
@@ -145,10 +145,10 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
             Passo a passo
           </span>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-            Como baixar em 2 etapas simples:
+            Como instalar em 2 etapas simples:
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            Como o app está em testes antecipados, o Google solicita que sua conta faça parte do grupo oficial de testadores.
+            Para garantir acesso prioritário e atualizações contínuas, faça parte do canal oficial no Google.
           </p>
         </div>
 
@@ -168,10 +168,10 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
 
               <div>
                 <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                  Inscrever-se no Grupo do Google
+                  Acessar o Grupo Oficial do Google
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                  Inscreva-se no grupo oficial para que sua conta Google seja liberada como testadora autorizada na Play Store:
+                  Inscreva-se no grupo oficial para que sua conta Google seja autorizada e tenha acesso à instalação direta na Play Store:
                 </p>
               </div>
 
@@ -246,7 +246,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
                   Baixar na Google Play Store
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                  Com a inscrição feita, acesse o link oficial do <strong>TETO FII</strong> na Google Play Store e instale a versão de testes no seu celular Android:
+                  Com a conta autorizada, acesse a página oficial do <strong>TETO FII</strong> na Google Play Store e instale no seu celular Android:
                 </p>
               </div>
 
@@ -386,7 +386,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
             </div>
             <h4 className="font-bold text-slate-900 text-xs sm:text-sm">Canal com o Desenvolvedor</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Participe da comunidade de testadores: envie sugestões de novos filtros e melhorias diretamente para os criadores do app.
+              Participe da comunidade oficial: envie sugestões de novos filtros e melhorias diretamente para os criadores do app.
             </p>
           </div>
         </div>
@@ -414,7 +414,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               O aplicativo é gratuito?
             </strong>
             <p className="text-slate-600 leading-relaxed">
-              Sim! O aplicativo é 100% gratuito tanto durante a fase de testes quanto no lançamento.
+              Sim! O aplicativo é 100% gratuito e sem custos de assinatura.
             </p>
           </div>
 
