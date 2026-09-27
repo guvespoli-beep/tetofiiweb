@@ -26,6 +26,7 @@ import {
 import { CalculationResult, FiiData } from '../types';
 import { QuestionButton } from './ExplanationModal';
 import { AdBanner } from './AdBanner';
+import { EducationalGuide } from './EducationalGuide';
 import { fetchLiveQuote } from '../services/quoteService';
 
 interface CalculatorProps {
@@ -682,7 +683,7 @@ Calculado no TETOFII`;
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
-              Análise de Valuation & Margem de Segurança
+              Análise de Precificação e Margem de Segurança
             </h3>
           </div>
 
@@ -856,6 +857,11 @@ Calculado no TETOFII`;
 
       {/* AdSlot #3: Banner Pós-Resultados (Strategic Position 3) */}
       <AdBanner position="post_results" onOpenAdGuide={onOpenAdGuide} />
+
+      {/* Artigo Editorial Completo Integrado na Página da Calculadora para o Google AdSense e Usuários */}
+      <div className="pt-6">
+        <EducationalGuide onOpenTopic={onOpenExplanation} />
+      </div>
     </div>
   );
 };

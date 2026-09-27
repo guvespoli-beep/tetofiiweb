@@ -110,7 +110,7 @@ export const AdsenseGuideModal: React.FC<AdsenseGuideModalProps> = ({
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-start gap-2.5">
                 <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block text-slate-800">Política de Privacidade & Cookies DART</strong>
+                  <strong className="block text-slate-800">Política de Privacidade e Cookies DART</strong>
                   <span>O Google exige menção expressa sobre os cookies de publicidade DART. Já criamos a página de Política pronta para você.</span>
                 </div>
               </div>

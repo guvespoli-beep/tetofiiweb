@@ -261,6 +261,9 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
+// Servir arquivos estáticos da pasta public (incluindo PDFs oficiais de relatórios)
+app.use(express.static(path.resolve(__dirname, 'public')));
+
 async function startServer() {
   if (!isProd) {
     const { createServer: createViteServer } = await import('vite');

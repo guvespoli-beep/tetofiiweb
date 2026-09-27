@@ -316,7 +316,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
                   Principal Vantagem
                 </span>
                 <h4 className="text-lg sm:text-xl font-bold text-white mt-1">
-                  Carteira Personalizada & Monitoramento Contínuo
+                  Carteira Personalizada e Monitoramento Contínuo
                 </h4>
               </div>
             </div>

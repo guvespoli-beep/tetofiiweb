@@ -13,35 +13,60 @@ import {
 import { Calculator } from './components/Calculator';
 import { RadarFiiTable } from './components/RadarFiiTable';
 import { DownloadAppTab } from './components/DownloadAppTab';
+import { EducationalGuide } from './components/EducationalGuide';
+import { FiiReportsSection } from './components/FiiReportsSection';
+import { AboutProjectModal } from './components/AboutProjectModal';
 import { ExplanationModal } from './components/ExplanationModal';
 import { DisclaimerModal } from './components/DisclaimerModal';
 import { AdsenseGuideModal } from './components/AdsenseGuideModal';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
 import { AdBanner } from './components/AdBanner';
 import { MarketTickerTape } from './components/MarketTickerTape';
+import { BookOpen, FileText } from 'lucide-react';
 
 export default function App() {
   // Navigation tabs
-  const [activeTab, setActiveTab] = useState<'calculator' | 'radar' | 'download'>('calculator');
+  const [activeTab, setActiveTab] = useState<'calculator' | 'radar' | 'reports' | 'guide' | 'download'>('calculator');
   const [selectedFiiForCalc, setSelectedFiiForCalc] = useState<string>('');
+  const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
 
   // Modals state
   const [explanationTopicId, setExplanationTopicId] = useState<string | null>(null);
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState<boolean>(false);
+  const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false);
   const [isAdGuideOpen, setIsAdGuideOpen] = useState<boolean>(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
-  // Check initial disclaimer acceptance from localStorage and URL param for admin guide
+  // Check initial disclaimer acceptance and URL parameters (tab, relatorio/artigo, guia admin)
   useEffect(() => {
     const hasAccepted = localStorage.getItem('tetofii_disclaimer_accepted');
     if (!hasAccepted) {
       setIsDisclaimerOpen(true);
     }
 
-    // Acesso privado ao guia de AdSense via URL (?guia=adsense)
     try {
       const params = new URLSearchParams(window.location.search);
+      
+      // Deep link para matéria/relatório: ?materia=art-1001 ou ?relatorio=...
+      const reportParam = params.get('materia') || params.get('relatorio') || params.get('artigo');
+      if (reportParam) {
+        setSelectedReportId(reportParam.trim().toLowerCase());
+        setActiveTab('reports');
+      } else {
+        const tabParam = params.get('aba');
+        if (tabParam && ['calculator', 'radar', 'reports', 'guide', 'download'].includes(tabParam)) {
+          setActiveTab(tabParam as any);
+        }
+      }
+
+      // Ticker pré-selecionado para cálculo: ?fii=HGLG11
+      const fiiParam = params.get('fii') || params.get('ticker');
+      if (fiiParam) {
+        setSelectedFiiForCalc(fiiParam.toUpperCase());
+      }
+
+      // Acesso privado ao guia de AdSense via URL (?guia=adsense)
       if (params.get('guia') === 'adsense' || params.get('admin') === 'adsense') {
         setIsAdGuideOpen(true);
       }
@@ -71,7 +96,7 @@ export default function App() {
           <div className="flex items-center gap-2 truncate">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
             <span className="truncate">
-              TETOFII • Calculadora Independente de Preço Teto para Fundos Imobiliários de Tijolo
+              TETOFII • Plataforma Independente de Precificação e Informações sobre FIIs de Tijolo
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-4 shrink-0 text-xs">
@@ -151,6 +176,32 @@ export default function App() {
 
             <button
               type="button"
+              onClick={() => setActiveTab('reports')}
+              className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'reports'
+                  ? 'bg-emerald-700 text-white shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>FIIque Informado</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('guide')}
+              className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'guide'
+                  ? 'bg-emerald-700 text-white shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Guia de Precificação</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setActiveTab('download')}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'download'
@@ -215,6 +266,34 @@ export default function App() {
             <button
               type="button"
               onClick={() => {
+                setActiveTab('reports');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
+                activeTab === 'reports' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>FIIque Informado</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('guide');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
+                activeTab === 'guide' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Guia de Precificação</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
                 setActiveTab('download');
                 setIsMobileMenuOpen(false);
               }}
@@ -273,6 +352,28 @@ export default function App() {
           />
         )}
 
+        {activeTab === 'reports' && (
+          <FiiReportsSection
+            initialReportId={selectedReportId}
+            onSelectReportId={(id) => setSelectedReportId(id)}
+            onGoToCalculatorWithTicker={(ticker) => {
+              setSelectedFiiForCalc(ticker);
+              setActiveTab('calculator');
+              window.scrollTo({ top: 120, behavior: 'smooth' });
+            }}
+          />
+        )}
+
+        {activeTab === 'guide' && (
+          <EducationalGuide
+            onOpenTopic={(topicId) => setExplanationTopicId(topicId)}
+            onGoToCalculator={() => {
+              setActiveTab('calculator');
+              window.scrollTo({ top: 120, behavior: 'smooth' });
+            }}
+          />
+        )}
+
         {activeTab === 'download' && (
           <DownloadAppTab onOpenDisclaimer={() => setIsDisclaimerOpen(true)} />
         )}
@@ -290,10 +391,10 @@ export default function App() {
               <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <strong className="block font-bold text-amber-950 mb-1">
-                  Termo de Responsabilidade & Isenção Educativa:
+                  Termo de Responsabilidade e Isenção Educativa:
                 </strong>
                 <p>
-                  "Esta ferramenta possui caráter exclusivamente educativo e de simulação matemática. Os cálculos dependem integralmente das premissas e dados inseridos pelo usuário. Não constitui relatório de análise, indicação de compra ou venda, nem recomendação de investimentos."
+                  "Esta plataforma possui caráter exclusivamente educativo, informativo e de simulação matemática. Os cálculos dependem integralmente das premissas e dados inseridos pelo usuário. As análises, destaques de relatórios gerenciais e dados disponibilizados têm finalidade meramente informativa e não constituem relatório de análise, indicação de compra ou venda, nem recomendação de investimentos."
                 </p>
               </div>
             </div>
@@ -303,10 +404,37 @@ export default function App() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-bold text-slate-700">TETOFII</span>
-              <span>• Calculadora Independente de Preço Teto para FIIs de Tijolo</span>
+              <span>• Plataforma Independente de Precificação e Informações sobre FIIs de Tijolo</span>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 text-slate-600">
+              <button
+                type="button"
+                onClick={() => setIsAboutOpen(true)}
+                className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
+              >
+                Sobre o TETOFII
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('reports');
+                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                }}
+                className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
+              >
+                FIIque Informado
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('guide');
+                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                }}
+                className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
+              >
+                Guia de Precificação (FAQ)
+              </button>
               <a
                 href="mailto:suporte@gvlab.com.br"
                 className="hover:text-emerald-700 flex items-center gap-1.5 transition-colors font-medium text-slate-700 hover:underline"
@@ -331,7 +459,7 @@ export default function App() {
                 onClick={() => setIsPrivacyOpen(true)}
                 className="hover:text-emerald-700 transition-colors cursor-pointer"
               >
-                Política de Privacidade & Cookies
+                Política de Privacidade e Cookies
               </button>
               <button
                 type="button"
@@ -382,6 +510,15 @@ export default function App() {
       <PrivacyPolicyModal
         isOpen={isPrivacyOpen}
         onClose={() => setIsPrivacyOpen(false)}
+      />
+
+      <AboutProjectModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+        onGoToGuide={() => {
+          setActiveTab('guide');
+          window.scrollTo({ top: 120, behavior: 'smooth' });
+        }}
       />
     </div>
   );

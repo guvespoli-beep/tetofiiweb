@@ -200,7 +200,7 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
                 className="p-3.5 cursor-pointer hover:bg-slate-100 transition-colors min-w-[220px]"
               >
                 <div className="flex items-center gap-1">
-                  <span>Ticker & Fundo</span>
+                  <span>Ticker e Fundo</span>
                   <ArrowUpDown className={`w-3 h-3 ${sortBy === 'ticker' ? 'text-emerald-700' : 'text-slate-400'}`} />
                 </div>
               </th>

@@ -15,7 +15,7 @@ export const TickerMigrationGuide: React.FC<TickerMigrationGuideProps> = ({ onSe
       <div className="border-b border-slate-100 pb-6">
         <div className="flex items-center gap-2">
           <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900">
-            Histórico B3 & CVM Auditado
+            Histórico B3 e CVM Auditado
           </span>
           <span className="text-xs text-slate-400">Guia Oficial de Migrações e Mudanças de Ticker</span>
         </div>

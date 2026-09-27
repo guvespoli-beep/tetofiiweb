@@ -17,7 +17,7 @@ export const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
   if (!isOpen) return null;
 
   const disclaimerText =
-    "Esta ferramenta possui caráter exclusivamente educativo e de simulação matemática. Os cálculos dependem integralmente das premissas e dados inseridos pelo usuário. Não constitui relatório de análise, indicação de compra ou venda, nem recomendação de investimentos.";
+    "Esta plataforma possui caráter exclusivamente educativo, informativo e de simulação matemática. Os cálculos dependem integralmente das premissas e dados inseridos pelo usuário. As análises, destaques de relatórios gerenciais e dados disponibilizados têm finalidade meramente informativa e não constituem relatório de análise, indicação de compra ou venda, nem recomendação de investimentos.";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/70 backdrop-blur-xs animate-in fade-in duration-200">
