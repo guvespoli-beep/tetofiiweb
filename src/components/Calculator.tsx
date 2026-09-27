@@ -293,12 +293,23 @@ export const Calculator: React.FC<CalculatorProps> = ({
     const shareText = `📊 Calculei o Preço Teto do ${ticker} no TETOFII\nDescubra o preço teto dos seus FIIs também!\nAcesse ${siteUrl}`;
 
     try {
-      // Gera a imagem PNG em alta resolução do card dedicado de compartilhamento
-      const blob = await toBlob(shareCardTemplateRef.current, {
+      // Opções seguras para html-to-image ignorando folhas de estilo externas (evita erro de CORS ao ler cssRules do Google Fonts)
+      const exportOptions = {
         cacheBust: true,
         pixelRatio: 2,
-        backgroundColor: '#0b1120',
-      });
+        backgroundColor: '#020617',
+        skipFonts: true,
+        filter: (domNode: HTMLElement) => {
+          // Ignora tags de link/estilos que causem restrição de CORS
+          if (domNode.tagName === 'LINK' && (domNode as HTMLLinkElement).rel === 'stylesheet') {
+            return false;
+          }
+          return true;
+        },
+      };
+
+      // Gera a imagem PNG em alta resolução do card dedicado de compartilhamento
+      const blob = await toBlob(shareCardTemplateRef.current, exportOptions);
 
       if (blob) {
         const file = new File([blob], `TETOFII_${ticker}_Simulacao.png`, {
@@ -325,11 +336,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
             url: siteUrl,
           });
           // E também faz o download da imagem para o usuário poder enviar
-          const dataUrl = await toPng(shareCardTemplateRef.current, {
-            cacheBust: true,
-            pixelRatio: 2,
-            backgroundColor: '#0b1120',
-          });
+          const dataUrl = await toPng(shareCardTemplateRef.current, exportOptions);
           const link = document.createElement('a');
           link.download = `TETOFII_${ticker}_Simulacao.png`;
           link.href = dataUrl;
@@ -341,11 +348,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
         }
 
         // Fallback para Desktop sem Web Share API: copia o texto com link e baixa a imagem
-        const dataUrl = await toPng(shareCardTemplateRef.current, {
-          cacheBust: true,
-          pixelRatio: 2,
-          backgroundColor: '#0b1120',
-        });
+        const dataUrl = await toPng(shareCardTemplateRef.current, exportOptions);
         const link = document.createElement('a');
         link.download = `TETOFII_${ticker}_Simulacao.png`;
         link.href = dataUrl;
