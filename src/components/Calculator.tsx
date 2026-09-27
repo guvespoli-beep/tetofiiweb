@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import {
   Calculator as CalcIcon,
   Search,
@@ -14,8 +14,13 @@ import {
   TrendingDown,
   Lock,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  Share2,
+  Download,
+  Loader2,
+  Calendar
 } from 'lucide-react';
+import { toBlob, toPng } from 'html-to-image';
 import {
   searchFii,
   formatCurrency,
@@ -52,9 +57,11 @@ export const Calculator: React.FC<CalculatorProps> = ({
   const [aliasNotification, setAliasNotification] = useState<string | null>(null);
   const [isVpManuallyEdited, setIsVpManuallyEdited] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
+  const [isSharing, setIsSharing] = useState<boolean>(false);
   const [lastQuoteTime, setLastQuoteTime] = useState<string>('');
   const [quoteSource, setQuoteSource] = useState<string>('Yahoo Finance (B3)');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const simulationCardRef = useRef<HTMLDivElement>(null);
 
   // Load fund data with real-time market quote from Yahoo Finance
   const loadFiiData = useCallback(async (ticker: string, notifyIfAlias: boolean = true) => {
@@ -276,23 +283,91 @@ export const Calculator: React.FC<CalculatorProps> = ({
     };
   }, [referenceRate, riskPremium, monthlyDividend, currentPrice, vpPerShare]);
 
-  // Copy Summary
-  const handleCopySummary = () => {
-    const numVp = typeof vpPerShare === 'number' ? vpPerShare : 0;
-    const summaryText = `📊 Análise de Preço Teto • FII ${activeFii?.ticker || tickerQuery || 'FII'} (${activeFii?.name || 'FII de Tijolo'})
-Preço Atual (B3): ${formatCurrency(currentPrice)} (atualizado a cada 5 min)
-Preço Teto Calculado: ${result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'Aguardando parâmetros'}
-Preço Atual / Teto: ${result.ceilingPrice > 0 ? formatDecimal(result.priceToCeilingRatio, 2) : '-'}
-Status do Teto: ${result.ceilingPrice > 0 ? (result.ceilingAnalysis === 'ABAIXO_DO_PRECO_TETO' ? `Abaixo do Teto (Margem de Segurança de ${formatPercent(result.safetyMarginPercentage)})` : `Acima do Teto (Sobrepreço de ${formatPercent(result.safetyMarginPercentage)})`) : 'Parâmetros incompletos'}
-P/VP: ${result.pvp > 0 ? formatDecimal(result.pvp, 2) : '-'} (${result.pvpAnalysis === 'SEM_DADOS' ? '-' : result.pvpAnalysis === 'ABAIXO_DO_VP' ? `Desconto de ${formatPercent(result.pvpDiscountOrPremiumPercent)}` : result.pvpAnalysis === 'ACIMA_DO_VP' ? `Ágio de ${formatPercent(result.pvpDiscountOrPremiumPercent)}` : 'Paridade'})
-Premissas: Taxa de Referência ${referenceRate ? formatPercent(Number(referenceRate)) : 'não informada'} + Prêmio ${riskPremium ? formatPercent(Number(riskPremium)) : 'não informado'}
-Provento Mensal: ${monthlyDividend ? formatCurrency(Number(monthlyDividend)) : 'não informado'} (Anual: ${formatCurrency(result.annualDividend)})
-VP por Cota: ${formatCurrency(numVp)} (Informe de ${activeFii?.cvmReportDate || 'Agosto/2026'})
-Calculado no TETOFII`;
+  // Compartilhar Simulação com Imagem Gerada + Texto de Divulgação Orgânica
+  const handleShareSimulation = async () => {
+    if (!simulationCardRef.current) return;
+    setIsSharing(true);
 
-    navigator.clipboard.writeText(summaryText);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2500);
+    const ticker = activeFii?.ticker || tickerQuery || 'FII';
+    const siteUrl = 'https://gvlab.com.br';
+    const shareText = `Veja como eu calculei o preço teto de ${ticker} em TETOFII:\n${siteUrl}`;
+
+    try {
+      // Gera a imagem PNG em alta resolução do card completo
+      const blob = await toBlob(simulationCardRef.current, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: '#0b1120',
+      });
+
+      if (blob) {
+        const file = new File([blob], `TETOFII_${ticker}_Simulacao.png`, {
+          type: 'image/png',
+        });
+
+        // Se o navegador suportar compartilhamento de arquivos (Mobile / WhatsApp / etc.)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: `Simulação de Preço Teto - ${ticker} | TETOFII`,
+            text: shareText,
+            files: [file],
+          });
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2500);
+          return;
+        }
+
+        // Se suportar navigator.share sem arquivos (alguns browsers desktop)
+        if (navigator.share) {
+          await navigator.share({
+            title: `Simulação de Preço Teto - ${ticker} | TETOFII`,
+            text: shareText,
+            url: siteUrl,
+          });
+          // E também faz o download da imagem para o usuário poder enviar
+          const dataUrl = await toPng(simulationCardRef.current, {
+            cacheBust: true,
+            pixelRatio: 2,
+            backgroundColor: '#0b1120',
+          });
+          const link = document.createElement('a');
+          link.download = `TETOFII_${ticker}_Simulacao.png`;
+          link.href = dataUrl;
+          link.click();
+
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2500);
+          return;
+        }
+
+        // Fallback para Desktop sem Web Share API: copia o texto com link e baixa a imagem
+        const dataUrl = await toPng(simulationCardRef.current, {
+          cacheBust: true,
+          pixelRatio: 2,
+          backgroundColor: '#0b1120',
+        });
+        const link = document.createElement('a');
+        link.download = `TETOFII_${ticker}_Simulacao.png`;
+        link.href = dataUrl;
+        link.click();
+
+        await navigator.clipboard.writeText(shareText);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 3000);
+      }
+    } catch (err) {
+      console.warn('Erro ao compartilhar ou gerar imagem:', err);
+      // Fallback simples de texto
+      try {
+        await navigator.clipboard.writeText(shareText);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2500);
+      } catch {
+        // Ignora
+      }
+    } finally {
+      setIsSharing(false);
+    }
   };
 
   const hasCompleteInputs = typeof referenceRate === 'number' && typeof riskPremium === 'number' && typeof monthlyDividend === 'number' && result.ceilingPrice > 0;
@@ -670,16 +745,19 @@ Calculado no TETOFII`;
         </div>
       </div>
 
-      {/* Primary Results Section: 4 High-Impact KPI Cards */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-855 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      {/* Primary Results Section: 4 High-Impact KPI Cards (com ref para captura de imagem) */}
+      <div
+        ref={simulationCardRef}
+        className="bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800 space-y-5"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
           <div>
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                Resultado Matemático
+                Resultado da Simulação
               </span>
               <span className="text-xs text-slate-400">
-                Ticker Ativo: {activeFii?.ticker || tickerQuery}
+                Ticker Ativo: {activeFii?.ticker || tickerQuery || 'FII'}
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-black tracking-tight mt-1 text-white">
@@ -690,26 +768,62 @@ Calculado no TETOFII`;
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={handleCopySummary}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+              onClick={handleShareSimulation}
+              disabled={isSharing}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-80 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
-              {isCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{isCopied ? 'Resumo Copiado!' : 'Copiar Resumo'}</span>
+              <Share2 className="w-4 h-4 text-emerald-200" />
+              <span>Compartilhar</span>
             </button>
           </div>
         </div>
 
-        {/* 4 Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          {/* Card 1: Preço Teto */}
+        {/* Faixa destacada: Taxa de Desconto Total (Yield Requerido) com composição da taxa de referência e prêmio */}
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs sm:text-sm shadow-inner">
+          <div className="flex items-center gap-2 text-slate-200 font-medium">
+            <Percent className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>
+              Taxa de Desconto Total (Yield Requerido):{' '}
+              <strong className="text-emerald-400 font-bold text-sm sm:text-base font-mono">
+                {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : '0,00% a.a.'}
+              </strong>
+            </span>
+          </div>
+          <div className="text-slate-400 text-xs font-medium sm:text-right">
+            ({referenceRate ? formatPercent(Number(referenceRate)) : '0,00%'} Taxa Ref. + {riskPremium ? formatPercent(Number(riskPremium)) : '0,00%'} Prêmio)
+          </div>
+        </div>
+
+        {/* 4 Cards Grid: sempre lado a lado em desktop e tablets (md:grid-cols-4) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+          {/* Card 1: Preço Atual */}
           <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
+              <div className="flex items-center text-slate-400 text-xs font-semibold mb-1">
                 <span className="flex items-center gap-1">
-                  Preço Teto Máximo
+                  Preço Atual
+                  <QuestionButton topicId="relacao-preco-teto" onClick={onOpenExplanation} className="bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white" />
+                </span>
+              </div>
+              <div className="text-2xl sm:text-3xl font-black font-mono text-white">
+                {currentPrice > 0 ? formatCurrency(currentPrice) : 'R$ 0,00'}
+              </div>
+            </div>
+            <div className="mt-3 pt-3 border-t border-slate-700/60 text-xs text-slate-400">
+              <span>
+                {currentPrice > 0 ? `Cotação de mercado em tempo real` : 'Aguardando cotação'}
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: Preço Teto */}
+          <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center text-slate-400 text-xs font-semibold mb-1">
+                <span className="flex items-center gap-1">
+                  Preço Teto
                   <QuestionButton topicId="preco-teto" onClick={onOpenExplanation} className="bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white" />
                 </span>
-                <span className="text-[10px] font-mono text-emerald-400">Preço Teto</span>
               </div>
               <div className="text-2xl sm:text-3xl font-black font-mono text-emerald-400">
                 {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'R$ 0,00'}
@@ -717,22 +831,23 @@ Calculado no TETOFII`;
             </div>
             <div className="mt-3 pt-3 border-t border-slate-700/60 text-xs text-slate-400">
               <span>
-                {result.discountRate > 0
-                  ? `Para Yield de ${formatPercent(result.discountRate)} a.a.`
+                {result.discountRate > 0 && typeof monthlyDividend === 'number'
+                  ? `Provento mensal de ${formatCurrency(monthlyDividend)} e um yield de ${formatPercent(result.discountRate)} a.a.`
+                  : result.discountRate > 0
+                  ? `Para um yield de ${formatPercent(result.discountRate)} a.a.`
                   : 'Preencha taxa e provento'}
               </span>
             </div>
           </div>
 
-          {/* Card 2: Relação Preço Atual / Preço Teto (Múltiplo Decimal similar a P/VP) */}
+          {/* Card 3: Preço Atual / Preço Teto */}
           <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
+              <div className="flex items-center text-slate-400 text-xs font-semibold mb-1">
                 <span className="flex items-center gap-1">
-                  Preço Atual / Teto
+                  Preço Atual / Preço Teto
                   <QuestionButton topicId="relacao-preco-teto" onClick={onOpenExplanation} className="bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white" />
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">Múltiplo</span>
               </div>
               <div className="text-2xl sm:text-3xl font-black font-mono text-white">
                 {result.ceilingPrice > 0 ? formatDecimal(result.priceToCeilingRatio, 2) : '-'}
@@ -763,66 +878,37 @@ Calculado no TETOFII`;
             </div>
           </div>
 
-          {/* Card 3: P/VP */}
+          {/* Card 4: Indicador P/VP com Abaixo do VP ou Acima do VP embaixo */}
           <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
+              <div className="flex items-center text-slate-400 text-xs font-semibold mb-1">
                 <span className="flex items-center gap-1">
                   Indicador P/VP
                   <QuestionButton topicId="pvp" onClick={onOpenExplanation} className="bg-slate-700 text-slate-300 hover:bg-emerald-600 hover:text-white" />
                 </span>
-                <span className="text-[10px] font-mono text-slate-400">CVM</span>
               </div>
               <div className="text-2xl sm:text-3xl font-black font-mono text-white">
                 {result.pvp > 0 ? formatDecimal(result.pvp, 2) : '-'}
               </div>
             </div>
             <div className="mt-3 pt-3 border-t border-slate-700/60">
-              <span className="text-xs text-slate-400">
-                VP Cota: <strong className="text-slate-200">{typeof vpPerShare === 'number' && vpPerShare > 0 ? formatCurrency(vpPerShare) : '-'}</strong>
-              </span>
-            </div>
-          </div>
-
-          {/* Card 4: Análise do P/VP (Acima ou Abaixo do VP) */}
-          <div className="bg-slate-800/80 backdrop-blur-xs p-5 rounded-2xl border border-slate-700/80 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between text-slate-400 text-xs font-semibold mb-1">
-                <span>Análise do P/VP</span>
-                <span className="text-[10px] font-mono text-slate-400">Status</span>
-              </div>
-              <div className="mt-1">
-                {result.pvpAnalysis === 'SEM_DADOS' ? (
-                  <div className="text-2xl sm:text-3xl font-black font-mono text-slate-400">
-                    -
-                  </div>
-                ) : result.pvpAnalysis === 'ABAIXO_DO_VP' ? (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 font-bold text-sm border border-emerald-500/30">
-                    <span>Abaixo do VP</span>
-                    <span className="text-xs font-mono font-normal">(-{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
-                  </div>
-                ) : result.pvpAnalysis === 'ACIMA_DO_VP' ? (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 font-bold text-sm border border-amber-500/30">
-                    <span>Acima do VP (Ágio)</span>
-                    <span className="text-xs font-mono font-normal">(+{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
-                  </div>
-                ) : (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/20 text-blue-300 font-bold text-sm border border-blue-500/30">
-                    <span>No VP (Paridade 1,00)</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="mt-3 pt-3 border-t border-slate-700/60 text-xs text-slate-400">
-              <span>
-                {result.pvpAnalysis === 'SEM_DADOS'
-                  ? '-'
-                  : result.pvpAnalysis === 'ABAIXO_DO_VP'
-                  ? 'Negociando com desconto sobre laudo CVM'
-                  : result.pvpAnalysis === 'ACIMA_DO_VP'
-                  ? 'Negociando acima do valor contábil'
-                  : 'Preço em linha com o laudo pericial'}
-              </span>
+              {result.pvpAnalysis === 'SEM_DADOS' ? (
+                <span className="text-xs text-slate-400">Aguardando dados</span>
+              ) : result.pvpAnalysis === 'ABAIXO_DO_VP' ? (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30">
+                  <TrendingDown className="w-3.5 h-3.5" />
+                  <span>Abaixo do VP (-{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
+                </div>
+              ) : result.pvpAnalysis === 'ACIMA_DO_VP' ? (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 text-xs font-bold border border-amber-500/30">
+                  <TrendingUp className="w-3.5 h-3.5" />
+                  <span>Acima do VP (+{formatPercent(result.pvpDiscountOrPremiumPercent, 1)})</span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-500/30">
+                  <span>No VP (1,00)</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -831,7 +917,7 @@ Calculado no TETOFII`;
         <div className="mt-6 p-4 rounded-2xl bg-slate-800/40 border border-slate-700/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
           <div className="space-y-1">
             <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-              Diagnóstico Matemático Consolidado:
+              Diagnóstico Consolidado da Simulação:
             </span>
             {hasCompleteInputs ? (
               <p className="text-slate-200">
@@ -840,9 +926,13 @@ Calculado no TETOFII`;
                   <span className="text-emerald-300 font-semibold ml-1">
                     O ativo encontra-se na zona de oportunidade matemática com {formatPercent(result.safetyMarginPercentage)} de margem de proteção.
                   </span>
-                ) : (
+                ) : result.ceilingAnalysis === 'ACIMA_DO_PRECO_TETO' ? (
                   <span className="text-rose-300 font-semibold ml-1">
                     O ativo está negociando acima do limite estabelecido para a sua rentabilidade exigida.
+                  </span>
+                ) : (
+                  <span className="text-amber-300 font-semibold ml-1">
+                    O ativo está negociando no limite estabelecido para a sua rentabilidade exigida.
                   </span>
                 )}
               </p>
@@ -851,6 +941,24 @@ Calculado no TETOFII`;
                 Preencha a <strong>Taxa de Referência</strong>, o <strong>Prêmio de Risco</strong> e o <strong>Provento Mensal</strong> para visualizar o cálculo do Preço Teto e a margem de segurança {activeFii?.ticker || tickerQuery ? `para o fundo ${activeFii?.ticker || tickerQuery}` : 'para o ativo desejado'}.
               </p>
             )}
+          </div>
+        </div>
+
+        {/* Rodapé da Simulação: Divulgação Orgânica, Data e Link Oficial (impresso na imagem compartilhada) */}
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 border-t border-slate-800/70">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded-md bg-emerald-600 text-white flex items-center justify-center font-black text-[10px]">
+              T
+            </div>
+            <span className="text-slate-300 font-semibold">
+              Simulação gerada no <strong className="text-white">TETOFII</strong> •{' '}
+              <span className="text-emerald-400 font-mono">gvlab.com.br</span>
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-slate-400 text-[11px]">
+            <Calendar className="w-3.5 h-3.5 text-slate-500" />
+            <span>Simulação realizada em {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
           </div>
         </div>
       </div>
