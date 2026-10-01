@@ -2,6 +2,63 @@ import { FiiReportHighlight } from '../types/reports';
 
 export const FII_REPORTS_DATA: FiiReportHighlight[] = [
   {
+    id: 'art-1003',
+    ticker: 'FATN11',
+    fundName: 'BRC Renda Corporativa FII (ex-Athena I)',
+    segment: 'Lajes Corporativas',
+    reportMonth: 'Agosto de 2026',
+    publishedAt: '2026-10-01',
+    publishedAtFormatted: '01/10/2026',
+    title: 'FATN11 - Destaques do Relatório Gerencial de Agosto de 2026',
+    summaryBadge: 'Lajes Plug & Play • P/VP 0,81x • 151 Lajes',
+    pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1336927&cvm=true',
+    pdfFilename: 'FATN11_Relatorio_Gerencial_Agosto_2026.pdf',
+
+    gestor: 'BR Capital DTVM S.A.',
+    administrador: 'BR Capital DTVM S.A.',
+    taxaAdmTotal: '0,8% ao ano sobre o patrimônio líquido (administração e consultoria imobiliária).',
+    guidance: 'Não Informado',
+
+    indicadores: [
+      { label: 'Patrimônio Líquido', value: 'R$ 687,4 milhões' },
+      { label: 'Cota Patrimonial', value: 'R$ 97,23' },
+      { label: 'Valor de Mercado da Cota', value: 'R$ 78,70' },
+      { label: 'P/VP', value: '0,81x', highlight: true },
+      { label: 'Área Bruta Locável (ABL)', value: '44.097 m²' },
+      { label: 'Quantidade de Lajes Corporativas', value: '151 lajes (59 edifícios)' },
+      { label: 'Quantidade de Inquilinos', value: '130' },
+      { label: 'Vacância (Conjuntos Gerais)', value: '3,10%', highlight: true },
+      { label: 'Alavancagem (CRI / PL)', value: '5,97%' },
+      { label: 'Disponibilidades (Caixa)', value: 'R$ 9,5 milhões' },
+      { label: 'Número de Cotistas', value: '31.125' },
+      { label: 'Rendimento Distribuído', value: 'R$ 0,80', highlight: true },
+      { label: 'Reserva Acumulada', value: 'Sem reserva' },
+      { label: 'Prazo Médio Contratos (WAULT)', value: '2,93 anos' },
+    ],
+
+    principaisInquilinos: [
+      'Serviços Advocatícios (16,2%)',
+      'Serviços Financeiros (16,0%)',
+      'Consultoria (13,5%)',
+      'Seguros (9,1%)',
+      'Tecnologia (9,0%)',
+      'Comércio de Energia (2,8%)',
+      'Incorporação (2,3%)',
+      'Serviços de Eventos (1,3%)',
+      'Outros Segmentos Pulverizados (29,7%)',
+    ],
+
+    outrosPontosRelevantes: [
+      'Foco de atuação e conceito Plug and Play: Estratégia de Middle Market focada na aquisição de escritórios com alta liquidez, reformados, mobiliados e prontos para operar. O prazo médio histórico de recolocação de aluguéis é inferior a 1 mês, com aviso prévio mínimo de 90 dias nos contratos.',
+      'Edifício Brasílio Machado: 100% dos escritórios pertencentes ao FATN11 estão locados, bem como a Loja 02 (restaurante). Obras das áreas internas totalmente finalizadas. A aquisição de 50% de participação do 12º andar (pertencente ao FII Oxigênio 2) está prevista para ocorrer até outubro de 2026.',
+      'Edifício Arco do Triunfo (Higienópolis): Adquirido em fevereiro de 2026 e em fase de retrofit e comercialização. Conjuntos 2A e 9A tiveram vigência iniciada em agosto/2026 (contratos até 2029 e 2031); 4A e 5A ocupados; 10A e 12A assinados com vigência a partir de outubro/2026.',
+      'Vendas realizadas no mês: Concluída em agosto a venda dos conjuntos 111 ao 114 do Ed. The Taj (Vila Olímpia), totalizando 442,18 m² de ABL. Do preço total, 47% foram recebidos à vista e o saldo em 10 parcelas mensais, com locação partilhada proporcionalmente até a quitação.',
+      'Alavancagem e serviço da dívida: Duas séries de CRI atreladas ao IPCA (CRI 1 a IPCA + 6,25% a.a. e CRI 2 a IPCA + 7,70% a.a.), com saldo devedor total de R$ 41,0 milhões. Em agosto foram amortizados R$ 696 mil (CRI 1) e R$ 347 mil (CRI 2), sendo que as amortizações não impactam a distribuição de rendimentos.',
+      'Localização privilegiada e indexadores: 48% da ABL concentrada na Vila Olímpia, 13% no Brooklin, 11% na Berrini, 4% na Faria Lima e 4% na Paulista. 67,87% dos contratos são corrigidos pelo IPCA e 32,13% pelo IGP-M.',
+      'Fundo de Reposição de Ativos (FRA): Recolhimento mensal de 3% das receitas de caixa para manutenção e modernização do portfólio. Em agosto, dos R$ 196 mil investidos em obras e melhorias, R$ 124 mil foram suportados pelo FRA sem onerar a distribuição de proventos.',
+    ],
+  },
+  {
     id: 'art-1002',
     ticker: 'BTLG11',
     fundName: 'BTG Pactual Logística FII',
