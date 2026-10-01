@@ -2,6 +2,68 @@ import { FiiReportHighlight } from '../types/reports';
 
 export const FII_REPORTS_DATA: FiiReportHighlight[] = [
   {
+    id: 'art-1002',
+    ticker: 'BTLG11',
+    fundName: 'BTG Pactual Logística FII',
+    segment: 'Logística',
+    reportMonth: 'Setembro de 2026',
+    publishedAt: '2026-09-30',
+    publishedAtFormatted: '30/09/2026',
+    title: 'BTLG11 - Destaques do Relatório Gerencial de Setembro de 2026',
+    summaryBadge: 'Logística SP • P/VP 0,93x • Vacância 1,1%',
+    pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1336846&cvm=true',
+    pdfFilename: 'BTLG11_Relatorio_Gerencial_Setembro_2026.pdf',
+
+    gestor: 'BTG Pactual Gestora de Recursos Ltda.',
+    administrador: 'BTG Pactual Serviços Financeiros S.A. DTVM',
+    taxaAdmTotal: '0,90% ao ano sobre o valor de mercado do fundo.',
+    guidance: 'Entre R$ 0,78 e R$ 0,84',
+
+    indicadores: [
+      { label: 'Patrimônio Líquido', value: 'R$ 7,6 bilhões' },
+      { label: 'Cota Patrimonial', value: 'R$ 106,69' },
+      { label: 'Valor de Mercado', value: 'R$ 7,0 bilhões' },
+      { label: 'Cota de Mercado', value: 'R$ 99,10' },
+      { label: 'P/VP', value: '0,93x', highlight: true },
+      { label: 'Quantidade de Imóveis', value: '35' },
+      { label: 'Área Bruta Locável (ABL)', value: '1.530.692 m²' },
+      { label: 'Número de Cotistas', value: '525.374' },
+      { label: 'Vacância Financeira', value: '1,1%', highlight: true },
+      { label: 'Vacância Física (% ABL)', value: '1,0%' },
+      { label: 'Alavancagem (LTV)', value: '1,9%', sublabel: 'Dívida muito baixa frente aos ativos' },
+      { label: 'Dividend Yield Anualizado', value: '10,3%' },
+      { label: 'Rendimento Distribuído', value: 'R$ 0,81', highlight: true },
+      { label: 'Reserva Acumulada', value: 'R$ 0,03' },
+    ],
+
+    principaisInquilinos: [
+      'Assaí (8%)',
+      'DHL (6%)',
+      'Unilever (6%)',
+      'Ceva Logistics (6%)',
+      'Amazon (4%)',
+      'Luft Logistics (4%)',
+      'Nestlé (4%)',
+      'Braskem (3%)',
+      'BRF (3%)',
+      'Rojemac (3%)',
+      'BioMedical (3%)',
+      'Jamef (3%)',
+      'Mercado Livre (2%)',
+      'Shopee (2%)',
+      'JSL (2%)',
+    ],
+
+    outrosPontosRelevantes: [
+      'Potencial aquisição de ativos AAA: Memorando de entendimentos para compra de 3 ativos locados para Amazon e Mercado Livre (182,5 mil m² de ABL), em SP (raios 30km e 60km) e Curitiba. O valor indicativo é de R$ 918,5 milhões, com cap rate de ~9,0% e yield médio estimado em 12,6% nos próximos 24 meses, com remuneração de IPCA + 11,0% a.a. nos desembolsos de obras BTS.',
+      'Convocação da 17ª Emissão de Cotas: Proposta de captação de aproximadamente R$ 800 milhões (com lote adicional de até 50%), com novas cotas ao valor patrimonial de R$ 106,69 por cota, voltada para expandir o portfólio logístico.',
+      'Quitação antecipada de dívidas: Em 31 de agosto, quitou antecipadamente R$ 51,8 milhões referentes aos imóveis BTLG Mauá II e BTLG Osasco, eliminando custo de CDI + 2,0% a.a. e mantendo LTV em patamar mínimo de 1,9%.',
+      'Locação recente com ganho real: Conclusão da locação de 3,4 mil m² no BTLG Jundiaí por 5 anos, sem vacância intermediária e com ganho real de 13% no valor do aluguel (segunda reprecificação positiva consecutiva no ativo).',
+      'Alta concentração em São Paulo e contratos IPCA: 92% da ABL está no Estado de SP (42% no raio de 30 km e 35% no raio de 60 km da capital). 97% das receitas de locação são indexadas ao IPCA e 53% dos contratos vencem a partir de 2029 (WAULT de 4 anos).',
+      'Desinvestimentos e criação de valor: Histórico de R$ 1,3 bilhão em vendas nos últimos 4 anos, gerando lucro de R$ 4,68/cota (preços 27% acima dos valores de laudo). Há R$ 60,1 milhões (R$ 0,87/cota) em lucros de vendas retidos a serem distribuídos.',
+    ],
+  },
+  {
     id: 'art-1001',
     ticker: 'HGLG11',
     fundName: 'Patria LOG FII (CSHG Logística)',
@@ -11,7 +73,6 @@ export const FII_REPORTS_DATA: FiiReportHighlight[] = [
     publishedAtFormatted: '26/09/2026',
     title: 'HGLG11 - Destaques do Relatório Gerencial de Agosto de 2026',
     summaryBadge: 'Logística AAA • P/VP 0,89x',
-    // Link direto para o documento oficial na B3 / CVM (Sistema Fnet)
     pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1327262&cvm=true',
     pdfFilename: 'HGLG11_Relatorio_Gerencial_Agosto_2026.pdf',
 
