@@ -2,6 +2,64 @@ import { FiiReportHighlight } from '../types/reports';
 
 export const FII_REPORTS_DATA: FiiReportHighlight[] = [
   {
+    id: 'art-1004',
+    ticker: 'KNRI11',
+    fundName: 'Kinea Renda Imobiliária FII',
+    segment: 'Híbrido (Lajes e Logística)',
+    reportMonth: 'Setembro de 2026',
+    publishedAt: '2026-10-02',
+    publishedAtFormatted: '02/10/2026',
+    title: 'KNRI11 - Destaques do Relatório Gerencial de Setembro de 2026',
+    summaryBadge: 'Híbrido • P/VP 0,96x • Vacância Física 1,84%',
+    // Link direto para o documento oficial na B3 / CVM (Sistema Fnet)
+    pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1338388&cvm=true',
+    pdfFilename: 'KNRI11_Relatorio_Gerencial_Setembro_2026.pdf',
+
+    gestor: 'Kinea Investimentos Ltda.',
+    administrador: 'Intrag DTVM Ltda.',
+    taxaAdmTotal: '1,11% ao ano sobre o valor de mercado.',
+
+    indicadores: [
+      { label: 'Patrimônio Líquido', value: 'R$ 4,61 bilhões' },
+      { label: 'Cota Patrimonial', value: 'R$ 163,64' },
+      { label: 'Valor de Mercado', value: 'R$ 4,43 bilhões' },
+      { label: 'Cota de Mercado', value: 'R$ 157,01' },
+      { label: 'P/VP', value: '0,96x', highlight: true },
+      { label: 'Quantidade de Imóveis', value: '18' },
+      { label: 'Área Bruta Locável (ABL)', value: '639.579 m²' },
+      { label: 'Quantidade de Inquilinos', value: 'Mais de 150' },
+      { label: 'Vacância Física', value: '1,84%', highlight: true },
+      { label: 'Vacância Financeira', value: '4,66%', highlight: true },
+      { label: 'Rendimento Distribuído', value: 'R$ 1,10', highlight: true },
+      { label: 'Prazo Médio Contratos (Remanescente)', value: '3,14 anos' },
+    ],
+
+    principaisInquilinos: [
+      'Lojas Renner',
+      'Kimberly Clark',
+      'BASF',
+      'Bunge',
+      'Google',
+      'Votorantim',
+      'Delta Business',
+      'Marisa',
+      'Foxconn',
+      'Pinheiro Neto',
+      'CTEEP',
+      'SAP',
+    ],
+
+    outrosPontosRelevantes: [
+      'Venda do imóvel PIB Sumaré: Concluída em setembro com recebimento da parcela à vista correspondente a 24% da transação total de R$ 26 milhões. O saldo remanescente será pago em 6 parcelas semestrais de R$ 3,3 milhões cada, corrigidas nos termos contratuais.',
+      'Forte redução nos indicadores de vacância: A vacância física recuou para 1,84% (ante 3,91% em agosto) e a vacância financeira para 4,66% (ante 5,14% em agosto), refletindo a conclusão da venda do PIB Sumaré e a rápida recolocação de locatários.',
+      'Movimentações de locatários no mês: No Boulevard Corporate Tower (BH), saída da CI&T e entrada imediata da Construtora REMO (1.202 m²); no Rochaverá - Torre C (SP), saída da All4Labels e entrada da Omoda & Jaecoo (602 m²); no Ed. Madison (SP), desocupação de 618 m² pela CSL.',
+      'Renovação no CD Pouso Alegre por 5 anos: Renovação contratual de galpão logístico AAA com 87.750 m² de ABL, localizado na Rodovia Fernão Dias (MG), formalizada com valores acima dos praticados anteriormente e alinhados ao mercado local.',
+      'Equilíbrio de portfólio e tipologia: Composição de receitas por tipologia conta com 61,61% em edifícios corporativos e 38,39% em logística. Geograficamente, 65,71% da receita provém de SP, 17,59% do RJ e 16,70% de MG.',
+      'Estrutura e correção contratual: 79,66% das receitas de locação são reajustadas pelo IPCA e 20,34% pelo IGP-M. Do total de contratos, 55,10% são típicos e 44,90% são atípicos ou contratos de longo prazo.',
+      'Renda Mínima Garantida (RMG) e Alavancagem: O Rochaverá Torre C conta com garantia contratual de R$ 79,5 milhões que protege o fluxo financeiro. O Fundo possui alavancagens pontuais nos ativos Biosquare (R$ 195,3 mi com Bradesco a TR + 9,50%) e CD Cabreúva (R$ 200 mi em CRI a IPCA + 7,25% até 2036).',
+    ],
+  },
+  {
     id: 'art-1003',
     ticker: 'FATN11',
     fundName: 'BRC Renda Corporativa FII (ex-Athena I)',
@@ -11,6 +69,7 @@ export const FII_REPORTS_DATA: FiiReportHighlight[] = [
     publishedAtFormatted: '01/10/2026',
     title: 'FATN11 - Destaques do Relatório Gerencial de Agosto de 2026',
     summaryBadge: 'Lajes Plug & Play • P/VP 0,81x • 151 Lajes',
+    // Link direto para o documento oficial na B3 / CVM (Sistema Fnet)
     pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1336927&cvm=true',
     pdfFilename: 'FATN11_Relatorio_Gerencial_Agosto_2026.pdf',
 
@@ -68,6 +127,7 @@ export const FII_REPORTS_DATA: FiiReportHighlight[] = [
     publishedAtFormatted: '30/09/2026',
     title: 'BTLG11 - Destaques do Relatório Gerencial de Setembro de 2026',
     summaryBadge: 'Logística SP • P/VP 0,93x • Vacância 1,1%',
+    // Link direto para o documento oficial na B3 / CVM (Sistema Fnet)
     pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1336846&cvm=true',
     pdfFilename: 'BTLG11_Relatorio_Gerencial_Setembro_2026.pdf',
 
@@ -130,6 +190,7 @@ export const FII_REPORTS_DATA: FiiReportHighlight[] = [
     publishedAtFormatted: '26/09/2026',
     title: 'HGLG11 - Destaques do Relatório Gerencial de Agosto de 2026',
     summaryBadge: 'Logística AAA • P/VP 0,89x',
+    // Link direto para o documento oficial na B3 / CVM (Sistema Fnet)
     pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1327262&cvm=true',
     pdfFilename: 'HGLG11_Relatorio_Gerencial_Agosto_2026.pdf',
 
