@@ -18,7 +18,7 @@ export const FII_REPORTS_DATA: FiiReportHighlight[] = [
     gestor: 'Kinea Investimentos Ltda.',
     administrador: 'Intrag DTVM Ltda.',
     taxaAdmTotal: '1,11% ao ano sobre o valor de mercado.',
-
+    guidance: 'Não Informado',
     indicadores: [
       { label: 'Patrimônio Líquido', value: 'R$ 4,61 bilhões' },
       { label: 'Cota Patrimonial', value: 'R$ 163,64' },
