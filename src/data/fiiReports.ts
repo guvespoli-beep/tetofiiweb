@@ -2,6 +2,73 @@ import { FiiReportHighlight } from '../types/reports';
 
 export const FII_REPORTS_DATA: FiiReportHighlight[] = [
   {
+    id: 'art-1005',
+    ticker: 'TRXF11',
+    fundName: 'TRX Real Estate FII',
+    segment: 'Híbrido / Renda Urbana',
+    reportMonth: 'Setembro de 2026',
+    publishedAt: '2026-10-07',
+    publishedAtFormatted: '07/10/2026',
+    title: 'TRXF11 - Destaques do Relatório Gerencial de Setembro de 2026',
+    summaryBadge: 'Híbrido • P/VP 0,75x • 129 Imóveis • Vacância 0,5%',
+    // Link direto para o documento oficial na B3 / CVM (Sistema Fnet)
+    pdfUrl: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=1341443&cvm=true',
+    pdfFilename: 'TRXF11_Relatorio_Gerencial_Setembro_2026.pdf',
+
+    gestor: 'TRX Gestora de Recursos',
+    administrador: 'BRL Trust Investimentos',
+    taxaAdmTotal: '1,00% ao ano sobre o valor de mercado (Taxa de Performance: 20% sobre o excesso de IPCA + 6% a.a.).',
+    guidance: 'Entre R$ 0,90 e R$ 0,93 (próximos 12 meses)',
+
+    indicadores: [
+      { label: 'Patrimônio Líquido', value: 'R$ 5,99 bilhões' },
+      { label: 'Cota Patrimonial', value: 'R$ 95,99' },
+      { label: 'Valor de Mercado', value: 'R$ 4,45 bilhões' },
+      { label: 'Cota de Mercado', value: 'R$ 71,79' },
+      { label: 'P/VP', value: '0,75x', highlight: true },
+      { label: 'Quantidade de Imóveis', value: '129' },
+      { label: 'Área Bruta Locável (ABL)', value: '2.051.308 m²' },
+      { label: 'Área Total de Terrenos', value: '5.975.121 m²' },
+      { label: 'Quantidade de Inquilinos', value: '1.375' },
+      { label: 'Número de Cotistas', value: '354.486' },
+      { label: 'Vacância Física', value: '0,5%', highlight: true },
+      { label: 'Vacância Financeira', value: '0,3%', highlight: true },
+      { label: 'Rendimento no Mês', value: 'R$ 0,93', highlight: true },
+      { label: 'Dividend Yield Anualizado', value: '15,55%', sublabel: '1,30% no mês' },
+      { label: 'Alavancagem Líquida', value: '27,5%', sublabel: 'Securitizações/Ativo: 24,68%' },
+      { label: 'Reserva Acumulada de Lucro', value: 'R$ 0,51/cota', sublabel: 'R$ 31,7 milhões acumulados' },
+      { label: 'Prazo Médio Contratos', value: '11,06 anos' },
+    ],
+
+    principaisInquilinos: [
+      'Mercado Livre (14,94%)',
+      'Multilocatários Logísticos (14,19%)',
+      'Lojistas de Shopping Centers (10,56%)',
+      'Assaí (6,87%)',
+      'Grupo Mateus (6,57%)',
+      'Albert Einstein (6,12%)',
+      'Shopee (4,05%)',
+      'Multilocatários Corporativos (3,96%)',
+      'DHL (3,72%)',
+      'Pão de Açúcar (3,37%)',
+      'Hotel Emiliano (3,12%)',
+      'Atacadão (2,69%)',
+      'Sírio-Libanês (2,58%)',
+      'Obramax (1,99%)',
+      'Link School (1,63%)',
+    ],
+
+    outrosPontosRelevantes: [
+      'Conclusão da 13ª Emissão de Cotas: Captação total de R$ 3,16 bilhões encerrada em 30 de setembro. Deste total, R$ 2,63 bilhões foram liquidados via compensação de créditos pelos vendedores dos imóveis na subscrição de cotas, preservando o caixa do Fundo.',
+      'Aquisições relevantes e diversificação de tipologias: Recursos destinados a ativos de grande porte, como Shopping Centers da Iguatemi (R$ 876,1 mi), Galpão Multilocatário em Viana/ES (R$ 643,5 mi), Portfólio de 3 Galpões Logísticos em MG e ES (R$ 578,3 mi), IVBP11 (R$ 450,0 mi), Galpão DHL em Extrema/MG (R$ 424,3 mi), Thera Corporate e Ed. Morumbi (R$ 340,2 mi) e Hotel Emiliano no RJ (R$ 260,0 mi).',
+      'Investimento no MVFI11 (Edifício MV9): Alocação de R$ 93,1 milhões no Rio de Janeiro (15.174 m² de ABL), a um cap rate estimado de 12,32% a.a. e com mecanismo de garantia de renda por 24 meses para as áreas vagas.',
+      'Reciclagem de portfólio e desinvestimentos: Concluídas as vendas da loja do Pão de Açúcar no Setor Bueno (Goiânia/GO) e de portfólio com 15 imóveis (incluindo agências da Caixa Econômica Federal e lojas do Extra). A gestão mantém negociações em andamento com meta de alienar ~R$ 500 milhões ao longo do semestre.',
+      'Internalização da gestão do FII Varejo SP: Transferência de gestão da Mauá Capital para a TRX concluída em 11 de setembro (portfólio com 1 loja do Oba Hortifruti e 3 do St. Marche), sem dupla cobrança de taxa de gestão.',
+      'Estrutura contratual e indexadores: 56,53% das receitas são provenientes de contratos atípicos (Built to Suit/Sale & Leaseback). Em relação aos indexadores de aluguel, 80,68% da receita é reajustada pelo IPCA e 10,43% pelo INCC.',
+      'Distribuição e projeção para 12 meses: Rendimento distribuído de R$ 0,93 por cota (DY de 1,30% no mês e 15,55% a.a.). A previsão oficial da gestão para os próximos 12 meses segue na faixa entre R$ 0,90 e R$ 0,93 por cota.',
+    ],
+  },
+  {
     id: 'art-1004',
     ticker: 'KNRI11',
     fundName: 'Kinea Renda Imobiliária FII',
@@ -18,7 +85,7 @@ export const FII_REPORTS_DATA: FiiReportHighlight[] = [
     gestor: 'Kinea Investimentos Ltda.',
     administrador: 'Intrag DTVM Ltda.',
     taxaAdmTotal: '1,11% ao ano sobre o valor de mercado.',
-    guidance: 'Não Informado',
+
     indicadores: [
       { label: 'Patrimônio Líquido', value: 'R$ 4,61 bilhões' },
       { label: 'Cota Patrimonial', value: 'R$ 163,64' },
