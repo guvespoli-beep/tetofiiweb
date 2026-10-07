@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 1. Ferramenta Principal / Calculadora de Preço Teto -->
+  <url>
+    <loc>https://gvlab.com.br/</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?aba=calculator</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 2. Radar de FIIs de Tijolo (Cotações B3, P/VP, Vacância, DY, ABL) -->
+  <url>
+    <loc>https://gvlab.com.br/?aba=radar</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 3. Guia Educacional de Precificação (Metodologia NTN-B + Prêmio de Risco) -->
+  <url>
+    <loc>https://gvlab.com.br/?aba=guide</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 4. Portal FIIque Informado (Destaques de Relatórios Gerenciais) -->
+  <url>
+    <loc>https://gvlab.com.br/?aba=reports</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 5. Matérias e Destaques Individuais dos Relatórios Gerenciais -->
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1005</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1004</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1003</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1002</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1001</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 6. Aplicativo / Instalação PWA Mobile -->
+  <url>
+    <loc>https://gvlab.com.br/?aba=download</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>
