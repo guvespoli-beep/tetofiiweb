@@ -40,6 +40,30 @@
 
   <!-- 5. Matérias e Destaques Individuais dos Relatórios Gerenciais -->
   <url>
+    <loc>https://gvlab.com.br/?materia=art-1009</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1008</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1007</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://gvlab.com.br/?materia=art-1006</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://gvlab.com.br/?materia=art-1005</loc>
     <lastmod>2026-10-07</lastmod>
     <changefreq>weekly</changefreq>
