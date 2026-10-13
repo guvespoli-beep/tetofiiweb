@@ -80,10 +80,62 @@ export default function App() {
     }
   }, []);
 
-  // Rola suavemente para o topo sempre que o usuário trocar de aba/seção
+  // Rola suavemente para o topo e atualiza título, meta tags e sincroniza URL (?aba=...)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [activeTab]);
+
+    try {
+      const url = new URL(window.location.href);
+
+      let title = 'TETOFII - Calculadora de Preço Teto e Informações de FIIs de Tijolo';
+      let description = 'TETOFII: Calculadora de Preço Teto, P/VP e portal informativo de Fundos Imobiliários de Tijolo. Acompanhe destaques de relatórios gerenciais e análises.';
+
+      if (activeTab === 'my-radar') {
+        title = 'Meu Radar de FIIs de Tijolo - TETOFII | Preço Teto, Margem de Segurança e P/VP';
+        description = 'Personalize seu radar de Fundos Imobiliários de Tijolo: filtre por segmento, defina taxas de referência, compare Preço Teto com Preço Atual e calcule sua margem de segurança.';
+        url.searchParams.set('aba', 'meu-radar');
+        url.searchParams.delete('materia');
+      } else if (activeTab === 'radar') {
+        title = 'Radar de FIIs de Tijolo - TETOFII | Cotações, P/VP, Vacância e Dividend Yield';
+        description = 'Tabela completa com indicadores dos principais FIIs de Tijolo da B3: cotações em tempo real, P/VP, dividend yield, vacância física e área bruta locável (ABL).';
+        url.searchParams.set('aba', 'radar');
+        url.searchParams.delete('materia');
+      } else if (activeTab === 'reports') {
+        title = 'FIIque Informado - TETOFII | Destaques e Relatórios Gerenciais de FIIs';
+        description = 'Resumos executivos e pontos de atenção dos relatórios gerenciais mais recentes dos maiores fundos imobiliários de tijolo do Brasil.';
+        if (!selectedReportId) {
+          url.searchParams.set('aba', 'reports');
+        }
+      } else if (activeTab === 'guide') {
+        title = 'Guia de Precificação de FIIs - TETOFII | Metodologia Preço Teto e NTN-B';
+        description = 'Aprenda como calcular o Preço Teto de Fundos Imobiliários de Tijolo usando o Tesouro IPCA+ (NTN-B) e prêmio de risco adequado.';
+        url.searchParams.set('aba', 'guide');
+        url.searchParams.delete('materia');
+      } else if (activeTab === 'download') {
+        title = 'Baixe o Aplicativo TETOFII | App Android e PWA de Precificação de FIIs';
+        description = 'Instale o aplicativo oficial do TETOFII no seu celular Android ou dispositivo móvel para acessar a calculadora e radares de FIIs direto na tela inicial.';
+        url.searchParams.set('aba', 'download');
+        url.searchParams.delete('materia');
+      } else if (activeTab === 'calculator') {
+        url.searchParams.delete('materia');
+        if (url.searchParams.has('aba')) {
+          url.searchParams.set('aba', 'calculator');
+        }
+      }
+
+      document.title = title;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', description);
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', title);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', description);
+
+      window.history.replaceState({}, '', url.toString());
+    } catch {
+      // Ignora erro em ambientes restritos
+    }
+  }, [activeTab, selectedReportId]);
 
   const handleAcceptDisclaimer = (dontShowAgain: boolean) => {
     if (dontShowAgain) {
