@@ -160,7 +160,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               Baixe agora direto na Google Play Store
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              O aplicativo está em produção oficial. Basta um toque para acessar a página na loja, clicar em <strong>"Instalar"</strong> e começar a usar imediatamente no seu smartphone Android, sem necessidade de inscrição em grupos ou convites.
+              O aplicativo está disponível na Play Store. Basta um toque para acessar a página na loja, clicar em <strong>"Instalar"</strong> e começar a usar imediatamente no seu smartphone Android, sem necessidade de inscrição em grupos ou convites.
             </p>
           </div>
 
@@ -301,7 +301,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
             </div>
             <h4 className="font-bold text-slate-900 text-xs sm:text-sm">Design Nativo Android</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Navegação adaptada para a tela do smartphone, com modo escuro elegante, carregamento ultra rápido e sem poluição visual.
+              Navegação adaptada para a tela do smartphone, com modo escuro elegante ou modo claro, carregamento ultra rápido e sem poluição visual.
             </p>
           </div>
 
@@ -330,7 +330,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               Preciso de convite ou cadastro prévio?
             </strong>
             <p className="text-slate-600 leading-relaxed">
-              Não! O app está lançado em produção pública. Basta acessar a Play Store e clicar em Instalar diretamente.
+              Não! O app está disponível para todos (android). Basta acessar a Play Store e clicar em Instalar diretamente.
             </p>
           </div>
 

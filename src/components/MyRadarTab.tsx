@@ -73,7 +73,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
     } catch {
       // ignore
     }
-    return 6.3; // Taxa padrão do Tesouro IPCA+ de longo prazo
+    return ''; // Inicia em branco quando nunca foi preenchido
   });
 
   // Lista de ativos do radar
@@ -369,12 +369,14 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
       const pvp = vp > 0 && currentPrice > 0 ? currentPrice / vp : 0;
 
       // Taxa de Desconto = Taxa de Referência + Prêmio de Risco do ativo
-      const discountRate = numRefRate + item.riskPremium;
+      const hasRefRate = typeof referenceRate === 'number' && !isNaN(referenceRate) && referenceRate >= 0;
+      const discountRate = hasRefRate ? numRefRate + item.riskPremium : 0;
       const annualDividend = item.monthlyDividend * 12;
 
       // Preço Teto = ((Provento Mensal * 12) / (Taxa Ref + Prêmio Risco)) * 100
+      // Calculado apenas quando a Taxa de Referência estiver preenchida
       const ceilingPrice =
-        discountRate > 0 && annualDividend > 0
+        hasRefRate && discountRate > 0 && annualDividend > 0
           ? (annualDividend / discountRate) * 100
           : 0;
 
@@ -518,20 +520,22 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
 
   // Cálculo prévio dinâmico no modal
   const modalPreview = useMemo(() => {
-    const numRef = typeof referenceRate === 'number' ? referenceRate : 0;
+    const hasRef = typeof referenceRate === 'number' && !isNaN(referenceRate) && referenceRate >= 0;
+    const numRef = hasRef ? referenceRate : 0;
     const numRisk = parseNumberInput(formRiskPremium);
     const numDiv = parseNumberInput(formMonthlyDividend);
 
     const safeRisk = isNaN(numRisk) || numRisk < 0 ? 0 : numRisk;
     const safeDiv = isNaN(numDiv) || numDiv < 0 ? 0 : numDiv;
 
-    const totalRate = numRef + safeRisk;
+    const totalRate = hasRef ? numRef + safeRisk : 0;
     const annual = safeDiv * 12;
-    const ceiling = totalRate > 0 && annual > 0 ? (annual / totalRate) * 100 : 0;
+    const ceiling = hasRef && totalRate > 0 && annual > 0 ? (annual / totalRate) * 100 : 0;
     return {
       totalRate,
       annual,
       ceiling,
+      hasRef,
     };
   }, [referenceRate, formRiskPremium, formMonthlyDividend]);
 
@@ -1048,7 +1052,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
 
                       {/* 4. Preço Teto */}
                       <td className="p-3.5 text-center font-mono font-black text-emerald-800 text-sm bg-emerald-50/40">
-                        {ceilingPrice > 0 ? formatCurrency(ceilingPrice) : 'R$ 0,00'}
+                        {ceilingPrice > 0 ? formatCurrency(ceilingPrice) : '-'}
                       </td>
 
                       {/* 5. Preço Atual / Preço Teto */}
@@ -1296,7 +1300,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   <span className="font-mono text-base font-black text-emerald-800">
                     {modalPreview.ceiling > 0
                       ? formatCurrency(modalPreview.ceiling)
-                      : 'R$ 0,00'}
+                      : '-'}
                   </span>
                 </div>
               </div>
@@ -1451,7 +1455,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                 <strong className="text-emerald-400 font-mono font-bold text-sm">
                   {typeof referenceRate === 'number' && !isNaN(referenceRate)
                     ? `${formatPercent(referenceRate, 2)} a.a.`
-                    : '0,00% a.a.'}
+                    : '-'}
                 </strong>
               </span>
             </div>
@@ -1506,7 +1510,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
 
                       {/* 4. Preço Teto */}
                       <td className="p-3 text-center font-bold text-emerald-300 text-xs bg-emerald-950/20">
-                        {ceilingPrice > 0 ? formatCurrency(ceilingPrice) : 'R$ 0,00'}
+                        {ceilingPrice > 0 ? formatCurrency(ceilingPrice) : '-'}
                       </td>
 
                       {/* 5. Preço Atual / Preço Teto */}
