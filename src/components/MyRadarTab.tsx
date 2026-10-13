@@ -645,7 +645,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
       )}
 
       {/* Header do Meu Radar */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80">
+      <div className="bg-white rounded-2xl p-3.5 sm:p-6 shadow-xs border border-slate-200/80">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900">
@@ -728,7 +728,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
       </div>
 
       {/* Conteúdo Principal: Tabela do Meu Radar ou Empty State */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 space-y-5">
+      <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-xs border border-slate-200/80 space-y-4 sm:space-y-5">
         {/* Barra superior de ações, filtros e busca */}
         <div className="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1">
@@ -870,7 +870,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 1. Ativo */}
                   <th
                     onClick={() => handleSort('ticker')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[120px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[75px] sm:min-w-[100px]"
                   >
                     <div className="flex items-center justify-center gap-1">
                       <span>Ativo</span>
@@ -885,7 +885,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 2. Preço Atual */}
                   <th
                     onClick={() => handleSort('price')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[120px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[95px] sm:min-w-[110px]"
                     title="Cotação oficial de mercado B3"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -901,7 +901,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 3. Prêmio de Risco */}
                   <th
                     onClick={() => handleSort('riskPremium')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[120px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[95px] sm:min-w-[110px]"
                     title="Prêmio de Risco definido pelo usuário (% a.a.)"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -917,7 +917,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 4. Preço Teto */}
                   <th
                     onClick={() => handleSort('ceilingPrice')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[120px] bg-emerald-50/60"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[95px] sm:min-w-[110px] bg-emerald-50/60"
                     title="Preço Teto calculado com a Taxa de Referência + Prêmio de Risco"
                   >
                     <div className="flex items-center justify-center gap-1 text-emerald-950 font-bold">
@@ -933,7 +933,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 5. Preço Atual / Preço Teto */}
                   <th
                     onClick={() => handleSort('ratio')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[140px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[110px] sm:min-w-[130px]"
                     title="Relação Preço Atual ÷ Preço Teto"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -949,7 +949,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 6. Provento Mensal Estimado */}
                   <th
                     onClick={() => handleSort('monthlyDividend')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[140px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[110px] sm:min-w-[130px]"
                     title="Provento Mensal Estimado por cota definido pelo usuário (R$)"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -965,7 +965,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 7. DY Anual Estimado */}
                   <th
                     onClick={() => handleSort('dy')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[140px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[110px] sm:min-w-[125px]"
                     title="Dividend Yield Anual no Preço Atual com base no Provento Estimado"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -981,7 +981,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 8. VP por Cota */}
                   <th
                     onClick={() => handleSort('vp')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[120px]"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors min-w-[95px] sm:min-w-[110px]"
                     title="Valor Patrimonial por Cota"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -997,7 +997,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   {/* 9. P/VP */}
                   <th
                     onClick={() => handleSort('pvp')}
-                    className="p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors w-24"
+                    className="p-2 sm:p-3.5 text-center cursor-pointer hover:bg-slate-100 transition-colors w-20 sm:w-24"
                     title="Preço de Mercado ÷ VP por Cota"
                   >
                     <div className="flex items-center justify-center gap-1">
@@ -1011,7 +1011,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                   </th>
 
                   {/* 10. Ação */}
-                  <th className="p-3.5 text-center min-w-[110px]">Ação</th>
+                  <th className="p-2 sm:p-3.5 text-center min-w-[95px] sm:min-w-[110px]">Ação</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-sans">
@@ -1034,32 +1034,32 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                       className="hover:bg-slate-50/80 transition-colors"
                     >
                       {/* 1. Ativo */}
-                      <td className="p-3.5 text-center">
-                        <span className="font-mono font-black text-slate-900 text-sm">
+                      <td className="p-2 sm:p-3.5 text-center">
+                        <span className="font-mono font-black text-slate-900 text-xs sm:text-sm">
                           {item.ticker}
                         </span>
                       </td>
 
                       {/* 2. Preço Atual */}
-                      <td className="p-3.5 text-center font-mono font-bold text-slate-900 text-sm">
+                      <td className="p-2 sm:p-3.5 text-center font-mono font-bold text-slate-900 text-xs sm:text-sm">
                         {currentPrice > 0 ? formatCurrency(currentPrice) : 'R$ 0,00'}
                       </td>
 
                       {/* 3. Prêmio de Risco */}
-                      <td className="p-3.5 text-center font-mono text-slate-700 font-semibold text-xs">
+                      <td className="p-2 sm:p-3.5 text-center font-mono text-slate-700 font-semibold text-xs">
                         {formatPercent(item.riskPremium, 2)}
                       </td>
 
                       {/* 4. Preço Teto */}
-                      <td className="p-3.5 text-center font-mono font-black text-emerald-800 text-sm bg-emerald-50/40">
+                      <td className="p-2 sm:p-3.5 text-center font-mono font-black text-emerald-800 text-xs sm:text-sm bg-emerald-50/40">
                         {ceilingPrice > 0 ? formatCurrency(ceilingPrice) : '-'}
                       </td>
 
                       {/* 5. Preço Atual / Preço Teto */}
-                      <td className="p-3.5 text-center font-mono">
+                      <td className="p-2 sm:p-3.5 text-center font-mono">
                         {priceToCeilingRatio > 0 ? (
                           <span
-                            className={`inline-block px-2 py-0.5 rounded text-xs font-black ${
+                            className={`inline-block px-1.5 sm:px-2 py-0.5 rounded text-[11px] sm:text-xs font-black ${
                               isDiscount
                                 ? 'bg-emerald-100 text-emerald-800'
                                 : isFair
@@ -1067,7 +1067,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                                 : 'bg-rose-100 text-rose-800'
                             }`}
                           >
-                            {formatDecimal(priceToCeilingRatio, 2)}x
+                            {formatDecimal(priceToCeilingRatio, 2)}
                           </span>
                         ) : (
                           <span className="text-slate-400">-</span>
@@ -1075,25 +1075,25 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                       </td>
 
                       {/* 6. Provento Mensal Estimado */}
-                      <td className="p-3.5 text-center font-mono text-slate-900 font-bold text-xs">
+                      <td className="p-2 sm:p-3.5 text-center font-mono text-slate-900 font-bold text-xs">
                         {formatCurrency(item.monthlyDividend)}
                       </td>
 
                       {/* 7. DY Anual Estimado */}
-                      <td className="p-3.5 text-center font-mono font-bold text-slate-800 text-xs">
+                      <td className="p-2 sm:p-3.5 text-center font-mono font-bold text-slate-800 text-xs">
                         {currentYield > 0 ? formatPercent(currentYield, 2) : '-'}
                       </td>
 
                       {/* 8. VP por Cota */}
-                      <td className="p-3.5 text-center font-mono font-semibold text-slate-700 text-xs">
+                      <td className="p-2 sm:p-3.5 text-center font-mono font-semibold text-slate-700 text-xs">
                         {vp > 0 ? formatCurrency(vp) : '-'}
                       </td>
 
                       {/* 9. P/VP */}
-                      <td className="p-3.5 text-center font-mono">
+                      <td className="p-2 sm:p-3.5 text-center font-mono">
                         {pvp > 0 ? (
                           <span
-                            className={`inline-block px-2 py-0.5 rounded text-xs font-bold ${
+                            className={`inline-block px-1.5 sm:px-2 py-0.5 rounded text-[11px] sm:text-xs font-bold ${
                               pvp < 0.98
                                 ? 'bg-emerald-100 text-emerald-800'
                                 : pvp > 1.02
@@ -1109,21 +1109,21 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                       </td>
 
                       {/* 10. Ação: Editar e Remover */}
-                      <td className="p-3.5 text-center">
-                        <div className="flex items-center justify-center gap-1.5">
+                      <td className="p-2 sm:p-3.5 text-center">
+                        <div className="flex items-center justify-center gap-1 sm:gap-1.5">
                           <button
                             type="button"
                             onClick={() => handleOpenEditModal(item)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors cursor-pointer"
                             title={`Editar premissas de ${item.ticker}`}
                           >
                             <Edit3 className="w-3 h-3" />
-                            <span>Editar</span>
+                            <span className="hidden sm:inline">Editar</span>
                           </button>
                           <button
                             type="button"
                             onClick={() => setDeleteConfirmTicker(item.ticker)}
-                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                            className="p-1 sm:p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                             title={`Remover ${item.ticker} do Meu Radar`}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -1525,7 +1525,7 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
                                 : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
                             }`}
                           >
-                            {formatDecimal(priceToCeilingRatio, 2)}x
+                            {formatDecimal(priceToCeilingRatio, 2)}
                           </span>
                         ) : (
                           <span className="text-slate-500">-</span>
