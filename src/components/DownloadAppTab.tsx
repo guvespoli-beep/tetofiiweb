@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Smartphone,
-  Users,
   Download,
   CheckCircle2,
   ExternalLink,
@@ -25,16 +24,14 @@ interface DownloadAppTabProps {
 }
 
 export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
-  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
   const [useScreenshotImage, setUseScreenshotImage] = useState(true);
-  const groupEmail = 'tetofii@googlegroups.com';
-  const groupUrl = 'https://groups.google.com/g/tetofii';
   const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.tetofiitijolo.app';
 
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(groupEmail);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2500);
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(playStoreUrl);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2500);
   };
 
   return (
@@ -73,6 +70,39 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               O aplicativo oficial <strong>TETO FII</strong> está disponível para smartphones Android. Instale agora para salvar sua própria carteira personalizada de ativos e monitorar Preço Teto, valor patrimonial e cotações da B3 com praticidade na palma da mão!
             </p>
 
+            {/* Botão de Ação Direta para a Loja */}
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <a
+                href={playStoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-3 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black text-sm sm:text-base shadow-lg hover:shadow-emerald-500/25 transition-all hover:scale-[1.02] cursor-pointer group"
+              >
+                <Download className="w-5 h-5 text-slate-950 group-hover:translate-y-0.5 transition-transform" />
+                <span>Instalar pelo Google Play</span>
+                <ExternalLink className="w-4 h-4 text-slate-900/80 ml-0.5" />
+              </a>
+
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                title="Copiar link da Play Store"
+              >
+                {copiedLink ? (
+                  <>
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    <span className="text-emerald-300">Link Copiado!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 text-slate-400" />
+                    <span>Copiar Link do App</span>
+                  </>
+                )}
+              </button>
+            </div>
+
             <div className="pt-1 flex flex-wrap items-center gap-4 text-xs text-slate-300">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -80,11 +110,11 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               </div>
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Google Play Store</span>
+                <span>Instalação Oficial Direta</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <HeartHandshake className="w-4 h-4 text-teal-300" />
-                <span>Comunidade Oficial de Usuários</span>
+                <span>Disponível para Todos</span>
               </div>
             </div>
           </div>
@@ -119,173 +149,68 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
         </div>
       </div>
 
-      {/* Dica Importante sobre a Conta Google (Suave, Amigável e Acolhedor) */}
-      <div className="p-5 sm:p-6 bg-gradient-to-r from-emerald-50/90 via-teal-50/50 to-sky-50/70 border border-emerald-200/90 rounded-2xl flex items-start gap-4 shadow-xs">
-        <div className="p-2.5 bg-emerald-100/90 text-emerald-800 rounded-xl shrink-0 mt-0.5">
-          <Lightbulb className="w-5 h-5 text-emerald-700" />
-        </div>
-        <div className="space-y-1.5 text-xs sm:text-sm text-slate-700">
-          <h4 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
-            <span>Dica importante: utilize a mesma conta Google em ambos os passos</span>
-          </h4>
-          <p className="text-slate-600 leading-relaxed">
-            Para que a Google Play Store reconheça sua autorização e libere o botão de download, é necessário que você <strong>acesse</strong> a Play Store <strong>utilizando o mesmo e-mail/conta Google</strong> que você utilizou para se inscrever no grupo de testes.
-          </p>
-          <p className="text-slate-500 text-xs pt-0.5 flex items-center gap-1">
-            <span>💡</span>
-            <span><em>Caso apareça a mensagem "Item não encontrado", basta confirmar se a Play Store está conectada nessa mesma conta Google.</em></span>
-          </p>
-        </div>
-      </div>
-
-      {/* Passo a Passo em Dois Cards */}
-      <div className="space-y-5">
-        <div className="text-center max-w-xl mx-auto space-y-1.5">
-          <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/80">
-            Passo a passo
-          </span>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-            Como instalar em 2 etapas simples:
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Para garantir acesso prioritário e atualizações contínuas, faça parte do canal oficial no Google.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* PASSO 1 */}
-          <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-xs hover:border-emerald-300 transition-all flex flex-col justify-between space-y-5">
-            <div className="space-y-3.5">
-              <div className="flex items-center justify-between">
-                <span className="w-9 h-9 rounded-xl bg-emerald-700 text-white font-bold text-base flex items-center justify-center shadow-xs">
-                  1
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-200/60 flex items-center gap-1">
-                  <Users className="w-3.5 h-3.5" />
-                  <span>1º Passo</span>
-                </span>
-              </div>
-
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                  Acessar o Grupo Oficial do Google
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                  Inscreva-se no grupo oficial para que sua conta Google seja autorizada e tenha acesso à instalação direta na Play Store:
-                </p>
-              </div>
-
-              {/* Caixa do E-mail do Grupo com botão copiar */}
-              <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between gap-2">
-                <div className="truncate">
-                  <span className="text-[10px] text-slate-400 font-semibold block uppercase">Grupo oficial:</span>
-                  <span className="text-xs sm:text-sm font-mono font-bold text-slate-800 truncate">
-                    {groupEmail}
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleCopyEmail}
-                  className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium text-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer shrink-0 shadow-2xs"
-                  title="Copiar e-mail do grupo"
-                >
-                  {copiedEmail ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span className="text-emerald-700 font-semibold">Copiado!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-slate-500" />
-                      <span>Copiar</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <a
-                href={groupUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer group"
-              >
-                <span>Acessar o Google Groups</span>
-                <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </a>
-
-              {/* Guia visual ilustrado do botão do Google */}
-              <div className="mt-3 p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl space-y-1.5 text-center">
-                <span className="text-[11px] text-slate-500 block leading-tight">
-                  Ao abrir a página do Google, basta clicar no botão azul no topo:
-                </span>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#1a73e8] text-white rounded-md text-xs font-semibold shadow-2xs">
-                  <Users className="w-3.5 h-3.5" />
-                  <span>Participar do grupo</span>
-                </div>
-              </div>
-            </div>
+      {/* Card de Download Rápido e Direto na Play Store */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+          <div className="space-y-1 max-w-xl">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/80">
+              Download Oficial
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-2">
+              Baixe agora direto na Google Play Store
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              O aplicativo está em produção oficial. Basta um toque para acessar a página na loja, clicar em <strong>"Instalar"</strong> e começar a usar imediatamente no seu smartphone Android, sem necessidade de inscrição em grupos ou convites.
+            </p>
           </div>
 
-          {/* PASSO 2 */}
-          <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-5">
-            <div className="space-y-3.5">
-              <div className="flex items-center justify-between">
-                <span className="w-9 h-9 rounded-xl bg-slate-800 text-white font-bold text-base flex items-center justify-center shadow-xs">
-                  2
-                </span>
-                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium border border-slate-200 flex items-center gap-1">
-                  <Download className="w-3.5 h-3.5" />
-                  <span>2º Passo</span>
-                </span>
-              </div>
+          <div className="w-full md:w-auto shrink-0 flex flex-col items-center sm:items-end gap-2">
+            <a
+              href={playStoreUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-emerald-800 hover:bg-emerald-900 text-white font-black text-base rounded-2xl shadow-md hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer group"
+            >
+              <Download className="w-5 h-5 text-emerald-400 group-hover:translate-y-0.5 transition-transform" />
+              <span>Acessar Google Play Store</span>
+              <ExternalLink className="w-4 h-4 text-emerald-300 ml-0.5" />
+            </a>
+            <span className="text-[11px] text-slate-400">
+              Identificador: <code className="font-mono text-slate-600 font-bold">com.tetofiitijolo.app</code>
+            </span>
+          </div>
+        </div>
 
-              <div>
-                <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                  Baixar na Google Play Store
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
-                  Com a conta autorizada, acesse a página oficial do <strong>TETO FII</strong> na Google Play Store e instale no seu celular Android:
-                </p>
-              </div>
-
-              {/* Package ID Box com ícone do app */}
-              <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl shadow-xs overflow-hidden shrink-0 border border-slate-200 bg-[#0c121e]">
-                  <img
-                    src="./app-icon.png"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = './app-icon.jpg';
-                    }}
-                    alt="TETO FII Ícone"
-                    className="w-full h-full object-cover block"
-                  />
-                </div>
-                <div className="truncate">
-                  <span className="text-[10px] text-slate-400 font-semibold block uppercase">Identificador na Play Store:</span>
-                  <span className="text-xs sm:text-sm font-mono font-bold text-slate-800 truncate">
-                    com.tetofiitijolo.app
-                  </span>
-                </div>
-              </div>
+        {/* 3 Passos Simples para Começar */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+            <div className="w-8 h-8 rounded-xl bg-emerald-700 text-white font-black text-sm flex items-center justify-center">
+              1
             </div>
+            <h4 className="font-bold text-slate-900 text-sm">Abra a Loja</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Toque no botão para abrir a página oficial do <strong>TETO FII</strong> na Google Play Store.
+            </p>
+          </div>
 
-            <div>
-              <a
-                href={playStoreUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl shadow-xs flex items-center justify-center gap-2 transition-all cursor-pointer group"
-              >
-                <Download className="w-4 h-4 text-emerald-400" />
-                <span>Acessar na Google Play Store</span>
-                <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </a>
-              <span className="text-[11px] text-slate-400 text-center block mt-2">
-                Download seguro e direto pela loja oficial do Google.
-              </span>
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+            <div className="w-8 h-8 rounded-xl bg-emerald-700 text-white font-black text-sm flex items-center justify-center">
+              2
             </div>
+            <h4 className="font-bold text-slate-900 text-sm">Toque em Instalar</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Instale o aplicativo gratuitamente com total segurança e verificação pelo Google Play Protect.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+            <div className="w-8 h-8 rounded-xl bg-emerald-700 text-white font-black text-sm flex items-center justify-center">
+              3
+            </div>
+            <h4 className="font-bold text-slate-900 text-sm">Cadastre seus Ativos</h4>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Monte sua carteira com seus FIIs favoritos e acompanhe seu Preço Teto e P/VP em tempo real.
+            </p>
           </div>
         </div>
       </div>
@@ -402,10 +327,10 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-700">
           <div className="p-3.5 bg-white rounded-xl border border-slate-200/70 space-y-1">
             <strong className="block font-semibold text-slate-900">
-              Quanto tempo demora para liberar?
+              Preciso de convite ou cadastro prévio?
             </strong>
             <p className="text-slate-600 leading-relaxed">
-              A liberação costuma ser rápida, geralmente entre 1 e 5 minutos após a confirmação no grupo.
+              Não! O app está lançado em produção pública. Basta acessar a Play Store e clicar em Instalar diretamente.
             </p>
           </div>
 
@@ -414,7 +339,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               O aplicativo é gratuito?
             </strong>
             <p className="text-slate-600 leading-relaxed">
-              Sim! O aplicativo é 100% gratuito e sem custos de assinatura.
+              Sim! O aplicativo é 100% gratuito e sem custos de assinatura ou taxas escondidas.
             </p>
           </div>
 
@@ -423,7 +348,7 @@ export const DownloadAppTab: React.FC<DownloadAppTabProps> = () => {
               Posso enviar ideias e sugestões?
             </strong>
             <p className="text-slate-600 leading-relaxed">
-              Adoramos receber sugestões! Você pode enviar pelo grupo ou pela própria avaliação da Play Store.
+              Adoramos receber feedback! Você pode enviar sua avaliação diretamente na página do app na Play Store ou pelo suporte.
             </p>
           </div>
         </div>

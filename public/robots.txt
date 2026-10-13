@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap oficial do domínio gvlab.com.br
+Sitemap: https://gvlab.com.br/sitemap.xml

@@ -38,6 +38,15 @@ export interface FiiData {
   grossLeasableAreaM2?: number;
 }
 
+export interface MyRadarItem {
+  ticker: string;
+  riskPremium: number; // in % a.a., e.g. 2.0
+  monthlyDividend: number; // in R$, e.g. 1.10
+  addedAt?: number;
+  updatedAt?: number;
+  notes?: string;
+}
+
 export interface CalculationInput {
   ticker: string;
   currentPrice: number;

@@ -149,7 +149,7 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1.5">
-            Radar de FIIs de Tijolo
+            FIIs de Tijolo
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             Fundos Imobiliários de Tijolo listados na B3 com cotação de mercado e valor patrimonial oficial.

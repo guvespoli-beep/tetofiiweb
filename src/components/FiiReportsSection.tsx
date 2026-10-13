@@ -242,14 +242,14 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
           </div>
         </header>
 
-        {/* Bloco 1: Ficha Institucional da Gestão e Guidance */}
+        {/* Bloco 1: Ficha Institucional da Gestão */}
         <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/90 space-y-4">
           <h2 className="text-lg font-black text-slate-900 flex items-center gap-2">
             <Building2 className="w-5 h-5 text-emerald-700" />
-            <span>Dados da Gestão e Diretrizes (Guidance)</span>
+            <span>Dados da Gestão {activeReport.guidance ? 'e Diretrizes (Guidance)' : ''}</span>
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 ${activeReport.guidance ? 'lg:grid-cols-4' : 'lg:grid-cols-3'} gap-4 pt-1`}>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
                 Gestor
@@ -271,12 +271,14 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
               <p className="font-bold text-slate-900 text-sm">{activeReport.taxaAdmTotal}</p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block">
-                Guidance 2º Semestre
-              </span>
-              <p className="font-black text-emerald-900 text-sm">{activeReport.guidance || 'Consulte o relatório'}</p>
-            </div>
+            {activeReport.guidance && (
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block">
+                  Guidance 2º Semestre
+                </span>
+                <p className="font-black text-emerald-900 text-sm">{activeReport.guidance}</p>
+              </div>
+            )}
           </div>
         </section>
 

@@ -18,7 +18,9 @@ import {
   Share2,
   Download,
   Loader2,
-  Calendar
+  Calendar,
+  Target,
+  CheckCircle2,
 } from 'lucide-react';
 import { toBlob, toPng } from 'html-to-image';
 import {
@@ -61,6 +63,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
   const [lastQuoteTime, setLastQuoteTime] = useState<string>('');
   const [quoteSource, setQuoteSource] = useState<string>('Yahoo Finance (B3)');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [addedToRadarNotification, setAddedToRadarNotification] = useState<string | null>(null);
   const shareCardTemplateRef = useRef<HTMLDivElement>(null);
 
   // Load fund data with real-time market quote from Yahoo Finance
@@ -288,6 +291,17 @@ export const Calculator: React.FC<CalculatorProps> = ({
     if (!shareCardTemplateRef.current) return;
     setIsSharing(true);
 
+    // Ao compartilhar uma simulação, atualiza a taxa de referência em Meu Radar automaticamente
+    // com a taxa preenchida nessa simulação (impactando toda a carteira em Meu Radar)
+    if (typeof referenceRate === 'number' && referenceRate >= 0) {
+      try {
+        localStorage.setItem('tetofii_my_radar_ref_rate', referenceRate.toString());
+        window.dispatchEvent(new Event('tetofii_my_radar_updated'));
+      } catch {
+        // ignore
+      }
+    }
+
     const ticker = activeFii?.ticker || tickerQuery || 'FII';
     const siteUrl = 'https://gvlab.com.br';
     const shareText = `📊 Calculei o Preço Teto do ${ticker} no TETOFII\nDescubra o preço teto dos seus FIIs também!\nAcesse ${siteUrl}`;
@@ -373,7 +387,73 @@ export const Calculator: React.FC<CalculatorProps> = ({
     }
   };
 
-  const hasCompleteInputs = typeof referenceRate === 'number' && typeof riskPremium === 'number' && typeof monthlyDividend === 'number' && result.ceilingPrice > 0;
+  const hasCompleteInputs =
+    Boolean(activeFii?.ticker || tickerQuery?.trim()) &&
+    typeof referenceRate === 'number' &&
+    referenceRate >= 0 &&
+    typeof riskPremium === 'number' &&
+    riskPremium >= 0 &&
+    typeof monthlyDividend === 'number' &&
+    monthlyDividend > 0 &&
+    result.ceilingPrice > 0;
+
+  // Incluir dados da simulação feita no Meu Radar
+  const handleAddToRadar = () => {
+    const rawTicker = (activeFii?.ticker || tickerQuery || '').trim().toUpperCase();
+    if (!rawTicker || typeof riskPremium !== 'number' || typeof monthlyDividend !== 'number') {
+      return;
+    }
+
+    try {
+      // 1. Atualiza Taxa de Referência no Meu Radar
+      if (typeof referenceRate === 'number' && referenceRate >= 0) {
+        localStorage.setItem('tetofii_my_radar_ref_rate', referenceRate.toString());
+      }
+
+      // 2. Adiciona ou atualiza o Fundo no Meu Radar
+      const savedItems = localStorage.getItem('tetofii_my_radar_portfolio_items');
+      let itemsList: any[] = [];
+      if (savedItems) {
+        try {
+          const parsed = JSON.parse(savedItems);
+          if (Array.isArray(parsed)) itemsList = parsed;
+        } catch {
+          itemsList = [];
+        }
+      }
+
+      const existingIndex = itemsList.findIndex((item) => item.ticker === rawTicker);
+      const now = Date.now();
+      if (existingIndex >= 0) {
+        itemsList[existingIndex] = {
+          ...itemsList[existingIndex],
+          riskPremium,
+          monthlyDividend,
+          updatedAt: now,
+        };
+      } else {
+        itemsList.push({
+          ticker: rawTicker,
+          riskPremium,
+          monthlyDividend,
+          addedAt: now,
+          updatedAt: now,
+        });
+      }
+
+      localStorage.setItem('tetofii_my_radar_portfolio_items', JSON.stringify(itemsList));
+
+      // 3. Dispara evento customizado para sincronizar abas / componentes
+      window.dispatchEvent(new Event('tetofii_my_radar_updated'));
+
+      setAddedToRadarNotification(`Fundo ${rawTicker} adicionado com sucesso ao Meu Radar!`);
+      setTimeout(() => {
+        setAddedToRadarNotification(null);
+      }, 4000);
+    } catch (e) {
+      console.error('Erro ao salvar no Meu Radar:', e);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -767,7 +847,26 @@ export const Calculator: React.FC<CalculatorProps> = ({
             </h3>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleAddToRadar}
+              disabled={!hasCompleteInputs}
+              title={
+                !hasCompleteInputs
+                  ? 'Preencha todos os parâmetros (Ticker, Taxa de Referência, Prêmio de Risco e Provento Mensal) para incluir no Meu Radar'
+                  : 'Incluir os dados desta simulação no Meu Radar'
+              }
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer ${
+                hasCompleteInputs
+                  ? 'bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/60'
+                  : 'bg-slate-800/40 text-slate-500 border border-slate-800 cursor-not-allowed opacity-60'
+              }`}
+            >
+              <Target className="w-4 h-4 text-emerald-400" />
+              <span>Incluir no Meu Radar</span>
+            </button>
+
             <button
               type="button"
               onClick={handleShareSimulation}
@@ -779,6 +878,23 @@ export const Calculator: React.FC<CalculatorProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Feedback visual ao adicionar no Meu Radar */}
+        {addedToRadarNotification && (
+          <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center justify-between gap-2 shadow-inner">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span>{addedToRadarNotification}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAddedToRadarNotification(null)}
+              className="text-emerald-400 hover:text-emerald-200 p-1"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Faixa destacada: Taxa de Desconto Total (Yield Requerido) com composição da taxa de referência e prêmio */}
         <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs sm:text-sm shadow-inner">

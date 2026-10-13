@@ -15,6 +15,7 @@ import { RadarFiiTable } from './components/RadarFiiTable';
 import { DownloadAppTab } from './components/DownloadAppTab';
 import { EducationalGuide } from './components/EducationalGuide';
 import { FiiReportsSection } from './components/FiiReportsSection';
+import { MyRadarTab } from './components/MyRadarTab';
 import { AboutProjectModal } from './components/AboutProjectModal';
 import { ExplanationModal } from './components/ExplanationModal';
 import { DisclaimerModal } from './components/DisclaimerModal';
@@ -22,11 +23,11 @@ import { AdsenseGuideModal } from './components/AdsenseGuideModal';
 import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
 import { AdBanner } from './components/AdBanner';
 import { MarketTickerTape } from './components/MarketTickerTape';
-import { BookOpen, FileText } from 'lucide-react';
+import { BookOpen, FileText, Target } from 'lucide-react';
 
 export default function App() {
   // Navigation tabs
-  const [activeTab, setActiveTab] = useState<'calculator' | 'radar' | 'reports' | 'guide' | 'download'>('calculator');
+  const [activeTab, setActiveTab] = useState<'calculator' | 'my-radar' | 'radar' | 'reports' | 'guide' | 'download'>('calculator');
   const [selectedFiiForCalc, setSelectedFiiForCalc] = useState<string>('');
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
 
@@ -55,8 +56,12 @@ export default function App() {
         setActiveTab('reports');
       } else {
         const tabParam = params.get('aba');
-        if (tabParam && ['calculator', 'radar', 'reports', 'guide', 'download'].includes(tabParam)) {
-          setActiveTab(tabParam as any);
+        if (tabParam) {
+          if (['my-radar', 'meu-radar', 'meuradar'].includes(tabParam)) {
+            setActiveTab('my-radar');
+          } else if (['calculator', 'radar', 'reports', 'guide', 'download'].includes(tabParam)) {
+            setActiveTab(tabParam as any);
+          }
         }
       }
 
@@ -168,6 +173,19 @@ export default function App() {
 
             <button
               type="button"
+              onClick={() => setActiveTab('my-radar')}
+              className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'my-radar'
+                  ? 'bg-emerald-700 text-white shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Target className="w-4 h-4" />
+              <span>Meu Radar</span>
+            </button>
+
+            <button
+              type="button"
               onClick={() => setActiveTab('radar')}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'radar'
@@ -176,7 +194,7 @@ export default function App() {
               }`}
             >
               <TableIcon className="w-4 h-4" />
-              <span>Radar de FIIs de Tijolo</span>
+              <span>FIIs de Tijolo</span>
             </button>
 
             <button
@@ -194,19 +212,6 @@ export default function App() {
 
             <button
               type="button"
-              onClick={() => setActiveTab('guide')}
-              className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
-                activeTab === 'guide'
-                  ? 'bg-emerald-700 text-white shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              <span>Guia de Precificação</span>
-            </button>
-
-            <button
-              type="button"
               onClick={() => setActiveTab('download')}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'download'
@@ -216,11 +221,19 @@ export default function App() {
             >
               <Smartphone className="w-4 h-4" />
               <span>Baixe o Aplicativo</span>
-              <span className={`text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded ${
-                activeTab === 'download' ? 'bg-emerald-800 text-white' : 'bg-emerald-100 text-emerald-800'
-              }`}>
-                Android
-              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('guide')}
+              className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'guide'
+                  ? 'bg-emerald-700 text-white shadow-xs font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Guia de Precificação</span>
             </button>
           </nav>
 
@@ -257,6 +270,20 @@ export default function App() {
             <button
               type="button"
               onClick={() => {
+                setActiveTab('my-radar');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
+                activeTab === 'my-radar' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <Target className="w-4 h-4" />
+              <span>Meu Radar</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
                 setActiveTab('radar');
                 setIsMobileMenuOpen(false);
               }}
@@ -265,7 +292,7 @@ export default function App() {
               }`}
             >
               <TableIcon className="w-4 h-4" />
-              <span>Radar de FIIs de Tijolo</span>
+              <span>FIIs de Tijolo</span>
             </button>
 
             <button
@@ -285,6 +312,20 @@ export default function App() {
             <button
               type="button"
               onClick={() => {
+                setActiveTab('download');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
+                activeTab === 'download' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <Smartphone className="w-4 h-4" />
+              <span>Baixe o Aplicativo</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
                 setActiveTab('guide');
                 setIsMobileMenuOpen(false);
               }}
@@ -294,25 +335,6 @@ export default function App() {
             >
               <BookOpen className="w-4 h-4" />
               <span>Guia de Precificação</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('download');
-                setIsMobileMenuOpen(false);
-              }}
-              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center justify-between ${
-                activeTab === 'download' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4" />
-                <span>Baixe o Aplicativo</span>
-              </div>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                Android
-              </span>
             </button>
 
             <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
@@ -347,6 +369,17 @@ export default function App() {
             onOpenExplanation={(topicId) => setExplanationTopicId(topicId)}
             onOpenAdGuide={() => setIsAdGuideOpen(true)}
             initialSelectedFii={selectedFiiForCalc}
+          />
+        )}
+
+        {activeTab === 'my-radar' && (
+          <MyRadarTab
+            onOpenExplanation={(topicId) => setExplanationTopicId(topicId)}
+            onGoToCalculator={(ticker) => {
+              setSelectedFiiForCalc(ticker);
+              setActiveTab('calculator');
+              window.scrollTo({ top: 120, behavior: 'smooth' });
+            }}
           />
         )}
 
@@ -423,6 +456,16 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => {
+                  setActiveTab('my-radar');
+                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                }}
+                className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
+              >
+                Meu Radar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
                   setActiveTab('reports');
                   window.scrollTo({ top: 120, behavior: 'smooth' });
                 }}
@@ -457,7 +500,7 @@ export default function App() {
                 className="text-emerald-700 hover:text-emerald-800 font-bold transition-colors cursor-pointer flex items-center gap-1"
               >
                 <Smartphone className="w-3.5 h-3.5" />
-                <span>Baixe o Aplicativo (Beta)</span>
+                <span>Baixe o Aplicativo</span>
               </button>
               <button
                 type="button"
