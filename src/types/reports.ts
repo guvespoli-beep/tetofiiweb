@@ -15,6 +15,7 @@ export interface FiiReportHighlight {
   gestor: string;
   administrador: string;
   taxaAdmTotal: string;
+  guidanceLabel?: string;
   guidance?: string;
   
   indicadores: {

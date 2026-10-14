@@ -274,7 +274,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
             {activeReport.guidance && (
               <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block">
-                  Guidance 2º Semestre
+                  {activeReport.guidanceLabel || 'Guidance'}
                 </span>
                 <p className="font-black text-emerald-900 text-sm">{activeReport.guidance}</p>
               </div>

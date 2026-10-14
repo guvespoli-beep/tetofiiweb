@@ -24,6 +24,7 @@ import { PrivacyPolicyModal } from './components/PrivacyPolicyModal';
 import { AdBanner } from './components/AdBanner';
 import { MarketTickerTape } from './components/MarketTickerTape';
 import { BookOpen, FileText, Target } from 'lucide-react';
+import { FII_REPORTS_DATA } from './data/fiiReports';
 
 export default function App() {
   // Navigation tabs
@@ -101,9 +102,18 @@ export default function App() {
         url.searchParams.set('aba', 'radar');
         url.searchParams.delete('materia');
       } else if (activeTab === 'reports') {
-        title = 'FIIque Informado - TETOFII | Destaques e Relatórios Gerenciais de FIIs';
-        description = 'Resumos executivos e pontos de atenção dos relatórios gerenciais mais recentes dos maiores fundos imobiliários de tijolo do Brasil.';
-        if (!selectedReportId) {
+        if (selectedReportId) {
+          const report = FII_REPORTS_DATA.find(r => r.id === selectedReportId);
+          if (report) {
+            title = `${report.title} | TETOFII`;
+            description = `Confira os principais indicadores e destaques do relatório gerencial do ${report.ticker} (${report.fundName}): ${report.summaryBadge || report.title}`;
+          } else {
+            title = 'FIIque Informado - TETOFII | Destaques e Relatórios Gerenciais de FIIs';
+            description = 'Resumos executivos e pontos de atenção dos relatórios gerenciais mais recentes dos maiores fundos imobiliários de tijolo do Brasil.';
+          }
+        } else {
+          title = 'FIIque Informado - TETOFII | Destaques e Relatórios Gerenciais de FIIs';
+          description = 'Resumos executivos e pontos de atenção dos relatórios gerenciais mais recentes dos maiores fundos imobiliários de tijolo do Brasil.';
           url.searchParams.set('aba', 'reports');
         }
       } else if (activeTab === 'guide') {
