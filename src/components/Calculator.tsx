@@ -223,18 +223,29 @@ export const Calculator: React.FC<CalculatorProps> = ({
 
   // Calculations
   const result: CalculationResult = useMemo(() => {
-    const numRefRate = typeof referenceRate === 'number' ? referenceRate : 0;
-    const numRiskPrem = typeof riskPremium === 'number' ? riskPremium : 0;
-    const numMonthlyDiv = typeof monthlyDividend === 'number' ? monthlyDividend : 0;
+    // Todos os campos do cálculo devem ser preenchidos para que o Preço Teto seja calculado:
+    // 1. Taxa de Referência (referenceRate)
+    // 2. Prêmio de Risco (riskPremium)
+    // 3. Proventos Estimados (monthlyDividend)
+    const hasRefRate = typeof referenceRate === 'number' && !isNaN(referenceRate) && referenceRate >= 0;
+    const hasRiskPrem = typeof riskPremium === 'number' && !isNaN(riskPremium) && riskPremium >= 0;
+    const hasMonthlyDiv = typeof monthlyDividend === 'number' && !isNaN(monthlyDividend) && monthlyDividend > 0;
 
-    const discountRate = numRefRate + numRiskPrem; // in %
-    const annualDividend = numMonthlyDiv * 12;
+    const areAllFieldsFilled = hasRefRate && hasRiskPrem && hasMonthlyDiv;
+
+    const numRefRate = hasRefRate ? referenceRate : 0;
+    const numRiskPrem = hasRiskPrem ? riskPremium : 0;
+    const numMonthlyDiv = hasMonthlyDiv ? monthlyDividend : 0;
+
+    const discountRate = (hasRefRate && hasRiskPrem) ? numRefRate + numRiskPrem : 0; // in %
+    const annualDividend = hasMonthlyDiv ? numMonthlyDiv * 12 : 0;
 
     // Preço Teto: ((Provento Mensal x 12)/(Taxa de Referência + Prêmio de Risco)) * 100
-    const ceilingPrice = discountRate > 0 && annualDividend > 0 ? (annualDividend / discountRate) * 100 : 0;
+    // O Preço Teto deverá ser "-" (sem valor) até que todos os campos sejam preenchidos
+    const ceilingPrice = areAllFieldsFilled && discountRate > 0 && annualDividend > 0 ? (annualDividend / discountRate) * 100 : 0;
 
     // P/VP
-    const numVp = typeof vpPerShare === 'number' ? vpPerShare : 0;
+    const numVp = typeof vpPerShare === 'number' && !isNaN(vpPerShare) && vpPerShare > 0 ? vpPerShare : 0;
     const pvp = numVp > 0 && currentPrice > 0 ? currentPrice / numVp : 0;
     let pvpAnalysis: CalculationResult['pvpAnalysis'] = 'SEM_DADOS';
     let pvpDiscountOrPremiumPercent = 0;
@@ -288,7 +299,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
 
   // Compartilhar Simulação com Imagem Gerada + Texto de Divulgação Orgânica
   const handleShareSimulation = async () => {
-    if (!shareCardTemplateRef.current) return;
+    if (!shareCardTemplateRef.current || result.ceilingPrice <= 0) return;
     setIsSharing(true);
 
     // Ao compartilhar uma simulação, atualiza a taxa de referência em Meu Radar automaticamente
@@ -390,17 +401,29 @@ export const Calculator: React.FC<CalculatorProps> = ({
   const hasCompleteInputs =
     Boolean(activeFii?.ticker || tickerQuery?.trim()) &&
     typeof referenceRate === 'number' &&
+    !isNaN(referenceRate) &&
     referenceRate >= 0 &&
     typeof riskPremium === 'number' &&
+    !isNaN(riskPremium) &&
     riskPremium >= 0 &&
     typeof monthlyDividend === 'number' &&
+    !isNaN(monthlyDividend) &&
     monthlyDividend > 0 &&
     result.ceilingPrice > 0;
 
   // Incluir dados da simulação feita no Meu Radar
   const handleAddToRadar = () => {
     const rawTicker = (activeFii?.ticker || tickerQuery || '').trim().toUpperCase();
-    if (!rawTicker || typeof riskPremium !== 'number' || typeof monthlyDividend !== 'number') {
+    if (
+      !rawTicker ||
+      typeof referenceRate !== 'number' ||
+      isNaN(referenceRate) ||
+      typeof riskPremium !== 'number' ||
+      isNaN(riskPremium) ||
+      typeof monthlyDividend !== 'number' ||
+      isNaN(monthlyDividend) ||
+      monthlyDividend <= 0
+    ) {
       return;
     }
 
@@ -780,7 +803,7 @@ export const Calculator: React.FC<CalculatorProps> = ({
               <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
                 <span>Provento Anual (× 12):</span>
                 <span className="font-mono font-bold text-emerald-700">
-                  {typeof monthlyDividend === 'number' && monthlyDividend > 0 ? formatCurrency(result.annualDividend) : 'R$ 0,00'}
+                  {typeof monthlyDividend === 'number' && monthlyDividend > 0 ? formatCurrency(result.annualDividend) : '-'}
                 </span>
               </div>
             </div>
@@ -795,9 +818,9 @@ export const Calculator: React.FC<CalculatorProps> = ({
                 {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : 'Aguardando preenchimento'}
               </strong>
             </div>
-            {result.discountRate > 0 && (
+            {result.discountRate > 0 && typeof referenceRate === 'number' && typeof riskPremium === 'number' && (
               <span className="text-slate-400 text-[11px]">
-                ({formatPercent(Number(referenceRate || 0))} Taxa Ref. + {formatPercent(Number(riskPremium || 0))} Prêmio)
+                ({formatPercent(referenceRate)} Taxa Ref. + {formatPercent(riskPremium)} Prêmio)
               </span>
             )}
           </div>
@@ -870,10 +893,19 @@ export const Calculator: React.FC<CalculatorProps> = ({
             <button
               type="button"
               onClick={handleShareSimulation}
-              disabled={isSharing}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-80 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
+              disabled={isSharing || result.ceilingPrice <= 0}
+              title={
+                result.ceilingPrice <= 0
+                  ? 'Preencha a Taxa de Referência, Prêmio de Risco e Proventos Estimados para calcular o Preço Teto e liberar o compartilhamento'
+                  : 'Compartilhar simulação'
+              }
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-md transition-all ${
+                !isSharing && result.ceilingPrice > 0
+                  ? 'bg-emerald-700 hover:bg-emerald-600 text-white hover:shadow-lg cursor-pointer'
+                  : 'bg-slate-800/40 text-slate-500 border border-slate-800 cursor-not-allowed opacity-50 shadow-none'
+              }`}
             >
-              <Share2 className="w-4 h-4 text-emerald-200" />
+              <Share2 className={`w-4 h-4 ${!isSharing && result.ceilingPrice > 0 ? 'text-emerald-200' : 'text-slate-500'}`} />
               <span>Compartilhar</span>
             </button>
           </div>
@@ -903,12 +935,14 @@ export const Calculator: React.FC<CalculatorProps> = ({
             <span>
               Taxa de Desconto Total (Yield Requerido):{' '}
               <strong className="text-emerald-400 font-bold text-sm sm:text-base font-mono">
-                {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : '0,00% a.a.'}
+                {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : '-'}
               </strong>
             </span>
           </div>
           <div className="text-slate-400 text-xs font-medium sm:text-right">
-            ({referenceRate ? formatPercent(Number(referenceRate)) : '0,00%'} Taxa Ref. + {riskPremium ? formatPercent(Number(riskPremium)) : '0,00%'} Prêmio)
+            {result.discountRate > 0 && typeof referenceRate === 'number' && typeof riskPremium === 'number'
+              ? `(${formatPercent(referenceRate)} Taxa Ref. + ${formatPercent(riskPremium)} Prêmio)`
+              : 'Preencha Taxa de Ref. e Prêmio de Risco'}
           </div>
         </div>
 
@@ -944,16 +978,16 @@ export const Calculator: React.FC<CalculatorProps> = ({
                 </span>
               </div>
               <div className="text-2xl sm:text-3xl font-black font-mono text-emerald-400">
-                {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'R$ 0,00'}
+                {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : '-'}
               </div>
             </div>
             <div className="mt-3 pt-3 border-t border-slate-700/60 text-xs text-slate-400">
               <span>
-                {result.discountRate > 0 && typeof monthlyDividend === 'number'
+                {result.ceilingPrice > 0 && typeof monthlyDividend === 'number'
                   ? `Provento mensal de ${formatCurrency(monthlyDividend)} e um yield de ${formatPercent(result.discountRate)} a.a.`
-                  : result.discountRate > 0
+                  : result.ceilingPrice > 0
                   ? `Para um yield de ${formatPercent(result.discountRate)} a.a.`
-                  : 'Preencha taxa e provento'}
+                  : 'Preencha Taxa de Ref., Prêmio e Proventos'}
               </span>
             </div>
           </div>
@@ -1138,12 +1172,14 @@ export const Calculator: React.FC<CalculatorProps> = ({
               <span>
                 Taxa Desconto Total (Yield Requerido):{' '}
                 <strong className="text-emerald-400 font-bold text-sm font-mono">
-                  {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : '0,00% a.a.'}
+                  {result.discountRate > 0 ? `${formatPercent(result.discountRate)} a.a.` : '-'}
                 </strong>
               </span>
             </div>
             <div className="text-slate-400 text-[11px]">
-              ({referenceRate ? formatPercent(Number(referenceRate)) : '0%'} + {riskPremium ? formatPercent(Number(riskPremium)) : '0%'})
+              {result.discountRate > 0 && typeof referenceRate === 'number' && typeof riskPremium === 'number'
+                ? `(${formatPercent(referenceRate)} + ${formatPercent(riskPremium)})`
+                : '-'}
             </div>
           </div>
 
@@ -1167,14 +1203,14 @@ export const Calculator: React.FC<CalculatorProps> = ({
               <div>
                 <span className="text-slate-400 text-xs font-semibold block mb-1">Preço Teto</span>
                 <div className="text-2xl font-black font-mono text-emerald-400">
-                  {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : 'R$ 0,00'}
+                  {result.ceilingPrice > 0 ? formatCurrency(result.ceilingPrice) : '-'}
                 </div>
               </div>
               <div className="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400 truncate">
                 <span>
-                  {result.discountRate > 0 && typeof monthlyDividend === 'number'
+                  {result.ceilingPrice > 0 && typeof monthlyDividend === 'number'
                     ? `Provento de ${formatCurrency(monthlyDividend)} e yield de ${formatPercent(result.discountRate)} a.a.`
-                    : result.discountRate > 0
+                    : result.ceilingPrice > 0
                     ? `Yield de ${formatPercent(result.discountRate)} a.a.`
                     : 'Aguardando parâmetros'}
                 </span>

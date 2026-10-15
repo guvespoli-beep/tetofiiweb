@@ -542,9 +542,13 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
   const shareRadarCardRef = useRef<HTMLDivElement>(null);
   const [isSharing, setIsSharing] = useState<boolean>(false);
 
+  // Validação: Preço Teto existe no Meu Radar se houver Taxa de Referência preenchida e pelo menos um ativo com Preço Teto calculado
+  const hasRefRate = typeof referenceRate === 'number' && !isNaN(referenceRate) && referenceRate >= 0;
+  const hasCeilingPriceInRadar = hasRefRate && filteredRows.some((row) => row.ceilingPrice > 0);
+
   // Compartilhar Tabela do Meu Radar (Gera Imagem com as 6 colunas especificadas + Taxa de Referência)
   const handleShareRadarTable = async () => {
-    if (!shareRadarCardRef.current || filteredRows.length === 0) return;
+    if (!shareRadarCardRef.current || filteredRows.length === 0 || !hasCeilingPriceInRadar) return;
     setIsSharing(true);
 
     const shareText = 'Veja Meu Radar em TETOFII. Crie o seu também em https://gvlab.com.br';
@@ -817,18 +821,26 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
               <button
                 type="button"
                 onClick={handleShareRadarTable}
-                disabled={isSharing || filteredRows.length === 0}
-                className="px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSharing || !hasCeilingPriceInRadar}
+                className={`px-3.5 py-2 rounded-lg font-bold text-xs flex items-center gap-1.5 transition-all ${
+                  !isSharing && hasCeilingPriceInRadar
+                    ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs cursor-pointer'
+                    : 'bg-slate-200 text-slate-400 border border-slate-300 cursor-not-allowed opacity-60 shadow-none'
+                }`}
                 title={
-                  filteredRows.length === 0
+                  !hasRefRate
+                    ? 'Preencha a Taxa de Referência (% a.a.) no topo para calcular o Preço Teto e liberar o compartilhamento'
+                    : filteredRows.length === 0
                     ? 'Nenhum fundo para compartilhar com os filtros atuais'
+                    : !hasCeilingPriceInRadar
+                    ? 'Preencha os dados dos fundos para calcular o Preço Teto e liberar o compartilhamento'
                     : 'Compartilhar imagem do Meu Radar com as cotações e preços teto'
                 }
               >
                 {isSharing ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 ) : (
-                  <Share2 className="w-3.5 h-3.5" />
+                  <Share2 className={`w-3.5 h-3.5 ${!isSharing && hasCeilingPriceInRadar ? 'text-white' : 'text-slate-400'}`} />
                 )}
                 <span>Compartilhar</span>
               </button>
