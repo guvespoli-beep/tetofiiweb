@@ -25,7 +25,7 @@ import {
   formatPercent,
   searchFii,
 } from '../data/fiiDatabase';
-import { fetchLiveQuote, loadStaticQuotes } from '../services/quoteService';
+import { fetchLiveQuote, loadStaticQuotes, loadAllCvmVpa } from '../services/quoteService';
 import { MyRadarItem, FiiData } from '../types/index';
 
 interface MyRadarTabProps {
@@ -179,16 +179,33 @@ export const MyRadarTab: React.FC<MyRadarTabProps> = ({
     let isMounted = true;
     const updateQuotes = async () => {
       try {
-        const staticQuotes = await loadStaticQuotes();
-        if (isMounted && staticQuotes && Object.keys(staticQuotes).length > 0) {
+        const [staticQuotes, cvmVpas] = await Promise.all([
+          loadStaticQuotes(),
+          loadAllCvmVpa(),
+        ]);
+
+        if (isMounted) {
           const map: Record<string, number> = {};
           const vps: Record<string, { vp: number; date?: string }> = {};
-          for (const [t, item] of Object.entries(staticQuotes)) {
-            if (item.price > 0) map[t] = item.price;
-            if (item.vpPerShare && item.vpPerShare > 0) {
-              vps[t] = { vp: item.vpPerShare, date: item.cvmReportDate };
+
+          if (staticQuotes && Object.keys(staticQuotes).length > 0) {
+            for (const [t, item] of Object.entries(staticQuotes)) {
+              if (item.price > 0) map[t] = item.price;
+              if (item.vpPerShare && item.vpPerShare > 0) {
+                vps[t] = { vp: item.vpPerShare, date: item.cvmReportDate };
+              }
             }
           }
+
+          // Prioridade para os dados oficiais da CVM
+          if (cvmVpas && Object.keys(cvmVpas).length > 0) {
+            for (const [t, item] of Object.entries(cvmVpas)) {
+              if (item.vpa > 0) {
+                vps[t] = { vp: item.vpa, date: item.dataRefFormatada };
+              }
+            }
+          }
+
           setLivePrices((prev) => ({ ...prev, ...map }));
           setLiveVps((prev) => ({ ...prev, ...vps }));
         }

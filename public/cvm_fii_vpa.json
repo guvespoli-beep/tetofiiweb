@@ -1,0 +1,647 @@
+{
+  "lastSync": "2026-10-16T16:55:55.857213",
+  "lastSyncFormatted": "16/10/2026 16:55:55",
+  "totalFunds": 71,
+  "fundsWithVpa": 71,
+  "vpa": {
+    "XPML11": {
+      "ticker": "XPML11",
+      "vpa": 112.75,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "07.583.627/0001-61",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HGLG11": {
+      "ticker": "HGLG11",
+      "vpa": 165.95,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "11.728.688/0001-47",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BTLG11": {
+      "ticker": "BTLG11",
+      "vpa": 106.69,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "11.839.593/0001-09",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "KNRI11": {
+      "ticker": "KNRI11",
+      "vpa": 163.56,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "12.005.956/0001-65",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "VISC11": {
+      "ticker": "VISC11",
+      "vpa": 115.45,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "17.554.274/0001-25",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "XPLG11": {
+      "ticker": "XPLG11",
+      "vpa": 104.65,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "26.502.794/0001-85",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HGRU11": {
+      "ticker": "HGRU11",
+      "vpa": 128.11,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "29.641.226/0001-53",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "TRXF11": {
+      "ticker": "TRXF11",
+      "vpa": 96.62,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "28.548.288/0001-52",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HGBS11": {
+      "ticker": "HGBS11",
+      "vpa": 20.18,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "08.431.747/0001-06",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "PVBI11": {
+      "ticker": "PVBI11",
+      "vpa": 104.76,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "35.652.102/0001-76",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "TGAR11": {
+      "ticker": "TGAR11",
+      "vpa": 106.64,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "25.032.881/0001-53",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "GARE11": {
+      "ticker": "GARE11",
+      "vpa": 9.07,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "37.295.919/0001-60",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BRCO11": {
+      "ticker": "BRCO11",
+      "vpa": 114.76,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "20.748.515/0001-81",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "ALZR11": {
+      "ticker": "ALZR11",
+      "vpa": 10.7,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "28.737.771/0001-85",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "VILG11": {
+      "ticker": "VILG11",
+      "vpa": 108.69,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "24.853.044/0001-22",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "JSRE11": {
+      "ticker": "JSRE11",
+      "vpa": 101.47,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "13.371.132/0001-71",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HSML11": {
+      "ticker": "HSML11",
+      "vpa": 99.41,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "32.892.018/0001-31",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "LVBI11": {
+      "ticker": "LVBI11",
+      "vpa": 120.99,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "30.629.603/0001-18",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "PMLL11": {
+      "ticker": "PMLL11",
+      "vpa": 119.32,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "26.499.833/0001-32",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HGRE11": {
+      "ticker": "HGRE11",
+      "vpa": 150.56,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "09.072.017/0001-29",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RBVA11": {
+      "ticker": "RBVA11",
+      "vpa": 10.66,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "15.576.907/0001-70",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "GGRC11": {
+      "ticker": "GGRC11",
+      "vpa": 10.93,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "26.614.291/0001-00",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "VINO11": {
+      "ticker": "VINO11",
+      "vpa": 9.83,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "12.516.185/0001-70",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RBRP11": {
+      "ticker": "RBRP11",
+      "vpa": 78.65,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "21.408.063/0001-51",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "TEPP11": {
+      "ticker": "TEPP11",
+      "vpa": 9.4,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "26.681.370/0001-25",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "TRBL11": {
+      "ticker": "TRBL11",
+      "vpa": 76.65,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "16.671.412/0001-93",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BRCR11": {
+      "ticker": "BRCR11",
+      "vpa": 80.71,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "08.924.783/0001-01",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "SARE11": {
+      "ticker": "SARE11",
+      "vpa": 5.03,
+      "dataReferencia": "2025-11-01",
+      "dataRefFormatada": "Novembro/2025",
+      "versao": 1,
+      "cnpj": "32.903.702/0001-71",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RCRB11": {
+      "ticker": "RCRB11",
+      "vpa": 190.87,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "03.683.056/0001-86",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RECT11": {
+      "ticker": "RECT11",
+      "vpa": 89.86,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "32.274.163/0001-59",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BROF11": {
+      "ticker": "BROF11",
+      "vpa": 108.51,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "48.978.859/0001-04",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BLMG11": {
+      "ticker": "BLMG11",
+      "vpa": 45.59,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 3,
+      "cnpj": "34.081.637/0001-71",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RBED11": {
+      "ticker": "RBED11",
+      "vpa": 100.01,
+      "dataReferencia": "2025-01-01",
+      "dataRefFormatada": "Janeiro/2025",
+      "versao": 1,
+      "cnpj": "13.873.457/0001-52",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HTMX11": {
+      "ticker": "HTMX11",
+      "vpa": 148.49,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "08.706.065/0001-69",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HCRI11": {
+      "ticker": "HCRI11",
+      "vpa": 329.3,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "04.066.582/0001-60",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "NSLU11": {
+      "ticker": "NSLU11",
+      "vpa": 252.6,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "08.014.513/0001-63",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "GTWR11": {
+      "ticker": "GTWR11",
+      "vpa": 101.36,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "23.740.527/0001-58",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "FIGS11": {
+      "ticker": "FIGS11",
+      "vpa": 70.12,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "17.590.518/0001-25",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "CPSH11": {
+      "ticker": "CPSH11",
+      "vpa": 11.54,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 3,
+      "cnpj": "47.896.665/0001-99",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "FATN11": {
+      "ticker": "FATN11",
+      "vpa": 97.23,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "30.567.216/0001-02",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "SNEL11": {
+      "ticker": "SNEL11",
+      "vpa": 8.06,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 4,
+      "cnpj": "43.741.171/0001-84",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RZTR11": {
+      "ticker": "RZTR11",
+      "vpa": 97.78,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "36.501.128/0001-86",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "AIEC11": {
+      "ticker": "AIEC11",
+      "vpa": 75.74,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "35.765.826/0001-26",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BBRC11": {
+      "ticker": "BBRC11",
+      "vpa": 104.04,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "12.681.340/0001-04",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "FAED11": {
+      "ticker": "FAED11",
+      "vpa": 223.75,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "11.179.118/0001-45",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "WPLZ11": {
+      "ticker": "WPLZ11",
+      "vpa": 54.58,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "09.326.861/0001-39",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "PATC11": {
+      "ticker": "PATC11",
+      "vpa": 34.26,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "30.048.651/0001-12",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "THRA11": {
+      "ticker": "THRA11",
+      "vpa": 145.2,
+      "dataReferencia": "Agosto/2026",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "19.380.007/0001-92",
+      "fonte": "Informe CVM Registrado"
+    },
+    "ONEF11": {
+      "ticker": "ONEF11",
+      "vpa": 175.4,
+      "dataReferencia": "Agosto/2026",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "12.007.828/0001-72",
+      "fonte": "Informe CVM Registrado"
+    },
+    "FLMA11": {
+      "ticker": "FLMA11",
+      "vpa": 250.74,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "04.141.645/0001-03",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "FLRP11": {
+      "ticker": "FLRP11",
+      "vpa": 20.98,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "10.375.382/0001-91",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "SHPH11": {
+      "ticker": "SHPH11",
+      "vpa": 1034.16,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "03.507.519/0001-59",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "JRDM11": {
+      "ticker": "JRDM11",
+      "vpa": 96.5,
+      "dataReferencia": "Agosto/2026",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "15.578.417/0001-08",
+      "fonte": "Informe CVM Registrado"
+    },
+    "PQDP11": {
+      "ticker": "PQDP11",
+      "vpa": 2607.18,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "10.869.155/0001-12",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "JFLL11": {
+      "ticker": "JFLL11",
+      "vpa": 104.06,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "36.501.181/0001-87",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RBRS11": {
+      "ticker": "RBRS11",
+      "vpa": 95.9,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "36.517.660/0001-91",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "NVHO11": {
+      "ticker": "NVHO11",
+      "vpa": 16.6,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "17.025.970/0001-44",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "CARE11": {
+      "ticker": "CARE11",
+      "vpa": 34.37,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "13.584.584/0001-31",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "HSLG11": {
+      "ticker": "HSLG11",
+      "vpa": 110.04,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "32.903.621/0001-71",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "TVRI11": {
+      "ticker": "TVRI11",
+      "vpa": 100.6,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "14.410.722/0001-29",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "BPML11": {
+      "ticker": "BPML11",
+      "vpa": 119.1,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "33.046.142/0001-49",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RBRL11": {
+      "ticker": "RBRL11",
+      "vpa": 93.38,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "35.705.463/0001-33",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "KORE11": {
+      "ticker": "KORE11",
+      "vpa": 107.31,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 2,
+      "cnpj": "52.219.978/0001-42",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "TOPP11": {
+      "ticker": "TOPP11",
+      "vpa": 101.74,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "56.805.391/0001-76",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "INLG11": {
+      "ticker": "INLG11",
+      "vpa": 106.52,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "34.598.181/0001-11",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "RZAT11": {
+      "ticker": "RZAT11",
+      "vpa": 101.55,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "28.267.696/0001-36",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "FCFL11": {
+      "ticker": "FCFL11",
+      "vpa": 125.66,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "11.602.654/0001-01",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "FIIB11": {
+      "ticker": "FIIB11",
+      "vpa": 593.64,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "14.217.108/0001-45",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "NEWL11": {
+      "ticker": "NEWL11",
+      "vpa": 131.78,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "32.527.626/0001-47",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "GSFI11": {
+      "ticker": "GSFI11",
+      "vpa": 12.89,
+      "dataReferencia": "2026-09-01",
+      "dataRefFormatada": "Setembro/2026",
+      "versao": 1,
+      "cnpj": "11.769.604/0001-13",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    },
+    "VCRR11": {
+      "ticker": "VCRR11",
+      "vpa": 103.28,
+      "dataReferencia": "2026-08-01",
+      "dataRefFormatada": "Agosto/2026",
+      "versao": 1,
+      "cnpj": "40.041.723/0001-53",
+      "fonte": "CVM Dados Abertos (Oficial - Resolução 175)"
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
 import { FII_DATABASE } from './src/data/fiiDatabase.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -85,7 +87,76 @@ async function fetchYahooQuote(rawTicker: string): Promise<CachedQuote | null> {
   return null;
 }
 
-// API de cotação em tempo real B3
+interface CvmVpaItem {
+  ticker: string;
+  vpa: number;
+  dataReferencia: string;
+  dataRefFormatada: string;
+  versao?: number;
+  cnpj?: string;
+  fonte?: string;
+}
+
+let cvmVpaMemoryMap: Record<string, CvmVpaItem> = {};
+
+function loadCvmVpaCacheFromDisk() {
+  try {
+    const vpaPath = path.resolve(__dirname, 'public', 'cvm_fii_vpa.json');
+    if (fs.existsSync(vpaPath)) {
+      const content = fs.readFileSync(vpaPath, 'utf-8');
+      const parsed = JSON.parse(content);
+      if (parsed && parsed.vpa) {
+        cvmVpaMemoryMap = parsed.vpa;
+        console.log(`[CVM Cache] Carregados ${Object.keys(cvmVpaMemoryMap).length} VPs oficiais da CVM em memória.`);
+      }
+    }
+  } catch (err: any) {
+    console.warn('[CVM Cache] Aviso ao ler cvm_fii_vpa.json:', err.message);
+  }
+}
+
+// Carregamento inicial síncrono do cache de VPs
+loadCvmVpaCacheFromDisk();
+
+// API de consulta direta do VPA oficial da CVM por ticker (padrão TETOFII Android)
+app.get('/api/fii/vpa/:ticker', (req: Request, res: Response) => {
+  const rawTicker = req.params.ticker;
+  if (!rawTicker) {
+    res.status(400).json({ error: 'Ticker obrigatório' });
+    return;
+  }
+  const cleanTicker = rawTicker.trim().toUpperCase().replace('.SA', '');
+  const item = cvmVpaMemoryMap[cleanTicker];
+  if (item) {
+    res.json(item);
+  } else {
+    const fund = FII_DATABASE.find((f) => f.ticker === cleanTicker);
+    if (fund) {
+      res.json({
+        ticker: fund.ticker,
+        vpa: fund.vpPerShare,
+        dataReferencia: fund.cvmReportDate,
+        dataRefFormatada: fund.cvmReportDate,
+        cnpj: fund.cnpj,
+        fonte: 'Base Cadastral CVM',
+      });
+    } else {
+      res.status(404).json({ error: `VPA oficial não encontrado para ${cleanTicker}` });
+    }
+  }
+});
+
+// API para carregar o mapa completo de VPAs da CVM
+app.get('/api/cvm/vpa', (_req: Request, res: Response) => {
+  res.json({
+    lastSync: cvmSyncState.lastSync ? new Date(cvmSyncState.lastSync).toISOString() : new Date().toISOString(),
+    lastSyncFormatted: cvmSyncState.lastSync ? new Date(cvmSyncState.lastSync).toLocaleString('pt-BR') : 'Hoje',
+    totalFunds: Object.keys(cvmVpaMemoryMap).length,
+    vpa: cvmVpaMemoryMap,
+  });
+});
+
+// API de cotação em tempo real B3 cruzada com VP oficial da CVM
 app.get('/api/quote/:ticker', async (req: Request, res: Response) => {
   const rawTicker = req.params.ticker;
   if (!rawTicker) {
@@ -95,6 +166,11 @@ app.get('/api/quote/:ticker', async (req: Request, res: Response) => {
 
   const cleanTicker = rawTicker.trim().toUpperCase().replace('.SA', '');
   const quote = await fetchYahooQuote(cleanTicker);
+  const fund = FII_DATABASE.find((f) => f.ticker === cleanTicker);
+  const cvmInfo = cvmVpaMemoryMap[cleanTicker];
+
+  const officialVp = cvmInfo?.vpa ?? fund?.vpPerShare;
+  const officialDate = cvmInfo?.dataRefFormatada ?? fund?.cvmReportDate;
 
   if (quote) {
     res.json({
@@ -103,6 +179,8 @@ app.get('/api/quote/:ticker', async (req: Request, res: Response) => {
       change: quote.change,
       changePercent: quote.changePercent,
       previousClose: quote.previousClose,
+      vpPerShare: officialVp,
+      cvmReportDate: officialDate,
       source: quote.source,
       timestamp: quote.timestamp,
     });
@@ -110,6 +188,8 @@ app.get('/api/quote/:ticker', async (req: Request, res: Response) => {
     res.status(404).json({
       error: `Cotação não encontrada para ${cleanTicker}`,
       ticker: cleanTicker,
+      vpPerShare: officialVp,
+      cvmReportDate: officialDate,
     });
   }
 });
@@ -256,6 +336,72 @@ app.get('/api/ticker-tape', async (_req: Request, res: Response) => {
   }
 });
 
+// =======================================================================
+// SINCRONIZAÇÃO AUTOMATIZADA E PERIÓDICA DE VPs COM A CVM
+// =======================================================================
+interface CvmSyncState {
+  lastSync: number;
+  lastStatus: string;
+  totalSynced: number;
+  fundsWithVp: number;
+  lastDetails?: any;
+}
+
+let cvmSyncState: CvmSyncState = {
+  lastSync: 0,
+  lastStatus: 'pending',
+  totalSynced: 0,
+  fundsWithVp: 0,
+};
+
+function executeCvmSync() {
+  console.log('[CVM Sync] Iniciando verificação e sincronização periódica de VPs com a CVM...');
+  try {
+    const scriptPath = path.resolve(__dirname, 'scripts', 'cvm-sync.py');
+    const result = spawnSync('python3', [scriptPath], {
+      encoding: 'utf-8',
+      timeout: 60000,
+    });
+
+    if (result.status === 0 && result.stdout) {
+      const data = JSON.parse(result.stdout.trim());
+      loadCvmVpaCacheFromDisk();
+      cvmSyncState = {
+        lastSync: Date.now(),
+        lastStatus: 'success',
+        totalSynced: data.total_db_tickers || data.total_synced || 0,
+        fundsWithVp: data.funds_with_vpa || data.funds_with_vp || 0,
+        lastDetails: data,
+      };
+      console.log(`[CVM Sync] Sincronização CVM concluída! ${cvmSyncState.fundsWithVp} fundos com VP oficial atualizados.`);
+    } else {
+      console.warn('[CVM Sync] Aviso no script de sincronização:', result.stderr || result.stdout);
+      cvmSyncState.lastStatus = 'error';
+    }
+  } catch (err: any) {
+    console.error('[CVM Sync] Erro ao sincronizar CVM:', err.message);
+    cvmSyncState.lastStatus = 'error';
+  }
+}
+
+// Endpoint para consultar status da sincronização CVM
+app.get('/api/cvm/status', (_req: Request, res: Response) => {
+  res.json({
+    ...cvmSyncState,
+    lastSyncFormatted: cvmSyncState.lastSync ? new Date(cvmSyncState.lastSync).toLocaleString('pt-BR') : 'Nunca',
+  });
+});
+
+// Endpoint para disparar sincronização manual da CVM sob demanda
+app.all('/api/cvm/sync', (_req: Request, res: Response) => {
+  executeCvmSync();
+  res.json({
+    success: cvmSyncState.lastStatus === 'success',
+    ...cvmSyncState,
+    lastSyncFormatted: new Date(cvmSyncState.lastSync).toLocaleString('pt-BR'),
+  });
+});
+
 // API de health check
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
@@ -281,6 +427,10 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`TETOFII Server running on http://0.0.0.0:${PORT}`);
+    // Executa sincronização inicial 3 segundos após boot do servidor
+    setTimeout(executeCvmSync, 3000);
+    // Agenda checagem periódica a cada 4 horas
+    setInterval(executeCvmSync, 4 * 60 * 60 * 1000);
   });
 }
 

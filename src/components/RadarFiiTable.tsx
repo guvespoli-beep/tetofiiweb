@@ -44,24 +44,41 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
     'Hotéis'
   ];
 
-  // Atualização das cotações em tempo real para todos os fundos
+  // Atualização das cotações em tempo real e VPs oficiais da CVM para todos os fundos
   useEffect(() => {
     let isMounted = true;
-    const updateQuotes = async () => {
+    const updateQuotesAndVpa = async () => {
       try {
-        const { loadStaticQuotes } = await import('../services/quoteService');
-        const staticQuotes = await loadStaticQuotes();
-        if (isMounted && staticQuotes && Object.keys(staticQuotes).length > 0) {
+        const { loadStaticQuotes, loadAllCvmVpa } = await import('../services/quoteService');
+        const [staticQuotes, cvmVpas] = await Promise.all([
+          loadStaticQuotes(),
+          loadAllCvmVpa(),
+        ]);
+
+        if (isMounted) {
           const map: Record<string, number> = {};
           const vps: Record<string, { vp: number; date?: string }> = {};
-          for (const [t, item] of Object.entries(staticQuotes)) {
-            if (item.price > 0) {
-              map[t] = item.price;
-            }
-            if (item.vpPerShare && item.vpPerShare > 0) {
-              vps[t] = { vp: item.vpPerShare, date: item.cvmReportDate };
+
+          if (staticQuotes && Object.keys(staticQuotes).length > 0) {
+            for (const [t, item] of Object.entries(staticQuotes)) {
+              if (item.price > 0) {
+                map[t] = item.price;
+              }
+              if (item.vpPerShare && item.vpPerShare > 0) {
+                vps[t] = { vp: item.vpPerShare, date: item.cvmReportDate };
+              }
             }
           }
+
+          // Prioridade máxima para os VPAs apurados pelo Crawler Oficial da CVM
+          if (cvmVpas && Object.keys(cvmVpas).length > 0) {
+            for (const [t, item] of Object.entries(cvmVpas)) {
+              if (item.vpa > 0) {
+                vps[t] = { vp: item.vpa, date: item.dataRefFormatada };
+              }
+            }
+          }
+
           setLivePrices(prev => ({ ...prev, ...map }));
           setLiveVps(prev => ({ ...prev, ...vps }));
         }
@@ -74,13 +91,20 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
           const live = await fetchLiveQuote(fii.ticker);
           if (live && live.price > 0 && isMounted) {
             setLivePrices(prev => ({ ...prev, [fii.ticker]: live.price }));
+            if (live.vpPerShare && live.vpPerShare > 0) {
+              setLiveVps(prev => ({
+                ...prev,
+                [fii.ticker]: { vp: live.vpPerShare!, date: live.cvmReportDate },
+              }));
+            }
           }
         } catch {
           // ignore
         }
       }
     };
-    updateQuotes();
+
+    updateQuotesAndVpa();
     return () => { isMounted = false; };
   }, []);
 
@@ -152,7 +176,7 @@ export const RadarFiiTable: React.FC<RadarFiiTableProps> = ({
             FIIs de Tijolo
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Fundos Imobiliários de Tijolo listados na B3 com cotação de mercado e valor patrimonial oficial.
+            Fundos Imobiliários de Tijolo listados na B3 com cotação de mercado e valor patrimonial oficial CVM.
           </p>
         </div>
       </div>

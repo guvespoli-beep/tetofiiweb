@@ -95,14 +95,20 @@ export const Calculator: React.FC<CalculatorProps> = ({
         const live = await fetchLiveQuote(fund.ticker);
         if (live && live.price > 0) {
           setCurrentPrice(live.price);
-          if (live.vpPerShare && live.vpPerShare > 0) {
-            setVpPerShare(live.vpPerShare);
-            if (live.cvmReportDate) {
-              setActiveFii(prev => prev ? { ...prev, vpPerShare: live.vpPerShare!, cvmReportDate: live.cvmReportDate! } : null);
-            }
-          }
           setLastQuoteTime(live.timeString);
           if (live.source) setQuoteSource(live.source);
+        }
+
+        const { fetchCvmVpa } = await import('../services/quoteService');
+        const cvmInfo = await fetchCvmVpa(fund.ticker);
+        const officialVp = cvmInfo?.vpa ?? live?.vpPerShare;
+        const officialDate = cvmInfo?.dataRefFormatada ?? live?.cvmReportDate;
+
+        if (officialVp && officialVp > 0) {
+          setVpPerShare(officialVp);
+          if (officialDate) {
+            setActiveFii(prev => prev ? { ...prev, vpPerShare: officialVp, cvmReportDate: officialDate } : null);
+          }
         }
       } catch {
         // Mantém a cotação base da tabela

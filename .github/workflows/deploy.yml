@@ -33,8 +33,10 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Sync latest B3 live quotes & CVM official VP
-        run: npx tsx scripts/update-quotes.mjs
+      - name: Sync latest CVM official VP & B3 live quotes
+        run: |
+          python3 scripts/cvm-sync.py
+          npx tsx scripts/update-quotes.mjs
 
       - name: Build app
         run: npm run build

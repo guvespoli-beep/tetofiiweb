@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-09-25T03:35:36.184Z",
-  "updatedAtFormatted": "25/09/2026, 00:35:36",
+  "updatedAt": "2026-10-15T19:00:00.000Z",
+  "updatedAtFormatted": "15/10/2026, 16:00:00",
   "total": 67,
   "quotes": {
     "XPML11": {
@@ -13,7 +13,7 @@
       "low": 97.7,
       "timestamp": 1790307324871,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 110.11,
+      "vpPerShare": 112.75,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -27,7 +27,7 @@
       "low": 147.93,
       "timestamp": 1790307325033,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 166.09,
+      "vpPerShare": 165.95,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -111,9 +111,9 @@
       "low": 72.96,
       "timestamp": 1790307326065,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 97.07,
+      "vpPerShare": 96.62,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "HGBS11": {
       "ticker": "HGBS11",
@@ -139,9 +139,9 @@
       "low": 65.5,
       "timestamp": 1790307326370,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 104.53,
+      "vpPerShare": 104.76,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "TGAR11": {
       "ticker": "TGAR11",
@@ -181,9 +181,9 @@
       "low": 110,
       "timestamp": 1790307326855,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 120.4,
+      "vpPerShare": 114.76,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "ALZR11": {
       "ticker": "ALZR11",
@@ -195,7 +195,7 @@
       "low": 9.8,
       "timestamp": 1790307327006,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 10.69,
+      "vpPerShare": 10.7,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -223,9 +223,9 @@
       "low": 59.9,
       "timestamp": 1790307327305,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 109.5,
+      "vpPerShare": 101.47,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "HSML11": {
       "ticker": "HSML11",
@@ -237,9 +237,9 @@
       "low": 82.8,
       "timestamp": 1790307327455,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 96.1,
+      "vpPerShare": 99.41,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "LVBI11": {
       "ticker": "LVBI11",
@@ -251,9 +251,9 @@
       "low": 97.02,
       "timestamp": 1790307327609,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 117.85,
+      "vpPerShare": 120.99,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "PMLL11": {
       "ticker": "PMLL11",
@@ -265,7 +265,7 @@
       "low": 103,
       "timestamp": 1790307327787,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 119.28,
+      "vpPerShare": 119.32,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -307,9 +307,9 @@
       "low": 8.93,
       "timestamp": 1790307328272,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 112.3,
+      "vpPerShare": 10.93,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "VINO11": {
       "ticker": "VINO11",
@@ -321,9 +321,9 @@
       "low": 4.28,
       "timestamp": 1790307328458,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 10.45,
+      "vpPerShare": 9.83,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "RBRP11": {
       "ticker": "RBRP11",
@@ -335,9 +335,9 @@
       "low": 49.99,
       "timestamp": 1790307328612,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 79.2,
+      "vpPerShare": 78.65,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "TEPP11": {
       "ticker": "TEPP11",
@@ -349,9 +349,9 @@
       "low": 7.09,
       "timestamp": 1790307328761,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 93.4,
+      "vpPerShare": 9.4,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "TRBL11": {
       "ticker": "TRBL11",
@@ -377,7 +377,7 @@
       "low": 40.97,
       "timestamp": 1790307329066,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 148.49,
+      "vpPerShare": 80.71,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -391,9 +391,9 @@
       "low": 4.75,
       "timestamp": 1790307329244,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 88.3,
-      "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "vpPerShare": 5.03,
+      "cvmReportDate": "Novembro/2025",
+      "cvmUpdated": true
     },
     "RCRB11": {
       "ticker": "RCRB11",
@@ -419,9 +419,9 @@
       "low": 33.14,
       "timestamp": 1790307329583,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 85.2,
+      "vpPerShare": 89.86,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "BROF11": {
       "ticker": "BROF11",
@@ -433,9 +433,9 @@
       "low": 60.89,
       "timestamp": 1790307329734,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 108.45,
+      "vpPerShare": 108.51,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "BLMG11": {
       "ticker": "BLMG11",
@@ -447,9 +447,9 @@
       "low": 33.38,
       "timestamp": 1790307329884,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 79.5,
+      "vpPerShare": 45.59,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "HTMX11": {
       "ticker": "HTMX11",
@@ -461,9 +461,9 @@
       "low": 135.71,
       "timestamp": 1790307330176,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 168.4,
+      "vpPerShare": 148.49,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "HCRI11": {
       "ticker": "HCRI11",
@@ -475,9 +475,9 @@
       "low": 276.25,
       "timestamp": 1790307330327,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 295.1,
+      "vpPerShare": 329.3,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "NSLU11": {
       "ticker": "NSLU11",
@@ -489,9 +489,9 @@
       "low": 183.59,
       "timestamp": 1790307330477,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 242.8,
+      "vpPerShare": 252.6,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "GTWR11": {
       "ticker": "GTWR11",
@@ -531,7 +531,7 @@
       "low": 9.65,
       "timestamp": 1790307330925,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 11.53,
+      "vpPerShare": 11.54,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -559,7 +559,7 @@
       "low": 7.95,
       "timestamp": 1790307331224,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 7.74,
+      "vpPerShare": 8.06,
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     },
@@ -573,9 +573,9 @@
       "low": 83.17,
       "timestamp": 1790307331373,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 96.5,
+      "vpPerShare": 97.78,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "AIEC11": {
       "ticker": "AIEC11",
@@ -587,9 +587,9 @@
       "low": 68.15,
       "timestamp": 1790307331549,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 91.8,
+      "vpPerShare": 75.74,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "BBRC11": {
       "ticker": "BBRC11",
@@ -601,9 +601,9 @@
       "low": 100.05,
       "timestamp": 1790307331699,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 118.4,
+      "vpPerShare": 104.04,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "FAED11": {
       "ticker": "FAED11",
@@ -615,9 +615,9 @@
       "low": 152,
       "timestamp": 1790307331886,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 205.1,
+      "vpPerShare": 223.75,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "WPLZ11": {
       "ticker": "WPLZ11",
@@ -629,9 +629,9 @@
       "low": 49.1,
       "timestamp": 1790307332037,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 79.2,
+      "vpPerShare": 54.58,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "PATC11": {
       "ticker": "PATC11",
@@ -643,9 +643,9 @@
       "low": 36,
       "timestamp": 1790307332188,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 67.5,
+      "vpPerShare": 34.26,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "FLMA11": {
       "ticker": "FLMA11",
@@ -657,9 +657,9 @@
       "low": 160.41,
       "timestamp": 1790307332627,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 160.1,
+      "vpPerShare": 250.74,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "FLRP11": {
       "ticker": "FLRP11",
@@ -671,9 +671,9 @@
       "low": 20.23,
       "timestamp": 1790307332780,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 181.3,
+      "vpPerShare": 20.98,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "SHPH11": {
       "ticker": "SHPH11",
@@ -685,9 +685,9 @@
       "low": 947,
       "timestamp": 1790307332932,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 885,
+      "vpPerShare": 1034.16,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "PQDP11": {
       "ticker": "PQDP11",
@@ -699,9 +699,9 @@
       "low": 2488.98,
       "timestamp": 1790307333258,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 3120,
+      "vpPerShare": 2607.18,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "JFLL11": {
       "ticker": "JFLL11",
@@ -713,9 +713,9 @@
       "low": 51.25,
       "timestamp": 1790307333407,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 98.4,
+      "vpPerShare": 104.06,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "RBRS11": {
       "ticker": "RBRS11",
@@ -727,9 +727,9 @@
       "low": 45.86,
       "timestamp": 1790307333553,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 82.1,
+      "vpPerShare": 95.9,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "NVHO11": {
       "ticker": "NVHO11",
@@ -741,9 +741,9 @@
       "low": 14.46,
       "timestamp": 1790307333712,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 14.8,
+      "vpPerShare": 16.6,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "CARE11": {
       "ticker": "CARE11",
@@ -755,9 +755,9 @@
       "low": 4.1,
       "timestamp": 1790307333870,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 1.85,
+      "vpPerShare": 34.37,
       "cvmReportDate": "Agosto/2026",
-      "cvmUpdated": false
+      "cvmUpdated": true
     },
     "HSLG11": {
       "ticker": "HSLG11",
@@ -923,8 +923,8 @@
       "low": 10.97,
       "timestamp": 1790307335779,
       "source": "B3 Oficial (Tempo Real/Yahoo)",
-      "vpPerShare": 70.12,
-      "cvmReportDate": "Agosto/2026",
+      "vpPerShare": 12.89,
+      "cvmReportDate": "Setembro/2026",
       "cvmUpdated": true
     },
     "VCRR11": {
@@ -941,5 +941,6 @@
       "cvmReportDate": "Agosto/2026",
       "cvmUpdated": true
     }
-  }
+  },
+  "lastCvmSync": "2026-10-16T16:55:55.919421"
 }

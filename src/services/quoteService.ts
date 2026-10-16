@@ -19,8 +19,96 @@ export interface LiveQuoteResult {
   timeString: string;
 }
 
+export interface CvmVpaResult {
+  ticker: string;
+  vpa: number;
+  dataReferencia: string;
+  dataRefFormatada: string;
+  versao?: number;
+  cnpj?: string;
+  fonte?: string;
+}
+
 let cachedQuotesFile: Record<string, LiveQuoteResult> | null = null;
 let quotesFilePromise: Promise<Record<string, LiveQuoteResult>> | null = null;
+
+let cachedCvmVpaFile: Record<string, CvmVpaResult> | null = null;
+let cvmVpaPromise: Promise<Record<string, CvmVpaResult>> | null = null;
+
+/**
+ * Carrega a base de VPA oficial da CVM gerada pelo crawler de Dados Abertos (Resolução CVM 175).
+ * Fonte: /api/cvm/vpa (backend) ou ./cvm_fii_vpa.json (estático GitHub Pages / fallback).
+ */
+export async function loadAllCvmVpa(): Promise<Record<string, CvmVpaResult>> {
+  if (cachedCvmVpaFile) return cachedCvmVpaFile;
+  if (cvmVpaPromise) return cvmVpaPromise;
+
+  cvmVpaPromise = (async () => {
+    // 1. Tentar endpoint de backend /api/cvm/vpa
+    try {
+      const res = await fetch('/api/cvm/vpa');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.vpa) {
+          cachedCvmVpaFile = data.vpa;
+          return data.vpa;
+        }
+      }
+    } catch {
+      // continua para o fallback de arquivo estático
+    }
+
+    // 2. Fallback para arquivo estático cvm_fii_vpa.json
+    try {
+      const res = await fetch('./cvm_fii_vpa.json?v=' + Date.now(), { cache: 'no-cache' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.vpa) {
+          cachedCvmVpaFile = data.vpa;
+          return data.vpa;
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    return {};
+  })();
+
+  return cvmVpaPromise;
+}
+
+/**
+ * Busca o VPA oficial de um FII específico na CVM (em milissegundos).
+ * Rota padrão: /api/fii/vpa/:ticker
+ */
+export async function fetchCvmVpa(rawTicker: string): Promise<CvmVpaResult | null> {
+  const cleanTicker = rawTicker.trim().toUpperCase().replace('.SA', '');
+  if (!cleanTicker) return null;
+
+  // 1. Tenta endpoint direto no backend
+  try {
+    const res = await fetch(`/api/fii/vpa/${cleanTicker}`);
+    if (res.ok) {
+      const item: CvmVpaResult = await res.json();
+      if (item && item.vpa > 0) return item;
+    }
+  } catch {
+    // continua
+  }
+
+  // 2. Consulta mapa em memória / cvm_fii_vpa.json
+  try {
+    const map = await loadAllCvmVpa();
+    if (map[cleanTicker]) {
+      return map[cleanTicker];
+    }
+  } catch {
+    // continua
+  }
+
+  return null;
+}
 
 /**
  * Carrega a base de cotações e VPs estática /quotes.json gerada na compilação do site.
@@ -84,6 +172,8 @@ export async function fetchLiveQuote(rawTicker: string): Promise<LiveQuoteResult
           change: data.change,
           changePercent: data.changePercent,
           previousClose: data.previousClose,
+          vpPerShare: data.vpPerShare,
+          cvmReportDate: data.cvmReportDate,
           source: data.source || 'Yahoo Finance (B3)',
           timestamp: data.timestamp,
           timeString: new Date().toLocaleTimeString('pt-BR', {
