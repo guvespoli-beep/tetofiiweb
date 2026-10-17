@@ -44,11 +44,9 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
 
-  // Sincroniza estado se a prop inicial mudar (ex: link vindo de fora)
+  // Sincroniza estado se a prop inicial mudar (ex: navegação pelo menu superior, voltar do histórico ou link vindo de fora)
   useEffect(() => {
-    if (initialReportId) {
-      setSelectedReportId(initialReportId);
-    }
+    setSelectedReportId(initialReportId || null);
   }, [initialReportId]);
 
   // Função interna para atualizar relatório selecionado e manter a URL sincronizada (/fiiqueinformado/:id)
