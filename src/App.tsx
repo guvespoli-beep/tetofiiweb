@@ -64,6 +64,11 @@ export function getTabFromPath(rawPath: string): TabType | null {
     p === '/fiiqueinfomado' ||
     p === '/fiique-informado' ||
     p === '/relatorios' ||
+    p.startsWith('/fiiqueinformado/') ||
+    p.startsWith('/fiiqueinfomado/') ||
+    p.startsWith('/fiique-informado/') ||
+    p.startsWith('/relatorios/') ||
+    p.startsWith('/materia/') ||
     p.endsWith('/fiiqueinformado/index.html') ||
     p.endsWith('/fiiqueinfomado/index.html') ||
     p.endsWith('/fiique-informado/index.html') ||
@@ -98,7 +103,16 @@ export default function App() {
   });
 
   const [selectedFiiForCalc, setSelectedFiiForCalc] = useState<string>('');
-  const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
+  const [selectedReportId, setSelectedReportId] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const match = window.location.pathname.match(/\/(?:fiiqueinformado|fiiqueinfomado|fiique-informado|relatorios|materia)\/(art-[a-z0-9-]+)/i);
+      if (match) return match[1].toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+      const r = params.get('materia') || params.get('relatorio') || params.get('artigo');
+      if (r) return r.trim().toLowerCase();
+    }
+    return null;
+  });
 
   // Modals state
   const [explanationTopicId, setExplanationTopicId] = useState<string | null>(null);
@@ -115,7 +129,10 @@ export default function App() {
     setIsMobileMenuOpen(false);
 
     try {
-      const targetPath = TAB_PATHS[tab] || '/';
+      let targetPath = TAB_PATHS[tab] || '/';
+      if (tab === 'reports' && reportId) {
+        targetPath = `/fiiqueinformado/${reportId}`;
+      }
       const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
       if (currentPath !== targetPath) {
         window.history.pushState({ tab, reportId }, '', targetPath);
@@ -133,6 +150,14 @@ export default function App() {
       const tabFromPath = getTabFromPath(window.location.pathname);
       if (tabFromPath) {
         setActiveTab(tabFromPath);
+      }
+      const match = window.location.pathname.match(/\/(?:fiiqueinformado|fiiqueinfomado|fiique-informado|relatorios|materia)\/(art-[a-z0-9-]+)/i);
+      if (match) {
+        setSelectedReportId(match[1].toLowerCase());
+      } else {
+        const params = new URLSearchParams(window.location.search);
+        const r = params.get('materia') || params.get('relatorio') || params.get('artigo');
+        setSelectedReportId(r ? r.trim().toLowerCase() : null);
       }
     };
     window.addEventListener('popstate', handlePopState);

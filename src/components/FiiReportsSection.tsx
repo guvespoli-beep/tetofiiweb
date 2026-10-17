@@ -51,24 +51,18 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
     }
   }, [initialReportId]);
 
-  // Função interna para atualizar relatório selecionado e manter a URL sincronizada (?materia=id)
+  // Função interna para atualizar relatório selecionado e manter a URL sincronizada (/fiiqueinformado/:id)
   const handleOpenReport = (id: string | null) => {
     setSelectedReportId(id);
     if (onSelectReportId) {
       onSelectReportId(id);
     }
     try {
-      const url = new URL(window.location.href);
       if (id) {
-        url.searchParams.set('materia', id);
-        url.searchParams.delete('relatorio');
-        url.searchParams.delete('artigo');
+        window.history.pushState({ reportId: id }, '', `/fiiqueinformado/${id}`);
       } else {
-        url.searchParams.delete('materia');
-        url.searchParams.delete('relatorio');
-        url.searchParams.delete('artigo');
+        window.history.pushState({}, '', '/fiiqueinformado');
       }
-      window.history.replaceState({}, '', url.toString());
     } catch {
       // fallback
     }
@@ -110,7 +104,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
   // Compartilhar link da matéria
   const handleShareReport = async () => {
     if (!activeReport) return;
-    const shareUrl = `${window.location.origin}${window.location.pathname}?materia=${activeReport.id}`;
+    const shareUrl = `${window.location.origin}/fiiqueinformado/${activeReport.id}`;
     const shareTitle = `${activeReport.title} | TETOFII`;
     const shareText = activeReport.title;
 
@@ -141,23 +135,24 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
 
   // Se o usuário clicou em um relatório, exibe a página detalhada
   if (activeReport) {
-    const reportShareUrl = `${window.location.origin}${window.location.pathname}?materia=${activeReport.id}`;
+    const reportShareUrl = `${window.location.origin}/fiiqueinformado/${activeReport.id}`;
 
     return (
       <article className="space-y-6 text-slate-800 animate-in fade-in duration-200">
         {/* Barra superior de navegação com botão Voltar, Compartilhar e Calculadora */}
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={() => {
+          <a
+            href="/fiiqueinformado"
+            onClick={(e) => {
+              e.preventDefault();
               handleOpenReport(null);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200/90 text-slate-700 hover:text-emerald-700 hover:border-emerald-300 font-bold text-sm shadow-2xs hover:bg-slate-50 transition-all cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Voltar</span>
-          </button>
+            <span>Voltar para todas as matérias</span>
+          </a>
 
           <div className="flex items-center gap-2">
             {/* Botão de Compartilhar */}
@@ -560,13 +555,15 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
           </div>
         ) : (
           filteredReports.map((report) => (
-            <div
+            <a
               key={report.id}
-              onClick={() => {
+              href={`/fiiqueinformado/${report.id}`}
+              onClick={(e) => {
+                e.preventDefault();
                 handleOpenReport(report.id);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-slate-200/90 hover:border-emerald-500/80 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+              className="bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-slate-200/90 hover:border-emerald-500/80 hover:shadow-md transition-all cursor-pointer group flex flex-col sm:flex-row sm:items-center justify-between gap-4 block no-underline"
             >
               <div className="space-y-1.5 flex-1 min-w-0">
                 {/* Linha de Metadados: Data de Publicação e Badges */}
@@ -601,7 +598,7 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
                   <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
-            </div>
+            </a>
           ))
         )}
       </div>
