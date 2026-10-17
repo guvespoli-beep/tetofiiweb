@@ -420,7 +420,19 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     app.use(express.static(path.resolve(__dirname, 'dist')));
-    app.get('*', (_req: Request, res: Response) => {
+    app.get('*', (req: Request, res: Response) => {
+      const cleanPath = req.path.replace(/^\/|\/$/g, '');
+      if (cleanPath) {
+        const candidates = [
+          path.resolve(__dirname, 'dist', cleanPath, 'index.html'),
+          path.resolve(__dirname, 'dist', `${cleanPath}.html`),
+        ];
+        for (const candidate of candidates) {
+          if (fs.existsSync(candidate)) {
+            return res.sendFile(candidate);
+          }
+        }
+      }
       res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
     });
   }

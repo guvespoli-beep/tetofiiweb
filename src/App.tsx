@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Calculator as CalcIcon,
   Table as TableIcon,
@@ -8,7 +8,9 @@ import {
   X,
   Building2,
   Mail,
-  Smartphone
+  Smartphone,
+  ShieldCheck,
+  Scale
 } from 'lucide-react';
 import { Calculator } from './components/Calculator';
 import { RadarFiiTable } from './components/RadarFiiTable';
@@ -25,10 +27,76 @@ import { AdBanner } from './components/AdBanner';
 import { MarketTickerTape } from './components/MarketTickerTape';
 import { BookOpen, FileText, Target } from 'lucide-react';
 import { FII_REPORTS_DATA } from './data/fiiReports';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsPage } from './pages/TermsPage';
+import { AboutPage } from './pages/AboutPage';
+
+export type TabType =
+  | 'calculator'
+  | 'my-radar'
+  | 'radar'
+  | 'reports'
+  | 'guide'
+  | 'download'
+  | 'privacy'
+  | 'terms'
+  | 'about';
+
+export const TAB_PATHS: Record<TabType, string> = {
+  calculator: '/calculadora',
+  'my-radar': '/meu-radar',
+  radar: '/fiis-de-tijolo',
+  reports: '/fiiqueinformado',
+  guide: '/guia-de-precificacao',
+  download: '/aplicativo',
+  privacy: '/politica-de-privacidade',
+  terms: '/termos-de-uso',
+  about: '/sobre',
+};
+
+export function getTabFromPath(rawPath: string): TabType | null {
+  const p = (rawPath || '').toLowerCase().replace(/\/$/, '');
+  if (p === '' || p === '/' || p === '/calculadora' || p.endsWith('/calculadora/index.html')) return 'calculator';
+  if (p === '/meu-radar' || p.endsWith('/meu-radar/index.html')) return 'my-radar';
+  if (p === '/fiis-de-tijolo' || p === '/radar' || p.endsWith('/fiis-de-tijolo/index.html')) return 'radar';
+  if (
+    p === '/fiiqueinformado' ||
+    p === '/fiiqueinfomado' ||
+    p === '/fiique-informado' ||
+    p === '/relatorios' ||
+    p.endsWith('/fiiqueinformado/index.html') ||
+    p.endsWith('/fiiqueinfomado/index.html') ||
+    p.endsWith('/fiique-informado/index.html') ||
+    p.endsWith('/relatorios/index.html')
+  ) {
+    return 'reports';
+  }
+  if (p === '/guia-de-precificacao' || p === '/guia' || p.endsWith('/guia-de-precificacao/index.html')) return 'guide';
+  if (p === '/aplicativo' || p === '/baixe-o-app' || p.endsWith('/aplicativo/index.html')) return 'download';
+  if (p === '/politica-de-privacidade' || p === '/privacidade' || p.endsWith('/politica-de-privacidade/index.html')) return 'privacy';
+  if (p === '/termos-de-uso' || p === '/termos' || p.endsWith('/termos-de-uso/index.html')) return 'terms';
+  if (p === '/sobre' || p.endsWith('/sobre/index.html')) return 'about';
+  return null;
+}
 
 export default function App() {
   // Navigation tabs
-  const [activeTab, setActiveTab] = useState<'calculator' | 'my-radar' | 'radar' | 'reports' | 'guide' | 'download'>('calculator');
+  const [activeTab, setActiveTab] = useState<TabType>(() => {
+    if (typeof window !== 'undefined') {
+      const tabFromPath = getTabFromPath(window.location.pathname);
+      if (tabFromPath) return tabFromPath;
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('aba');
+      if (tabParam) {
+        if (['my-radar', 'meu-radar', 'meuradar'].includes(tabParam)) return 'my-radar';
+        if (['calculator', 'radar', 'reports', 'guide', 'download', 'privacy', 'terms', 'about'].includes(tabParam)) {
+          return tabParam as TabType;
+        }
+      }
+    }
+    return 'calculator';
+  });
+
   const [selectedFiiForCalc, setSelectedFiiForCalc] = useState<string>('');
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
 
@@ -40,7 +108,38 @@ export default function App() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
-  // Check initial disclaimer acceptance and URL parameters (tab, relatorio/artigo, guia admin)
+  // Navegação unificada com suporte a URLs reais e histórico do navegador
+  const navigateTo = useCallback((tab: TabType, reportId: string | null = null) => {
+    setActiveTab(tab);
+    setSelectedReportId(reportId);
+    setIsMobileMenuOpen(false);
+
+    try {
+      const targetPath = TAB_PATHS[tab] || '/';
+      const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+      if (currentPath !== targetPath) {
+        window.history.pushState({ tab, reportId }, '', targetPath);
+      }
+    } catch {
+      // Ignora erro em iframes restritos
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Suporte aos botões Voltar / Avançar do navegador (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const tabFromPath = getTabFromPath(window.location.pathname);
+      if (tabFromPath) {
+        setActiveTab(tabFromPath);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Check initial disclaimer acceptance and URL query parameters (materia, ticker, guia admin)
   useEffect(() => {
     const hasAccepted = localStorage.getItem('tetofii_disclaimer_accepted');
     if (!hasAccepted) {
@@ -55,15 +154,6 @@ export default function App() {
       if (reportParam) {
         setSelectedReportId(reportParam.trim().toLowerCase());
         setActiveTab('reports');
-      } else {
-        const tabParam = params.get('aba');
-        if (tabParam) {
-          if (['my-radar', 'meu-radar', 'meuradar'].includes(tabParam)) {
-            setActiveTab('my-radar');
-          } else if (['calculator', 'radar', 'reports', 'guide', 'download'].includes(tabParam)) {
-            setActiveTab(tabParam as any);
-          }
-        }
       }
 
       // Ticker pré-selecionado para cálculo: ?fii=HGLG11
@@ -81,26 +171,18 @@ export default function App() {
     }
   }, []);
 
-  // Rola suavemente para o topo e atualiza título, meta tags e sincroniza URL (?aba=...)
+  // Atualiza título, meta tags, OpenGraph e canonical tag dinamicamente a cada página
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
     try {
-      const url = new URL(window.location.href);
-
       let title = 'TETOFII - Calculadora de Preço Teto e Informações de FIIs de Tijolo';
       let description = 'TETOFII: Calculadora de Preço Teto, P/VP e portal informativo de Fundos Imobiliários de Tijolo. Acompanhe destaques de relatórios gerenciais e análises.';
 
       if (activeTab === 'my-radar') {
         title = 'Meu Radar de FIIs de Tijolo - TETOFII | Preço Teto, Margem de Segurança e P/VP';
         description = 'Personalize seu radar de Fundos Imobiliários de Tijolo: filtre por segmento, defina taxas de referência, compare Preço Teto com Preço Atual e calcule sua margem de segurança.';
-        url.searchParams.set('aba', 'meu-radar');
-        url.searchParams.delete('materia');
       } else if (activeTab === 'radar') {
-        title = 'Radar de FIIs de Tijolo - TETOFII | Cotações, P/VP, Vacância e Dividend Yield';
-        description = 'Tabela completa com indicadores dos principais FIIs de Tijolo da B3: cotações em tempo real, P/VP, dividend yield, vacância física e área bruta locável (ABL).';
-        url.searchParams.set('aba', 'radar');
-        url.searchParams.delete('materia');
+        title = 'Radar de FIIs de Tijolo - TETOFII | Cotações B3, P/VP, Vacância e VPA CVM';
+        description = 'Tabela completa com indicadores dos principais FIIs de Tijolo da B3: cotações em tempo real, VPA oficial da CVM (Resolução 175), P/VP e dividend yield.';
       } else if (activeTab === 'reports') {
         if (selectedReportId) {
           const report = FII_REPORTS_DATA.find(r => r.id === selectedReportId);
@@ -114,23 +196,22 @@ export default function App() {
         } else {
           title = 'FIIque Informado - TETOFII | Destaques e Relatórios Gerenciais de FIIs';
           description = 'Resumos executivos e pontos de atenção dos relatórios gerenciais mais recentes dos maiores fundos imobiliários de tijolo do Brasil.';
-          url.searchParams.set('aba', 'reports');
         }
       } else if (activeTab === 'guide') {
         title = 'Guia de Precificação de FIIs - TETOFII | Metodologia Preço Teto e NTN-B';
-        description = 'Aprenda como calcular o Preço Teto de Fundos Imobiliários de Tijolo usando o Tesouro IPCA+ (NTN-B) e prêmio de risco adequado.';
-        url.searchParams.set('aba', 'guide');
-        url.searchParams.delete('materia');
+        description = 'Aprenda como calcular o Preço Teto de Fundos Imobiliários de Tijolo usando o Tesouro IPCA+ (NTN-B), Gordon Growth Model e prêmio de risco adequado.';
       } else if (activeTab === 'download') {
         title = 'Baixe o Aplicativo TETOFII | App Android e PWA de Precificação de FIIs';
-        description = 'Instale o aplicativo oficial do TETOFII no seu celular Android ou dispositivo móvel para acessar a calculadora e radares de FIIs direto na tela inicial.';
-        url.searchParams.set('aba', 'download');
-        url.searchParams.delete('materia');
-      } else if (activeTab === 'calculator') {
-        url.searchParams.delete('materia');
-        if (url.searchParams.has('aba')) {
-          url.searchParams.set('aba', 'calculator');
-        }
+        description = 'Instale o aplicativo oficial do TETOFII no seu celular Android para acessar a calculadora e os radares de FIIs direto na tela inicial.';
+      } else if (activeTab === 'privacy') {
+        title = 'Política de Privacidade e Cookies - TETOFII | Conformidade AdSense e LGPD';
+        description = 'Política de Privacidade oficial da plataforma TETOFII. Informações sobre tratamento de dados, cookies de publicidade Google AdSense (DART) e direitos LGPD.';
+      } else if (activeTab === 'terms') {
+        title = 'Termos de Uso e Isenção Regulatória - TETOFII | Resolução CVM 20/2021';
+        description = 'Termos de uso e avisos legais da plataforma TETOFII. Esclarecimentos sobre simulações matemáticas e ausência de recomendação de investimentos.';
+      } else if (activeTab === 'about') {
+        title = 'Sobre o TETOFII - GVLab | Engenharia Quantitativa e Educação em FIIs';
+        description = 'Conheça a história, missão e metodologia matemática por trás do TETOFII. Iniciativa do estúdio GVLab para democratização do valuation de FIIs de Tijolo.';
       }
 
       document.title = title;
@@ -140,8 +221,6 @@ export default function App() {
       if (ogTitle) ogTitle.setAttribute('content', title);
       const ogDesc = document.querySelector('meta[property="og:description"]');
       if (ogDesc) ogDesc.setAttribute('content', description);
-
-      window.history.replaceState({}, '', url.toString());
     } catch {
       // Ignora erro em ambientes restritos
     }
@@ -156,8 +235,7 @@ export default function App() {
 
   const handleSelectFiiFromTable = (ticker: string) => {
     setSelectedFiiForCalc(ticker);
-    setActiveTab('calculator');
-    window.scrollTo({ top: 120, behavior: 'smooth' });
+    navigateTo('calculator');
   };
 
   return (
@@ -196,8 +274,12 @@ export default function App() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
           {/* Brand Logo */}
-          <div
-            onClick={() => setActiveTab('calculator')}
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              navigateTo('calculator');
+            }}
             className="flex items-center gap-3 cursor-pointer group"
           >
             <div className="w-11 h-11 rounded-xl overflow-hidden shadow-xs group-hover:scale-105 transition-transform flex items-center justify-center bg-emerald-800">
@@ -216,13 +298,16 @@ export default function App() {
                 Preço Teto, P/VP e Margem de Segurança
               </p>
             </div>
-          </div>
+          </a>
 
           {/* Desktop Nav Items */}
           <nav className="hidden md:flex items-center gap-2 text-xs sm:text-sm font-semibold">
-            <button
-              type="button"
-              onClick={() => setActiveTab('calculator')}
+            <a
+              href={TAB_PATHS['calculator']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('calculator');
+              }}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'calculator'
                   ? 'bg-emerald-700 text-white shadow-xs font-bold'
@@ -231,11 +316,14 @@ export default function App() {
             >
               <CalcIcon className="w-4 h-4" />
               <span>Calculadora</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('my-radar')}
+            <a
+              href={TAB_PATHS['my-radar']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('my-radar');
+              }}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'my-radar'
                   ? 'bg-emerald-700 text-white shadow-xs font-bold'
@@ -244,11 +332,14 @@ export default function App() {
             >
               <Target className="w-4 h-4" />
               <span>Meu Radar</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('radar')}
+            <a
+              href={TAB_PATHS['radar']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('radar');
+              }}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'radar'
                   ? 'bg-emerald-700 text-white shadow-xs font-bold'
@@ -257,11 +348,14 @@ export default function App() {
             >
               <TableIcon className="w-4 h-4" />
               <span>FIIs de Tijolo</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('reports')}
+            <a
+              href={TAB_PATHS['reports']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('reports');
+              }}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'reports'
                   ? 'bg-emerald-700 text-white shadow-xs font-bold'
@@ -270,11 +364,14 @@ export default function App() {
             >
               <FileText className="w-4 h-4" />
               <span>FIIque Informado</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('download')}
+            <a
+              href={TAB_PATHS['download']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('download');
+              }}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'download'
                   ? 'bg-emerald-700 text-white shadow-xs font-bold'
@@ -283,11 +380,14 @@ export default function App() {
             >
               <Smartphone className="w-4 h-4" />
               <span>Baixe o Aplicativo</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('guide')}
+            <a
+              href={TAB_PATHS['guide']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('guide');
+              }}
               className={`px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'guide'
                   ? 'bg-emerald-700 text-white shadow-xs font-bold'
@@ -296,7 +396,7 @@ export default function App() {
             >
               <BookOpen className="w-4 h-4" />
               <span>Guia de Precificação</span>
-            </button>
+            </a>
           </nav>
 
           {/* Mobile menu toggle */}
@@ -315,11 +415,11 @@ export default function App() {
         {/* Mobile Navigation Dropdown */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-1 text-sm font-semibold">
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('calculator');
-                setIsMobileMenuOpen(false);
+            <a
+              href={TAB_PATHS['calculator']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('calculator');
               }}
               className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
                 activeTab === 'calculator' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
@@ -327,13 +427,13 @@ export default function App() {
             >
               <CalcIcon className="w-4 h-4" />
               <span>Calculadora de Preço Teto</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('my-radar');
-                setIsMobileMenuOpen(false);
+            <a
+              href={TAB_PATHS['my-radar']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('my-radar');
               }}
               className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
                 activeTab === 'my-radar' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
@@ -341,13 +441,13 @@ export default function App() {
             >
               <Target className="w-4 h-4" />
               <span>Meu Radar</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('radar');
-                setIsMobileMenuOpen(false);
+            <a
+              href={TAB_PATHS['radar']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('radar');
               }}
               className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
                 activeTab === 'radar' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
@@ -355,13 +455,13 @@ export default function App() {
             >
               <TableIcon className="w-4 h-4" />
               <span>FIIs de Tijolo</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('reports');
-                setIsMobileMenuOpen(false);
+            <a
+              href={TAB_PATHS['reports']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('reports');
               }}
               className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
                 activeTab === 'reports' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
@@ -369,13 +469,13 @@ export default function App() {
             >
               <FileText className="w-4 h-4" />
               <span>FIIque Informado</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('download');
-                setIsMobileMenuOpen(false);
+            <a
+              href={TAB_PATHS['download']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('download');
               }}
               className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
                 activeTab === 'download' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
@@ -383,13 +483,13 @@ export default function App() {
             >
               <Smartphone className="w-4 h-4" />
               <span>Baixe o Aplicativo</span>
-            </button>
+            </a>
 
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('guide');
-                setIsMobileMenuOpen(false);
+            <a
+              href={TAB_PATHS['guide']}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateTo('guide');
               }}
               className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center gap-2 ${
                 activeTab === 'guide' ? 'bg-emerald-700 text-white' : 'text-slate-700 hover:bg-slate-100'
@@ -397,19 +497,39 @@ export default function App() {
             >
               <BookOpen className="w-4 h-4" />
               <span>Guia de Precificação</span>
-            </button>
+            </a>
 
-            <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsDisclaimerOpen(true);
-                  setIsMobileMenuOpen(false);
+            <div className="pt-2 border-t border-slate-100 flex flex-col gap-1 text-xs">
+              <a
+                href={TAB_PATHS['about']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('about');
                 }}
-                className="w-full text-left px-3 py-2 text-xs text-slate-500 font-medium hover:text-slate-800"
+                className="px-3 py-1.5 text-slate-600 hover:text-slate-900"
               >
-                Ver Disclaimer de Isenção Completo
-              </button>
+                Sobre o TETOFII
+              </a>
+              <a
+                href={TAB_PATHS['terms']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('terms');
+                }}
+                className="px-3 py-1.5 text-slate-600 hover:text-slate-900"
+              >
+                Termos de Uso e Isenção CVM
+              </a>
+              <a
+                href={TAB_PATHS['privacy']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('privacy');
+                }}
+                className="px-3 py-1.5 text-slate-600 hover:text-slate-900"
+              >
+                Política de Privacidade e Cookies
+              </a>
             </div>
           </div>
         )}
@@ -439,8 +559,7 @@ export default function App() {
             onOpenExplanation={(topicId) => setExplanationTopicId(topicId)}
             onGoToCalculator={(ticker) => {
               setSelectedFiiForCalc(ticker);
-              setActiveTab('calculator');
-              window.scrollTo({ top: 120, behavior: 'smooth' });
+              navigateTo('calculator');
             }}
           />
         )}
@@ -458,8 +577,7 @@ export default function App() {
             onSelectReportId={(id) => setSelectedReportId(id)}
             onGoToCalculatorWithTicker={(ticker) => {
               setSelectedFiiForCalc(ticker);
-              setActiveTab('calculator');
-              window.scrollTo({ top: 120, behavior: 'smooth' });
+              navigateTo('calculator');
             }}
           />
         )}
@@ -467,15 +585,27 @@ export default function App() {
         {activeTab === 'guide' && (
           <EducationalGuide
             onOpenTopic={(topicId) => setExplanationTopicId(topicId)}
-            onGoToCalculator={() => {
-              setActiveTab('calculator');
-              window.scrollTo({ top: 120, behavior: 'smooth' });
-            }}
+            onGoToCalculator={() => navigateTo('calculator')}
           />
         )}
 
         {activeTab === 'download' && (
           <DownloadAppTab onOpenDisclaimer={() => setIsDisclaimerOpen(true)} />
+        )}
+
+        {activeTab === 'privacy' && (
+          <PrivacyPolicyPage onBackToCalculator={() => navigateTo('calculator')} />
+        )}
+
+        {activeTab === 'terms' && (
+          <TermsPage onBackToCalculator={() => navigateTo('calculator')} />
+        )}
+
+        {activeTab === 'about' && (
+          <AboutPage
+            onBackToCalculator={() => navigateTo('calculator')}
+            onGoToGuide={() => navigateTo('guide')}
+          />
         )}
 
         {/* AdSense Slot #4: Bottom Footer / In-Article Banner (Strategic Position 4) */}
@@ -508,43 +638,46 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 text-slate-600">
-              <button
-                type="button"
-                onClick={() => setIsAboutOpen(true)}
+              <a
+                href={TAB_PATHS['about']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('about');
+                }}
                 className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
               >
                 Sobre o TETOFII
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('my-radar');
-                  window.scrollTo({ top: 120, behavior: 'smooth' });
+              </a>
+              <a
+                href={TAB_PATHS['my-radar']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('my-radar');
                 }}
                 className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
               >
                 Meu Radar
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('reports');
-                  window.scrollTo({ top: 120, behavior: 'smooth' });
+              </a>
+              <a
+                href={TAB_PATHS['reports']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('reports');
                 }}
                 className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
               >
                 FIIque Informado
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('guide');
-                  window.scrollTo({ top: 120, behavior: 'smooth' });
+              </a>
+              <a
+                href={TAB_PATHS['guide']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('guide');
                 }}
                 className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
               >
                 Guia de Precificação (FAQ)
-              </button>
+              </a>
               <a
                 href="mailto:suporte@gvlab.com.br"
                 className="hover:text-emerald-700 flex items-center gap-1.5 transition-colors font-medium text-slate-700 hover:underline"
@@ -553,31 +686,37 @@ export default function App() {
                 <Mail className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Contato: suporte@gvlab.com.br</span>
               </a>
-              <button
-                type="button"
-                onClick={() => {
-                  setActiveTab('download');
-                  window.scrollTo({ top: 120, behavior: 'smooth' });
+              <a
+                href={TAB_PATHS['download']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('download');
                 }}
                 className="text-emerald-700 hover:text-emerald-800 font-bold transition-colors cursor-pointer flex items-center gap-1"
               >
                 <Smartphone className="w-3.5 h-3.5" />
                 <span>Baixe o Aplicativo</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsPrivacyOpen(true)}
-                className="hover:text-emerald-700 transition-colors cursor-pointer"
+              </a>
+              <a
+                href={TAB_PATHS['privacy']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('privacy');
+                }}
+                className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
               >
                 Política de Privacidade e Cookies
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsDisclaimerOpen(true)}
-                className="hover:text-emerald-700 transition-colors cursor-pointer"
+              </a>
+              <a
+                href={TAB_PATHS['terms']}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo('terms');
+                }}
+                className="hover:text-emerald-700 transition-colors cursor-pointer font-medium"
               >
-                Termos de Isenção
-              </button>
+                Termos de Isenção CVM
+              </a>
               <a
                 href="https://www.tesourodireto.com.br/produtos/dados-sobre-titulos/rendimento-dos-titulos"
                 target="_blank"

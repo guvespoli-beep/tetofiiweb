@@ -19,9 +19,11 @@ import {
   ArrowRight,
   ShieldCheck,
   ChevronRight,
+  ChevronDown,
   Share2,
   Check,
-  Copy
+  Copy,
+  X
 } from 'lucide-react';
 import { FII_REPORTS_DATA } from '../data/fiiReports';
 import { FiiReportHighlight } from '../types/reports';
@@ -440,19 +442,69 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
         </div>
       </div>
 
-      {/* Barra de Filtros e Busca */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-slate-200/90 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        {/* Filtro por Tickers Disponíveis */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider shrink-0 pr-1">
-            <Filter className="w-3.5 h-3.5 text-emerald-700" />
-            <span>Filtrar por Fundo:</span>
+      {/* Barra de Filtros e Busca Responsiva */}
+      <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-slate-200/90 space-y-4">
+        {/* Linha Principal: Dropdown de Fundos e Campo de Busca */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Seletor Suspenso (Dropdown) com Todos os Fundos */}
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 uppercase tracking-wider shrink-0">
+              <Filter className="w-3.5 h-3.5 text-emerald-700" />
+              <span>Fundo:</span>
+            </div>
+            <div className="relative flex-1 sm:w-64">
+              <select
+                value={selectedTickerFilter}
+                onChange={(e) => setSelectedTickerFilter(e.target.value)}
+                className="w-full appearance-none pl-3 pr-8 py-2 rounded-xl text-xs font-bold bg-slate-50 border border-slate-200 text-slate-800 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all cursor-pointer shadow-2xs"
+              >
+                <option value="TODOS">Todos os Fundos ({sortedReports.length})</option>
+                {availableTickers.map((ticker) => {
+                  const count = sortedReports.filter(r => r.ticker === ticker).length;
+                  return (
+                    <option key={ticker} value={ticker}>
+                      {ticker} ({count} {count === 1 ? 'matéria' : 'matérias'})
+                    </option>
+                  );
+                })}
+              </select>
+              <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
           </div>
+
+          {/* Campo de Busca Rápida com botão de limpar */}
+          <div className="relative w-full sm:w-72">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar por fundo, assunto ou mês..."
+              className="w-full pl-9 pr-8 py-2 rounded-xl text-xs bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                title="Limpar busca"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Linha Secundária: Tags Rápidas com Quebra Automática de Linha (Flex Wrap) */}
+        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1 shrink-0">
+            Atalhos:
+          </span>
 
           <button
             type="button"
             onClick={() => setSelectedTickerFilter('TODOS')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               selectedTickerFilter === 'TODOS'
                 ? 'bg-emerald-700 text-white shadow-2xs'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
@@ -469,9 +521,9 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
                 key={ticker}
                 type="button"
                 onClick={() => setSelectedTickerFilter(ticker)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-emerald-700 text-white shadow-2xs'
+                    ? 'bg-emerald-700 text-white shadow-2xs ring-1 ring-emerald-700'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
               >
@@ -479,18 +531,20 @@ export const FiiReportsSection: React.FC<FiiReportsSectionProps> = ({
               </button>
             );
           })}
-        </div>
 
-        {/* Campo de Busca Rápida */}
-        <div className="relative shrink-0 w-full md:w-64">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Buscar por fundo ou mês..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl text-xs bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all"
-          />
+          {(selectedTickerFilter !== 'TODOS' || searchQuery.trim() !== '') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedTickerFilter('TODOS');
+                setSearchQuery('');
+              }}
+              className="ml-auto text-xs text-rose-600 hover:text-rose-700 font-semibold flex items-center gap-1 px-2 py-1 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5" />
+              <span>Limpar filtros</span>
+            </button>
+          )}
         </div>
       </div>
 
